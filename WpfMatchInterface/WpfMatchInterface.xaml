@@ -1,0 +1,62 @@
+﻿<Window x:Class="WpfMatchInterface.WpfMatchInterfaceClass"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfMatchInterface"
+        mc:Ignorable="d"
+        Title="Match" Height="450" Width="800" WindowState="Maximized">
+    <Grid Background="#FF4F4F4F">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="0" RenderTransformOrigin="0.574,0.75">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="YellowTeamButton" Content="Jaune" FontFamily="Consolas" BorderBrush="Black" RenderTransformOrigin="1.128,5.309" Grid.Column="2" Grid.Row="1" FontSize="20" Click="OnYellowBtnClick" Background="#FFD7E011"/>
+            <Button x:Name="BlueTeamButton" Content="Bleue" Background="#FF005DFF" FontFamily="Consolas" BorderBrush="Black" Grid.Row="1" FontSize="20" Click="OnBlueBtnClick"/>
+        </Grid>
+        <Grid Margin="0" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="Robot1Button" Content="Robot 1" Background="#FFFB2A2A" BorderBrush="Black" FontSize="20" FontFamily="Consolas" Click="OnRbt1BtnClick"/>
+            <Button x:Name="SoloButton" Content="Solo" Grid.Column="2" Background="#FFA3F926" BorderBrush="Black" FontSize="20" FontFamily="Consolas" Click="OnSoloBtnClick"/>
+            <Button x:Name="Robot2Button" Content="Robot 2" Grid.Column="4" Background="#FF00B9FF" BorderBrush="Black" FontSize="20" FontFamily="Consolas" Click="OnRbt2BtnClick"/>
+        </Grid>
+        <Grid Margin="0" Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <ComboBox x:Name="StrategyCombo" Margin="0" FontSize="48" FontFamily="Consolas" Background="{x:Null}" BorderBrush="{x:Null}" MouseLeave="OnStrategyComboClick" PreviewMouseLeftButtonDown="OnStrategyComboClick" PreviewMouseLeftButtonUp="OnStrategyComboClick">
+                <Button Content="Gentil" BorderBrush="{x:Null}" Background="{x:Null}" FontSize="48"/>
+                <Button Content="ANNIHILATIONS" BorderBrush="{x:Null}" Background="{x:Null}" FontSize="48"/>
+            </ComboBox>
+            <ComboBox x:Name="OtherCombo" Grid.Column="2"/>
+        </Grid>
+        <Grid Margin="0" Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="SubmitButton" Content="Valider" Grid.Column="1" Margin="0" Background="#FF17FF00" FontSize="24" FontFamily="Consolas" Click="OnSubmitBtnClick"/>
+        </Grid>
+    </Grid>
+
+</Window>

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Constants\Constants.csproj" />
+    <ProjectReference Include="..\EventArgsLibrary\EventArgsLibrary.csproj" />
+    <ProjectReference Include="..\LidarTIM561\LidarTIM561.csproj" />
+  </ItemGroup>
+
+</Project>

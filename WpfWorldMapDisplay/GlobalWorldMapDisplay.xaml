@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="WpfWorldMapDisplay.GlobalWorldMapDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfWorldMapDisplay"
+             mc:Ignorable="d" 
+             d:DesignHeight="2000" d:DesignWidth="2600"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart" >
+    <Grid>
+        <Grid.RowDefinitions>            
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <s:SciChartSurface x:Name="sciChart" Padding="0" BorderThickness="0" Grid.Row="0">
+             
+            <!--  Create a X Axis  -->
+            <s:SciChartSurface.XAxis>
+                <s:NumericAxis VisibleRange="-12,12" IsCenterAxis="False" AutoRange="Never" Visibility="Visible"/>
+            </s:SciChartSurface.XAxis>
+
+            <!--  Create a Y Axis  -->
+            <s:SciChartSurface.YAxis>
+                <s:NumericAxis VisibleRange="-8,8" IsCenterAxis="False" AutoRange="Never" Visibility="Visible"/>
+            </s:SciChartSurface.YAxis>
+
+            <s:SciChartSurface.RenderableSeries>
+                <local:PolygonRenderableSeries x:Name="PolygonSeries" Opacity="0.5" >
+                </local:PolygonRenderableSeries>
+                <local:PolygonRenderableSeries x:Name="RobotShapesSeries" Opacity="0.5" >
+                </local:PolygonRenderableSeries>
+                <local:PolygonRenderableSeries x:Name="RobotGhostSeries" Opacity="0.5" >
+                </local:PolygonRenderableSeries>
+                <local:PolygonRenderableSeries x:Name="BallPolygon" Opacity="1" >
+                </local:PolygonRenderableSeries>
+                <s:XyScatterRenderableSeries x:Name="LidarPoints" Opacity="0.5">
+                    <s:XyScatterRenderableSeries.PointMarker>
+                        <s:EllipsePointMarker Width="2" Height="2" Fill="SteelBlue" Stroke="LightSteelBlue" StrokeThickness="1"/>
+                    </s:XyScatterRenderableSeries.PointMarker>
+                </s:XyScatterRenderableSeries>                
+                <s:FastUniformHeatmapRenderableSeries x:Name="heatmapSeries" Opacity="0.6" MouseLeftButtonUp="heatmapSeries_MouseLeftButtonUp" >
+                    <s:FastUniformHeatmapRenderableSeries.ColorMap>
+                        <s:HeatmapColorPalette Maximum="1">
+                            <s:HeatmapColorPalette.GradientStops>
+                                <GradientStop Offset="0" Color="#116699FF" />
+                                <GradientStop Offset="0.2" Color="#4466FFFF" />
+                                <GradientStop Offset="0.4" Color="#77FFFF99" />
+                                <GradientStop Offset="0.6" Color="#99FFCC00" />
+                                <GradientStop Offset="0.8" Color="#BBFF6600" />
+                                <GradientStop Offset="1" Color="#DDFF0000" />
+                            </s:HeatmapColorPalette.GradientStops>
+                        </s:HeatmapColorPalette>
+                    </s:FastUniformHeatmapRenderableSeries.ColorMap>
+                </s:FastUniformHeatmapRenderableSeries>
+                <local:PolygonRenderableSeries x:Name="ObjectsPolygonSeries" Opacity="1" >
+                </local:PolygonRenderableSeries>
+            </s:SciChartSurface.RenderableSeries>
+
+            <s:SciChartSurface.Annotations>
+                <s:TextAnnotation AnnotationCanvas="AboveChart" CoordinateMode="Relative" FontSize="18" FontWeight="Bold" HorizontalAnchorPoint="Left" Opacity="0.5" Text="GWM" VerticalAnchorPoint="Center" X1="0.08" Y1="0.12"/>
+            </s:SciChartSurface.Annotations>
+        </s:SciChartSurface>
+    </Grid>
+</UserControl>

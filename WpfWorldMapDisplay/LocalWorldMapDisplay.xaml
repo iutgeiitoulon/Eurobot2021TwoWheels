@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="WpfWorldMapDisplay.LocalWorldMapDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfWorldMapDisplay"
+             mc:Ignorable="d" 
+             d:DesignHeight="2000" d:DesignWidth="2600"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart">
+
+    <Grid>
+        <s:SciChartSurface x:Name="sciChartSurface" MaxFrameRate="25" Padding="0" BorderThickness="0" Grid.Row="0" 
+                           MouseLeftButtonUp="sciChart_MouseLeftButtonUp" MouseDoubleClick="sciChart_MouseDoubleClick"
+                           s:VisualXcceleratorEngine.IsEnabled="True"
+                           s:VisualXcceleratorEngine.FallbackType="{x:Type s:HighQualityRenderSurface}"
+                           s:VisualXcceleratorEngine.DowngradeWithoutException="False"
+                           s:VisualXcceleratorEngine.EnableImpossibleMode="False">
+            <!--  Create a X Axis  -->
+            <s:SciChartSurface.XAxis>
+                <s:NumericAxis VisibleRange="-12,12" IsCenterAxis="False" AutoRange="Never"  Visibility="Hidden" DrawMajorGridLines="False" DrawMinorGridLines="False"
+                               DrawMajorTicks="False" DrawMinorTicks="False" DrawMajorBands="False"/>
+            </s:SciChartSurface.XAxis>
+            <!--  Create a Y Axis  -->
+            <s:SciChartSurface.YAxis>
+                <s:NumericAxis VisibleRange="-8,8" IsCenterAxis="False" AutoRange="Never" Visibility="Hidden" DrawMajorGridLines="False" DrawMinorGridLines="False"
+                               DrawMajorTicks="False" DrawMinorTicks="False" DrawMajorBands="False"/>
+            </s:SciChartSurface.YAxis>
+            <s:SciChartSurface.RenderableSeries >
+                <local:PolygonRenderableSeries x:Name="PolygonTerrainSeries" Opacity="0.5">
+                </local:PolygonRenderableSeries>
+                <local:SegmentRenderableSeries x:Name="SegmentSeries" Opacity="0.5">
+                </local:SegmentRenderableSeries>
+                <local:PointListRenderableSeries x:Name="LidarPtExtendedSeries" Opacity="1">
+                </local:PointListRenderableSeries>
+                <s:FastUniformHeatmapRenderableSeries x:Name="heatmapSeries" Opacity="0.6">
+                    <s:FastUniformHeatmapRenderableSeries.ColorMap>
+                        <s:HeatmapColorPalette Minimum="-1" Maximum="1">
+                            <s:HeatmapColorPalette.GradientStops>
+                                <GradientStop Offset="0" Color="#DD061d04" />
+                                <GradientStop Offset="0.2" Color="#AA5588FF" />
+                                <GradientStop Offset="0.4" Color="#9977AAFF" />
+                                <GradientStop Offset="0.5" Color="#11FFFFFF" />
+                                <GradientStop Offset="0.6" Color="#99FFCC00" />
+                                <GradientStop Offset="0.8" Color="#BBFF6600" />
+                                <GradientStop Offset="1" Color="#DDFF0000" />
+                            </s:HeatmapColorPalette.GradientStops>
+                        </s:HeatmapColorPalette>
+                    </s:FastUniformHeatmapRenderableSeries.ColorMap>
+                </s:FastUniformHeatmapRenderableSeries>
+                <s:XyScatterRenderableSeries x:Name="LidarPoints" Opacity="0.5">
+                    <s:XyScatterRenderableSeries.PointMarker>
+                        <s:EllipsePointMarker Width="2" Height="2" Fill="SteelBlue" Stroke="LightSteelBlue" StrokeThickness="1"/>
+                    </s:XyScatterRenderableSeries.PointMarker>
+                </s:XyScatterRenderableSeries>
+                <s:XyScatterRenderableSeries x:Name="LidarProcessedPoints1" Opacity="0.5">
+                    <s:XyScatterRenderableSeries.PointMarker>
+                        <s:EllipsePointMarker Width="4" Height="4" Fill="SteelBlue" Stroke="Blue" StrokeThickness="1"/>
+                    </s:XyScatterRenderableSeries.PointMarker>
+                </s:XyScatterRenderableSeries>
+                <s:XyScatterRenderableSeries x:Name="LidarProcessedPoints2" Opacity="0.5">
+                    <s:XyScatterRenderableSeries.PointMarker>
+                        <s:EllipsePointMarker Width="4" Height="4" Fill="SteelBlue" Stroke="Green" StrokeThickness="1"/>
+                    </s:XyScatterRenderableSeries.PointMarker>
+                </s:XyScatterRenderableSeries>
+                <s:XyScatterRenderableSeries x:Name="LidarProcessedPoints3" Opacity="0.5">
+                    <s:XyScatterRenderableSeries.PointMarker>
+                        <s:EllipsePointMarker Width="4" Height="4" Fill="SteelBlue" Stroke="Orange" StrokeThickness="1"/>
+                    </s:XyScatterRenderableSeries.PointMarker>
+                </s:XyScatterRenderableSeries>
+                <local:PolygonRenderableSeries x:Name="PolygonSeries" Opacity="0.5">
+                </local:PolygonRenderableSeries>
+                <s:XyScatterRenderableSeries x:Name="BallPoints" Opacity="0.5">
+                    <s:XyScatterRenderableSeries.PointMarker>
+                        <s:EllipsePointMarker Width="10" Height="10" Fill="Yellow" Stroke="White" StrokeThickness="1"/>
+                    </s:XyScatterRenderableSeries.PointMarker>
+                </s:XyScatterRenderableSeries>
+                <local:PolygonRenderableSeries x:Name="BallPolygon" Opacity="0.8" >
+                </local:PolygonRenderableSeries>
+                <local:PolygonRenderableSeries x:Name="ObjectsPolygonSeries" Opacity="0.8" >
+                </local:PolygonRenderableSeries>
+                <s:XyScatterRenderableSeries x:Name="ObstaclePoints" Opacity="0.5">
+                    <s:XyScatterRenderableSeries.PointMarker>
+                        <s:EllipsePointMarker Width="5" Height="5" Fill="Red" Stroke="White" StrokeThickness="1"/>
+                    </s:XyScatterRenderableSeries.PointMarker>
+                </s:XyScatterRenderableSeries>
+
+
+            </s:SciChartSurface.RenderableSeries>
+
+
+            <!--https://support.scichart.com/index.php?/Knowledgebase/Article/View/17209/33/custom-annotations-adding-a-watermark-to-a-chart-->
+            <s:SciChartSurface.Annotations>
+                <s:TextAnnotation x:Name="LocalWorldMapTitle" AnnotationCanvas="AboveChart" CoordinateMode="Relative" FontSize="14" FontWeight="Bold" HorizontalAnchorPoint="Left" Opacity="0.5" Text="Local World Map" VerticalAnchorPoint="Center" X1="0.15" Y1="0.18"/>
+                <s:TextAnnotation x:Name="AnnotRobotRole" AnnotationCanvas="AboveChart" CoordinateMode="Relative" FontSize="14" FontWeight="Bold" HorizontalAnchorPoint="Right" Opacity="0.5" Text="Role" VerticalAnchorPoint="Center" X1="0.8" Y1="0.18"/>
+                <s:BoxAnnotation x:Name="AnnotationFond" AnnotationCanvas="BelowChart"  CoordinateMode="Absolute" X1="{Binding X1}" X2="{Binding X2}" Y1="{Binding Y1}" Y2="{Binding Y2}" HorizontalContentAlignment="Stretch" Background="#55FFFF00">
+                    <s:BoxAnnotation.Template>
+                        <ControlTemplate TargetType="s:BoxAnnotation">
+                            <Border x:Name="PART_BoxAnnotationRoot">
+                                <Image Name="BackGroundImage" Source="{Binding ImagePath}" Stretch="Fill" Opacity="0.2" />
+                            </Border>
+                        </ControlTemplate>
+                    </s:BoxAnnotation.Template>
+                </s:BoxAnnotation>
+            </s:SciChartSurface.Annotations>
+
+            <s:SciChartSurface.ChartModifier>
+                <s:ModifierGroup>
+                    <s:RubberBandXyZoomModifier IsXAxisOnly="False"  ZoomExtentsY="False" IsAnimated="True" RubberBandFill="#33FFFFFF" RubberBandStroke="#66FFFFFF" RubberBandStrokeDashArray="2 2"/>
+                    <s:MouseWheelZoomModifier ActionType="Zoom" XyDirection="XYDirection"/>
+                </s:ModifierGroup>
+            </s:SciChartSurface.ChartModifier>
+        </s:SciChartSurface>
+    </Grid>
+</UserControl>
