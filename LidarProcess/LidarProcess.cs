@@ -188,8 +188,6 @@ namespace LidarProcessNS
             List<Cup> list_of_cups = new List<Cup>();
             List<LidarObjects> list_of_objects = new List<LidarObjects>();
 
-            Console.ResetColor();
-            Console.WriteLine("--------------");
             foreach (ClusterObjects c in inside_clusters)
             {
                 RectangleOriented cluster_rectangle = FindRectangle.FindMbrBoxByOverlap(c.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList());
@@ -327,13 +325,8 @@ namespace LidarProcessNS
             //box_of_cluster.Width += 0.1;
             //box_of_cluster.Lenght += 0.1;
 
-
-
             if (box_of_cluster.Width / box_of_cluster.Lenght <= 5 && box_of_cluster.Width <= 0.08 && box_of_cluster.Width >= 0.02)
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("W: " + box_of_cluster.Width + " H: " + box_of_cluster.Lenght + " : " + box_of_cluster.Width / box_of_cluster.Lenght);
-
                 List<PointD> pointDs = cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList();
 
                 double median = 0.80;
@@ -362,9 +355,6 @@ namespace LidarProcessNS
             }
             else if (box_of_cluster.Width / box_of_cluster.Lenght <= 3 && box_of_cluster.Width >= 0.05 && box_of_cluster.Width <= 0.15)
             {
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("W: " + box_of_cluster.Width + " H: " + box_of_cluster.Lenght + " : " + box_of_cluster.Width / box_of_cluster.Lenght);
-
                 List<PointD> pointDs = cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList();
 
                 double median = 0.80;
@@ -393,8 +383,6 @@ namespace LidarProcessNS
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("W: " + box_of_cluster.Width + " H: " + box_of_cluster.Lenght + " : " + box_of_cluster.Width / box_of_cluster.Lenght);
                 return null;
             }
 

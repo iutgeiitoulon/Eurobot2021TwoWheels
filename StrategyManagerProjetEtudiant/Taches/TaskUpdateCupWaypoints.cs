@@ -41,21 +41,35 @@ namespace StrategyManagerProjetEtudiantNS
                 }
                 else if (parent.localWorldMap.WaypointLocations.Count == 0)
                 {
-                    List<PointD> ordered_list_of_cups = parent.localWorldMap.LidarCup.OrderBy(x => Toolbox.Distance(x.center, new PointD(parent.localWorldMap.RobotLocation.X, parent.localWorldMap.RobotLocation.Y))).Select(x => x.center).ToList();
-                    ordered_list_of_cups.ForEach(x => parent.OnSetNewWaypoint(x));
+                    List<PointD> false_ordered_list_of_cups = parent.localWorldMap.LidarCup.OrderBy(x => Toolbox.Distance(x.center, new PointD(parent.localWorldMap.RobotLocation.X, parent.localWorldMap.RobotLocation.Y))).Select(x => x.center).ToList();
+                    List<PointD> real_ordred_list_of_cups = new List<PointD>();
+
+
+                    while (false_ordered_list_of_cups.Count != 0)
+                    {
+                        PointD point = false_ordered_list_of_cups[0];
+                        real_ordred_list_of_cups.Add(point);
+                        false_ordered_list_of_cups.RemoveAt(0);
+                        false_ordered_list_of_cups = false_ordered_list_of_cups.OrderBy(x => Toolbox.Distance(x, point)).ToList();
+                    }
+
+
+                    real_ordred_list_of_cups.ForEach(x => parent.OnSetNewWaypoint(x));
                 }
                 else if (parent.localWorldMap.WaypointLocations.Count >= 0)
                 {
-                    List<PointD> ordered_list_of_cups = parent.localWorldMap.LidarCup.OrderBy(x => Toolbox.Distance(x.center, new PointD(parent.localWorldMap.RobotLocation.X, parent.localWorldMap.RobotLocation.Y))).Select(x => x.center).ToList();
+                    List<PointD> false_ordered_list_of_cups = parent.localWorldMap.LidarCup.OrderBy(x => Toolbox.Distance(x.center, new PointD(parent.localWorldMap.RobotLocation.X, parent.localWorldMap.RobotLocation.Y))).Select(x => x.center).ToList();
+                    List<PointD> real_ordred_list_of_cups = new List<PointD>();
 
-
-                    List<Location> new_waypoints_list = ordered_list_of_cups.Select(x => new Location(x.X, x.Y, 0, 0, 0, 0)).ToList();
-                    if (Toolbox.Distance(ordered_list_of_cups[0], parent.localWorldMap.WaypointLocations[0]) <= 0.05)
+                    while (false_ordered_list_of_cups.Count != 0)
                     {
-                        new_waypoints_list[0] = parent.localWorldMap.WaypointLocations[0];
+                        PointD point = false_ordered_list_of_cups[0];
+                        real_ordred_list_of_cups.Add(point);
+                        false_ordered_list_of_cups.RemoveAt(0);
+                        false_ordered_list_of_cups = false_ordered_list_of_cups.OrderBy(x => Toolbox.Distance(x, point)).ToList();
                     }
 
-                    parent.OnSetWaypointsList(new_waypoints_list);
+                    parent.OnSetWaypointsList(real_ordred_list_of_cups.Select(x => new Location(x.X, x.Y, 0, 0, 0, 0)).ToList());
                 }
 
             }
