@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "4Y0QiDgy8GCDAvuV9ZjExlCK2V5l/Y4Hkpy/nrHgEU9WO5nkIAKmSb/Ck9uSQIiRS1FkCx/ey0dVx/6msFxoTA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Table 12\\Documents\\GitHub\\Eurobot_Structure\\Protocol_Security\\Protocol_Security.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Table 12\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Table 12\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
