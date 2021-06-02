@@ -145,7 +145,7 @@ namespace LidarProcessNS
             processedPoints.Add(new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(best_rectangle.Center), 10, Color.Black));
 
 
-            Lines.AddRange(rectangle_segments);
+            //Lines.AddRange(rectangle_segments);
 
             //Console.WriteLine("Corners: " + FindRectangle.GetNumberOfVisibleCorners(best_rectangle));
 
@@ -154,8 +154,7 @@ namespace LidarProcessNS
 
             if (resized_rectangle != null)
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Lines.AddRange(FindRectangle.DrawRectangle(resized_rectangle, Color.LightGreen, 8));
+                //Lines.AddRange(FindRectangle.DrawRectangle(resized_rectangle, Color.LightGreen, 8));
                 processedPoints.Add(new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(resized_rectangle.Center), 10, Color.Green));
 
                 list_of_possible_locations = FindRectangle.ListAllPossibleLocation(resized_rectangle);
@@ -164,12 +163,11 @@ namespace LidarProcessNS
             else
             {
                 Tuple<RectangleOriented, RectangleOriented, RectangleOriented> list_of_possible_rectangles = FindRectangle.ListResisableRectangle(best_rectangle, thresold);
-                Console.ForegroundColor = ConsoleColor.Yellow;
                 list_of_possible_locations = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item2);
 
-                Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item1, Color.Yellow, 4));
-                Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item2, Color.Blue, 4));
-                Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item3, Color.Red, 4));
+                //Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item1, Color.Yellow, 4));
+                //Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item2, Color.Blue, 4));
+                //Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item3, Color.Red, 4));
 
             }
             //processedPoints.AddRange(list_of_possible_locations.Select(x => new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(new PointD(x.X, x.Y)), 10, (x.Theta != 1) ? Color.Red: Color.DarkBlue)).ToList());
@@ -179,8 +177,6 @@ namespace LidarProcessNS
 
             //processedPoints.Add(new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(new PointD(best_location.X, best_location.Y)), 10, Color.DarkGreen));
             //OnLidarSetupRobotLocationEvent?.Invoke(this, best_location);
-            Console.ResetColor();
-
 
 
 
@@ -198,7 +194,7 @@ namespace LidarProcessNS
                 cluster_rectangle.Width += 0.1;
                 cluster_rectangle.Lenght += 0.1;
 
-                //Lines.AddRange(FindRectangle.DrawRectangle(cluster_rectangle, c.points[0].Color, 3));
+                Lines.AddRange(FindRectangle.DrawRectangle(cluster_rectangle, c.points[0].Color, 3));
 
                 Color color = Toolbox.ColorFromHSL((list_of_objects.Count * 0.20) % 1, 1, 0.5);
                 list_of_objects.Add(new LidarObjects(c.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList(), color));
@@ -214,8 +210,7 @@ namespace LidarProcessNS
 
             OnProcessLidarObjectsDataEvent?.Invoke(this, list_of_objects);
 
-            // Lines.Add(DetectGlobalLine(polarPointRssi, 1d, 0d, 5d, 3, 0.2d));
-            //OnProcessLidarLineDataEvent?.Invoke(this, Lines);
+            OnProcessLidarLineDataEvent?.Invoke(this, Lines);
 
             OnProcessLidarCupDataEvent?.Invoke(this, list_of_cups);
 
@@ -223,8 +218,8 @@ namespace LidarProcessNS
             RawLidarArgs processLidar = new RawLidarArgs() { RobotId = robotId, LidarFrameNumber = LidarFrame, PtList = processedPoints.Select(x => x.Pt).ToList() };
             OnProcessLidarDataEvent?.Invoke(this, processLidar);
             
-            //OnProcessLidarPolarDataEvent?.Invoke(this, processedPoints);
-            //OnProcessLidarAbsoluteDataEvent?.Invoke(this, absolutePoints);
+            OnProcessLidarPolarDataEvent?.Invoke(this, processedPoints);
+            OnProcessLidarAbsoluteDataEvent?.Invoke(this, absolutePoints);
             //OnProcessLidarXYDataEvent?.Invoke(this, processedPoints.Select(x => new PointDExtended(Toolbox.ConvertPolarToPointD(x), Color.Blue, 2)).ToList());
         }
         #endregion

@@ -20,7 +20,7 @@ namespace Constants
         public const double LIDAR_FREQ_IN_HZ = 15d;
         public const double ODOMETRY_FREQ_IN_HZ = 50d;
 
-        public const string PROJECT_NAME = "Eurobot_Structure";
+        public const string PROJECT_NAME = "Eurobot2021TwoWheels";
         public const string LOG_FOLDER_NAME = "LogFiles";
         public const long MAX_LOG_FILE_SIZE = 90000000;
 
