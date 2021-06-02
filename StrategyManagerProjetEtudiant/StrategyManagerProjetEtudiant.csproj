@@ -68,6 +68,7 @@
     <Compile Include="Taches\TaskDemoMessage.cs" />
     <Compile Include="Taches\TaskDestination.cs" />
     <Compile Include="Taches\TaskDemoMove.cs" />
+    <Compile Include="Taches\TaskSetupWaypoints.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Constants\Constants.csproj">

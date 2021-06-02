@@ -358,6 +358,7 @@ namespace WpfWorldMapDisplay
                 UpdateLidarMap(robotId, localWorldMap.LidarMapRaw, LidarDataType.RawData);
                 UpdateLidarMap(robotId, localWorldMap.LidarMapProcessed, LidarDataType.ProcessedData1);
 
+                UpdateLidarCups(robotId, localWorldMap.LidarCup);
                 UpdateLidarSegments(robotId, localWorldMap.LidarSegment);
             }
             //UpdateLidarObjects(robotId, localWorldMap.lidarObjectList);
@@ -491,7 +492,12 @@ namespace WpfWorldMapDisplay
                 }
 
                 //Rendering des objets Lidar
-                
+                foreach (var cup in TeamMatesDisplayDictionary[r.Key].GetRobotLidarCup())
+                {
+                    LidarPtExtendedSeries.AddPtExtended(new PointDExtended(cup.center, cup.color, 15));
+                }
+
+
                 foreach (var segment in TeamMatesDisplayDictionary[r.Key].GetRobotLidarSegments())
                 {
                     SegmentSeries.AddSegmentExtended(0, segment);
@@ -657,6 +663,18 @@ namespace WpfWorldMapDisplay
                 TeamMatesDisplayDictionary[robotId].SetLidarSegment(lidarSegmentList);
             }
         }
+
+        private void UpdateLidarCups(int robotId, List<Cup> lidarCups)
+        {
+            if (lidarCups == null)
+                return;
+            if (TeamMatesDisplayDictionary.ContainsKey(robotId))
+            {
+                TeamMatesDisplayDictionary[robotId].SetLidarCup(lidarCups);
+            }
+        }
+
+
 
         //private void UpdateLidarObjects(int robotId, List<PolarPointListExtended> lidarObjectList)
         //{

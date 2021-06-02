@@ -379,7 +379,7 @@ namespace WpfWorldMapDisplay
 
         public List<Cup> GetRobotLidarCup()
         {
-            return LidarCup;
+            return LidarCup == null ? new List<Cup>() : LidarCup;
         }
 
         public List<PolygonExtended> GetRobotLidarObjects()

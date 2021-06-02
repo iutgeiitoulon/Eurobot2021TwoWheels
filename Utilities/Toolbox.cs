@@ -243,21 +243,21 @@ namespace Utilities
 
         static public PointDExtended ConvertPolarToPointD(PolarPointRssiExtended point)
         {
-            return new PointDExtended(new PointD(point.Pt.Distance * Math.Cos(point.Pt.Angle), point.Pt.Distance * Math.Sin(point.Pt.Angle)), point.Color, point.Width);
+            return new PointDExtended(new PointD(point.Pt.Distance * Math.Cos(point.Pt.Angle), point.Pt.Distance * Math.Sin(point.Pt.Angle), point.Pt.Rssi), point.Color, point.Width);
         }
 
         static public PolarPointRssiExtended ConvertPointDToPolar(PointDExtended point)
         {
-            return new PolarPointRssiExtended(new PolarPointRssi(Math.Atan2(point.Pt.Y, point.Pt.X), Math.Sqrt(Math.Pow(point.Pt.X, 2) + Math.Pow(point.Pt.Y, 2)), 0), point.Width, point.Color);
+            return new PolarPointRssiExtended(new PolarPointRssi(Math.Atan2(point.Pt.Y, point.Pt.X), Math.Sqrt(Math.Pow(point.Pt.X, 2) + Math.Pow(point.Pt.Y, 2)), point.Pt.Rssi), point.Width, point.Color);
         }
         static public PointD ConvertPolarToPointD(PolarPointRssi point)
         {
-            return new PointD(point.Distance * Math.Cos(point.Angle), point.Distance * Math.Sin(point.Angle));
+            return new PointD(point.Distance * Math.Cos(point.Angle), point.Distance * Math.Sin(point.Angle), point.Rssi);
         }
 
         static public PolarPointRssi ConvertPointDToPolar(PointD point)
         {
-            return new PolarPointRssi(Math.Atan2(point.Y, point.X), Math.Sqrt(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2)), 0);
+            return new PolarPointRssi(Math.Atan2(point.Y, point.X), Math.Sqrt(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2)), point.Rssi);
         }
 
         public static PointD GetCrossingPoint(Line line_1, Line line_2)

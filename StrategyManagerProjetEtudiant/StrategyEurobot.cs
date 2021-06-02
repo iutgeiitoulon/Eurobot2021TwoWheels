@@ -23,6 +23,7 @@ namespace StrategyManagerProjetEtudiantNS
         TaskDemoMove taskDemoMove;
         TaskDemoMessage taskDemoMessage;
         TaskDestination taskDestination;
+        TaskSetupWaypoints taskSetupWaypoints;
 
         int robotId, teamId;
 
@@ -34,6 +35,7 @@ namespace StrategyManagerProjetEtudiantNS
             taskDemoMove = new TaskDemoMove(this);
             taskDemoMessage = new TaskDemoMessage(this);
             taskDestination = new TaskDestination(this);
+            taskSetupWaypoints = new TaskSetupWaypoints(this);
 
             this.robotId = robotId;
             this.teamId = teamId;

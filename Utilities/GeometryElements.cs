@@ -10,17 +10,27 @@ namespace Utilities
     {
         public double X;// { get; set; }
         public double Y;// { get; set; }
+        public double Rssi;
 
         public PointD()
         {
             X = 0;
             Y = 0;
+            Rssi = 0;
         }
 
         public PointD(double x, double y)
         {
             X = x;
             Y = y;
+            Rssi = 0;
+        }
+
+        public PointD(double x, double y, double rssi)
+        {
+            X = x;
+            Y = y;
+            Rssi = rssi;
         }
 
 

@@ -150,9 +150,22 @@ namespace WorldMapManager
 
 
 
-        public void OnLidarProcessedCupReceived(object sender, List<Cup> cups)
+        public void OnLidarProcessedCupReceived(object sender, List<Cup> list_of_cups)
         {
-            localWorldMap.LidarCup = cups;
+            List<Cup> list_of_refTerrainCups = new List<Cup>();
+
+            foreach (Cup cup in list_of_cups)
+            {
+                PolarPointRssi point = Toolbox.ConvertPointDToPolar(cup.center);
+                list_of_refTerrainCups.Add(new Cup(
+                   new PointD(
+                        localWorldMap.RobotLocation.X + (point.Distance * Math.Cos(localWorldMap.RobotLocation.Theta + point.Angle)),
+                        localWorldMap.RobotLocation.Y + (point.Distance * Math.Sin(localWorldMap.RobotLocation.Theta + point.Angle))
+                   ),
+                   cup.radius, cup.color));
+            }
+
+            localWorldMap.LidarCup = list_of_refTerrainCups;
             OnLocalWorldMapChange();
         }
 
