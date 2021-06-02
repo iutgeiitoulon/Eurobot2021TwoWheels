@@ -23,7 +23,7 @@ namespace StrategyManagerProjetEtudiantNS
         TaskDemoMove taskDemoMove;
         TaskDemoMessage taskDemoMessage;
         TaskDestination taskDestination;
-        TaskSetupWaypoints taskSetupWaypoints;
+        TaskUpdateCupWaypoints taskSetupWaypoints;
 
         int robotId, teamId;
 
@@ -35,7 +35,7 @@ namespace StrategyManagerProjetEtudiantNS
             taskDemoMove = new TaskDemoMove(this);
             taskDemoMessage = new TaskDemoMessage(this);
             taskDestination = new TaskDestination(this);
-            taskSetupWaypoints = new TaskSetupWaypoints(this);
+            taskSetupWaypoints = new TaskUpdateCupWaypoints(this);
 
             this.robotId = robotId;
             this.teamId = teamId;
@@ -71,12 +71,12 @@ namespace StrategyManagerProjetEtudiantNS
             );
 
             //On envoie périodiquement les réglages du PID de vitesse embarqué
-            //On2WheelsIndependantSpeedPIDSetup(pM1: 5, iM1: 0, 0.0, pM2: 0, iM2: 0, 0, pM1Limit: 100, iM1Limit: 0, 0, pM2Limit: 0.0, iM2Limit: 0.0, 0);
-            double KpIndependant = 5;
-            double KiIndependant = 50;
-            //On envoie périodiquement les réglages du PID de vitesse embarqué
-            On2WheelsIndependantSpeedPIDSetup(pM1: KpIndependant, iM1: KiIndependant, 0.0, pM2: KpIndependant, iM2: KiIndependant, 0,
-                pM1Limit: 4, iM1Limit: 4, 0, pM2Limit: 4.0, iM2Limit: 4.0, 0);
+            On2WheelsIndependantSpeedPIDSetup( 
+                ConstVar.PID_SPEED_MOTOR1_KP, ConstVar.PID_SPEED_MOTOR1_KI, ConstVar.PID_SPEED_MOTOR1_KD,
+                ConstVar.PID_SPEED_MOTOR2_KP, ConstVar.PID_SPEED_MOTOR2_KI, ConstVar.PID_SPEED_MOTOR2_KD,
+                ConstVar.PID_SPEED_MOTOR1_KP_MAX, ConstVar.PID_SPEED_MOTOR1_KI_MAX, ConstVar.PID_SPEED_MOTOR1_KD_MAX,
+                ConstVar.PID_SPEED_MOTOR2_KP_MAX, ConstVar.PID_SPEED_MOTOR2_KI_MAX, ConstVar.PID_SPEED_MOTOR2_KD_MAX
+                );
 
             OnSetAsservissementMode((byte) AsservissementMode.Independant2Wheels);
         }

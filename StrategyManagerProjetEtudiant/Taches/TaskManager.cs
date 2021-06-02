@@ -10,7 +10,7 @@ using Utilities;
 
 namespace StrategyManagerProjetEtudiantNS
 {
-    public enum TaskDestinationState
+    public enum TaskMoveState
     {
         Arret,
         Avance,
@@ -19,11 +19,10 @@ namespace StrategyManagerProjetEtudiantNS
         AvanceEnCours,
     }
 
-    public enum TaskDestinationMode
+    public enum TaskMode
     { 
-        Waypoint,
-        Destination,
-        Manual,
+        Action,
+        Move,
         Stop,
     }
 
@@ -31,8 +30,9 @@ namespace StrategyManagerProjetEtudiantNS
     {
         StrategyEurobot parent;
         Thread TaskThread;
-        public TaskDestinationState state = TaskDestinationState.Arret;
-        public TaskDestinationMode mode = TaskDestinationMode.Stop;
+        public TaskMoveState state = TaskMoveState.Arret;
+        public TaskMode mode = TaskMode.Stop;
+        Location Destination = new Location();
 
         Stopwatch sw = new Stopwatch();
         
@@ -46,7 +46,7 @@ namespace StrategyManagerProjetEtudiantNS
             sw.Reset();
         }
 
-        public void SetTaskState(TaskDestinationState state)
+        public void SetTaskState(TaskMoveState state)
         {
             this.state = state;
         }
@@ -55,10 +55,7 @@ namespace StrategyManagerProjetEtudiantNS
         {
             switch (mode)
             {
-                case TaskDestinationMode.Destination:
-                    parent.OnDestinationReached(parent.localWorldMap.DestinationLocation);
-                    break;
-                case TaskDestinationMode.Waypoint:
+                case TaskMode.Move:
                     parent.OnWaypointsReached(parent.localWorldMap.WaypointLocations[0]);
 
                     //Random rand = new Random();
@@ -67,7 +64,7 @@ namespace StrategyManagerProjetEtudiantNS
                 default:
                     break;
             }
-            mode = TaskDestinationMode.Stop;
+            mode = TaskMode.Stop;
         }
         
         void UpdateTaskMode()
@@ -76,33 +73,34 @@ namespace StrategyManagerProjetEtudiantNS
                 return;
             switch (mode)
             {
-                case TaskDestinationMode.Stop:
-                    if (parent.localWorldMap.DestinationLocation != null)
+                case TaskMode.Stop:
+                    if (parent.localWorldMap.WaypointLocations.Count >= 1)
                     {
-                        mode = TaskDestinationMode.Destination;
-                        UpdateAndLaunch(parent.localWorldMap.DestinationLocation);
-
-                    }
-                    else if (parent.localWorldMap.WaypointLocations.Count >= 1)
-                    {
-                        mode = TaskDestinationMode.Waypoint;
+                        mode = TaskMode.Move;
                         Location location = parent.localWorldMap.WaypointLocations[0];
                         UpdateAndLaunch(location);
                     }
                     else
                     {
-                        state = TaskDestinationState.Arret;
+                        state = TaskMoveState.Arret;
                     }
                     break;
-                case TaskDestinationMode.Waypoint:
-                    if (parent.localWorldMap.DestinationLocation != null)
+                case TaskMode.Move:
+                    if (parent.localWorldMap.WaypointLocations.Count == 0)
                     {
-                        mode = TaskDestinationMode.Destination;
+                        mode = TaskMode.Stop;
+                        state = TaskMoveState.Arret;
+                        UpdateAndLaunch(parent.robotCurrentLocation);
                     }
-                    state = TaskDestinationState.Avance;
-                    break;
-                case TaskDestinationMode.Destination:
-                    state = TaskDestinationState.Avance;
+                    else 
+                    {
+                        state = TaskMoveState.Avance;
+                        if (Toolbox.Distance(parent.localWorldMap.WaypointLocations[0], Destination) >= 0.05)
+                        {
+                            Location location = parent.localWorldMap.WaypointLocations[0];
+                            UpdateAndLaunch(location);
+                        }
+                    }
                     break;
                 default:
                     break;
@@ -115,17 +113,17 @@ namespace StrategyManagerProjetEtudiantNS
             {
                 switch (state)
                 {
-                    case TaskDestinationState.Arret:
+                    case TaskMoveState.Arret:
                         sw.Restart();
                         UpdateTaskMode();
                         break;                    
-                    case TaskDestinationState.AvanceEnCours:
+                    case TaskMoveState.AvanceEnCours:
                         if (sw.ElapsedMilliseconds > 500)
-                            state = TaskDestinationState.Avance;                           
+                            state = TaskMoveState.Avance;                           
                         break;
-                    case TaskDestinationState.Avance:
+                    case TaskMoveState.Avance:
                         sw.Restart();
-                        state = TaskDestinationState.AvanceEnCours;
+                        state = TaskMoveState.AvanceEnCours;
                         UpdateTaskMode();
                         break;
                     default:

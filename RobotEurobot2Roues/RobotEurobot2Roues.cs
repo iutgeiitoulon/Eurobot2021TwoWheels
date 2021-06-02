@@ -155,7 +155,7 @@ namespace RobotEurobot2Roues
             
 
             #region Lidar
-            lidar = new SickLidar(17422959); // 18110177
+            lidar = new SickLidar(ConstVar.SICK_LIDAR_SERIAL_NUMBER); // 18110177
             lidarProcess = new LidarProcess(robotId, teamId);
 
             lidar.OnLidarDeviceConnectedEvent += lidarProcess.OnNewLidarConnected;
@@ -217,6 +217,7 @@ namespace RobotEurobot2Roues
 
             strategyManager.OnSetWantedLocationEvent += trajectoryPlanner.SetDestination;
 
+            strategyManager.OnSetWaypointsListEvent += localWorldMapManager.SetNewWaypointsList;
             strategyManager.OnSetNewWaypointEvent += localWorldMapManager.AddNewWaypointsEvent;
             strategyManager.OnSetNewDestinationEvent += localWorldMapManager.SetDestinationLocationEvent;
 
@@ -376,8 +377,8 @@ namespace RobotEurobot2Roues
                 usbDriver.OnUSBDataReceivedEvent -= msgDecoder.BuffReceived;
 
                 logReplay.OnLidarEvent += lidarProcess.OnRawLidarArgs;
-                logReplay.OnSpeedPolarOdometryFromReplayEvent += interfaceRobot.UpdateSpeedPolarOdometryOnInterface;
-                logReplay.OnSpeedPolarOdometryFromReplayEvent += positioning2Wheels.OnOdometryRobotSpeedReceived;
+                //logReplay.OnSpeedPolarOdometryFromReplayEvent += interfaceRobot.UpdateSpeedPolarOdometryOnInterface;
+                //logReplay.OnSpeedPolarOdometryFromReplayEvent += positioning2Wheels.OnOdometryRobotSpeedReceived;
             }
             else
             {

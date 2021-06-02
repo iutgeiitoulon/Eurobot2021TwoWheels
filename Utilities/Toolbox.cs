@@ -76,6 +76,15 @@ namespace Utilities
             return thetaDest;
         }
 
+        public static double Distance(Location l1, PointD p2)
+        {
+            return Distance(new PointD(l1.X, l1.Y), p2);
+        }
+        public static double Distance(PointD p1, Location l2)
+        {
+            return Distance(p1, new PointD(l2.X, l2.Y));
+        }
+
         public static double Distance(Location l1, Location l2)
         {
             return Distance(new PointD(l1.X, l1.Y), new PointD(l2.X, l2.Y));

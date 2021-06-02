@@ -351,6 +351,9 @@ namespace LidarProcessNS
         {
 			ConvexHullCreationResult<DefaultVertex2D> hull = ConvexHull.Create2D(list_of_points.Select(x => new double[2] { x.X, x.Y }).ToList());
 
+			if (list_of_points.Count <= 1)
+				return new RectangleOriented(new PointD(0, 0), 0, 0, 0);
+
 			double[,] hull_array = new double[hull.Result.Count, 2];
 
 			for (int i = 0; i < hull.Result.Count; i++)

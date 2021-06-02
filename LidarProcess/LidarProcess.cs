@@ -106,7 +106,7 @@ namespace LidarProcessNS
             List<PolarPointRssi> border_point_polar = border_points.Select(x => Toolbox.ConvertPointDToPolar(x)).ToList();
 
             List<ClusterObjects> inside_clusters = ClustersDetection.ExtractClusterByDBScan(validPointXY.Where(x => border_points.IndexOf(x) == -1).ToList(), 0.045, 3);
-            List<PolarPointRssiExtended> processedPoints = ClustersDetection.SetColorsOfClustersObjects(inside_clusters);
+            List<PolarPointRssiExtended> processedPoints = new List<PolarPointRssiExtended>();//ClustersDetection.SetColorsOfClustersObjects(inside_clusters);
             
 
             List<ClusterObjects> border_clusters = ClustersDetection.ExtractClusterByDBScan(border_points, 0.05, 10);
@@ -155,7 +155,7 @@ namespace LidarProcessNS
             if (resized_rectangle != null)
             {
                 //Lines.AddRange(FindRectangle.DrawRectangle(resized_rectangle, Color.LightGreen, 8));
-                processedPoints.Add(new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(resized_rectangle.Center), 10, Color.Green));
+                //processedPoints.Add(new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(resized_rectangle.Center), 10, Color.Green));
 
                 list_of_possible_locations = FindRectangle.ListAllPossibleLocation(resized_rectangle);
                 //processedPoints.AddRange(list_of_possible_locations.Select(x => new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(new PointD(x.X, x.Y)), 10, (x.Theta != 1) ? Color.Red : Color.DarkRed)).ToList());
@@ -172,7 +172,7 @@ namespace LidarProcessNS
             }
             //processedPoints.AddRange(list_of_possible_locations.Select(x => new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(new PointD(x.X, x.Y)), 10, (x.Theta != 1) ? Color.Red: Color.DarkBlue)).ToList());
 
-            absolutePoints = list_of_possible_locations.Select(x => new PointDExtended(new PointD(x.X, x.Y), x.Theta > 0 ? Color.Red : Color.Blue, 10)).ToList();
+            //absolutePoints = list_of_possible_locations.Select(x => new PointDExtended(new PointD(x.X, x.Y), x.Theta > 0 ? Color.Red : Color.Blue, 10)).ToList();
             Location best_location = FindRectangle.GetBestLocation(list_of_possible_locations, robotLocation);
 
             //processedPoints.Add(new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(new PointD(best_location.X, best_location.Y)), 10, Color.DarkGreen));
@@ -188,17 +188,20 @@ namespace LidarProcessNS
             List<Cup> list_of_cups = new List<Cup>();
             List<LidarObjects> list_of_objects = new List<LidarObjects>();
 
+            Console.ResetColor();
+            Console.WriteLine("--------------");
             foreach (ClusterObjects c in inside_clusters)
             {
-                RectangleOriented cluster_rectangle = FindRectangle.FindMbrBoxByArea(c.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList());
+                RectangleOriented cluster_rectangle = FindRectangle.FindMbrBoxByOverlap(c.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList());
                 cluster_rectangle.Width += 0.1;
                 cluster_rectangle.Lenght += 0.1;
 
-                Lines.AddRange(FindRectangle.DrawRectangle(cluster_rectangle, c.points[0].Color, 3));
+                
 
                 Color color = Toolbox.ColorFromHSL((list_of_objects.Count * 0.20) % 1, 1, 0.5);
                 list_of_objects.Add(new LidarObjects(c.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList(), color));
 
+                
 
                 Cup cup = DetectCup(c);
                 // The null condition is Bad need to edit
@@ -206,6 +209,9 @@ namespace LidarProcessNS
                 {
                     list_of_cups.Add(cup);
                 }
+                else
+                    Lines.AddRange(FindRectangle.DrawRectangle(cluster_rectangle, c.points[0].Color, 3));
+
             }
 
             OnProcessLidarObjectsDataEvent?.Invoke(this, list_of_objects);
@@ -317,15 +323,17 @@ namespace LidarProcessNS
         #region Cups
         public Cup DetectCup(ClusterObjects cluster)
         {
-            /// TEMPORARY NEED TO EDIT: ONLY FOR DEBUG PURPOSE
+            RectangleOriented box_of_cluster = FindRectangle.FindMbrBoxByOverlap(cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList());
+            //box_of_cluster.Width += 0.1;
+            //box_of_cluster.Lenght += 0.1;
 
-            PolarPointRssi begin_point = cluster.points[0].Pt;
-            PolarPointRssi end_point = cluster.points[cluster.points.Count - 1].Pt;
 
-            double lenght_of_cluster = Toolbox.Distance(begin_point, end_point);
 
-            if (lenght_of_cluster >= 0.040 && lenght_of_cluster <= 0.08)
+            if (box_of_cluster.Width / box_of_cluster.Lenght <= 5 && box_of_cluster.Width <= 0.08 && box_of_cluster.Width >= 0.02)
             {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("W: " + box_of_cluster.Width + " H: " + box_of_cluster.Lenght + " : " + box_of_cluster.Width / box_of_cluster.Lenght);
+
                 List<PointD> pointDs = cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList();
 
                 double median = 0.80;
@@ -335,9 +343,10 @@ namespace LidarProcessNS
 
                 double moyenne = (b + e) / 2;
                 Color color = Color.White;
+
                 if (moyenne >= 9000 && moyenne <= 12000)
                 {
-                    color = Color.Green;
+                    color = Color.LimeGreen;
                 }
                 else if (moyenne >= 12000 && moyenne <= 14000)
                 {
@@ -347,12 +356,45 @@ namespace LidarProcessNS
                 {
                     return new Cup();
                 }
-                //Console.WriteLine(moyenne);
-                PointD center_point = GetMediumPoint(pointDs);
+
+                PointD center_point = new PointD(pointDs.Sum(x => x.X) / pointDs.Count, pointDs.Sum(x => x.Y) / pointDs.Count, pointDs.Sum(x => x.Rssi) / pointDs.Count);
+                return new Cup(center_point, 0.065, color);
+            }
+            else if (box_of_cluster.Width / box_of_cluster.Lenght <= 3 && box_of_cluster.Width >= 0.05 && box_of_cluster.Width <= 0.15)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("W: " + box_of_cluster.Width + " H: " + box_of_cluster.Lenght + " : " + box_of_cluster.Width / box_of_cluster.Lenght);
+
+                List<PointD> pointDs = cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList();
+
+                double median = 0.80;
+
+                double b = cluster.points[(int)(cluster.points.Count() * median)].Pt.Rssi;
+                double e = cluster.points[(int)(cluster.points.Count() * (1 - median))].Pt.Rssi;
+
+                double moyenne = (b + e) / 2;
+                Color color = Color.White;
+
+                if (moyenne >= 9000 && moyenne <= 12000)
+                {
+                    color = Color.DarkGreen;
+                }
+                else if (moyenne >= 12000 && moyenne <= 14000)
+                {
+                    color = Color.DarkRed;
+                }
+                else
+                {
+                    return new Cup();
+                }
+
+                PointD center_point = new PointD(pointDs.Sum(x => x.X) / pointDs.Count, pointDs.Sum(x => x.Y) / pointDs.Count, pointDs.Sum(x => x.Rssi) / pointDs.Count);
                 return new Cup(center_point, 0.065, color);
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("W: " + box_of_cluster.Width + " H: " + box_of_cluster.Lenght + " : " + box_of_cluster.Width / box_of_cluster.Lenght);
                 return null;
             }
 
@@ -542,21 +584,6 @@ namespace LidarProcessNS
                 }
             }
             return index;
-        }
-
-        private PointD GetMediumPoint(List<PointD> points)
-        {
-            double X = 0;
-            double Y = 0;
-            foreach (PointD point in points)
-            {
-                X += point.X;
-                Y += point.Y;
-            }
-            X /= points.Count();
-            Y /= points.Count();
-
-            return new PointD(X, Y);
         }
         #endregion
         #endregion

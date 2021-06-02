@@ -66,9 +66,9 @@
     <Compile Include="StrategyEurobot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Taches\TaskDemoMessage.cs" />
-    <Compile Include="Taches\TaskDestination.cs" />
+    <Compile Include="Taches\TaskManager.cs" />
     <Compile Include="Taches\TaskDemoMove.cs" />
-    <Compile Include="Taches\TaskSetupWaypoints.cs" />
+    <Compile Include="Taches\TaskUpdateCupWaypoints.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Constants\Constants.csproj">

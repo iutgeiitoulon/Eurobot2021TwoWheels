@@ -74,6 +74,12 @@ namespace WorldMapManager
             OnLocalWorldMapChange();
         }
 
+        public void SetWaypoints(List<Location> locations)
+        {
+            localWorldMap.WaypointLocations = locations;
+            OnLocalWorldMapChange();
+        }
+
         public void ResetDestination()
         {
             localWorldMap.DestinationLocation = null;
@@ -116,6 +122,11 @@ namespace WorldMapManager
 
 
         #region Input Callback
+        public void SetNewWaypointsList(object sender, List<Location> locations)
+        {
+            SetWaypoints(locations);
+        }
+
         public void AddNewWaypointsEvent(object sender, Location location)
         {
             AddNewWaypoints(location);

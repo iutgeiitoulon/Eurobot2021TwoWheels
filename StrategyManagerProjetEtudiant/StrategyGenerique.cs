@@ -292,6 +292,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         public event EventHandler<LocationArgs> OnSetActualLocationEvent;
         public event EventHandler<PositionArgs> OnSetWantedLocationEvent;
+        public event EventHandler<List<Location>> OnSetWaypointsListEvent;
         public event EventHandler<Location> OnSetNewWaypointEvent;
         public event EventHandler<Location> OnSetNewDestinationEvent;
 
@@ -305,14 +306,20 @@ namespace StrategyManagerProjetEtudiantNS
             OnSetWantedLocationEvent?.Invoke(this, new PositionArgs { RobotId = robotId, X = location.X, Y = location.Y, Theta = location.Theta, Reliability = 0 });
         }
 
+        public void OnSetWaypointsList(List<Location> list_of_location)
+        {
+            OnSetWaypointsListEvent?.Invoke(this, list_of_location);
+        }
+
         public void OnSetNewWaypoint(Location location)
         {
             OnSetNewWaypointEvent?.Invoke(this, location);
         }
 
-        public void OnSetNewDestination(Location location)
+        public void OnSetNewWaypoint(PointD point)
         {
-            OnSetNewDestinationEvent?.Invoke(this, location);
+            OnSetNewWaypointEvent?.Invoke(this, new Location(point.X, point.Y, 0, 0, 0, 0)); 
         }
+
     }    
 }

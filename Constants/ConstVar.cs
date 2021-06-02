@@ -11,6 +11,8 @@ namespace Constants
         public const byte START_OF_FRAME = 0xFE;
         public const byte MAX_MSG_LENGHT = 255;
 
+        public const int SICK_LIDAR_SERIAL_NUMBER = 17422959;
+
         public const string SCICHART_RUNTIME_KEY = "Wh4gbehyfiMgkJA2zpELG3Z1hR4/RsihR9mWQXQ4oz3z/12i6QyyTgoag5ThU5WmVg3FVgxOAS3stZHqZrMg0btp5DhpXrOEp8zPV/UBZcZO3W9yEzvIuu0odvX0tx8s+EG27UvGlc6qUQXylWIRiG/Pyz9BN4CYd7bHOMQKTEnx6vpexCxfZYK930TYzo2hCJJTaty93ld1feRDCYlGubQMDcV3+9Ogsc+P67ldqTghn5pUZfukASkp3Pw1wui/TPR3iLp1rDTN7RJWzfFkMhTPjDLw46hW18ixWCzWb1F2fI1OghfjcLQFCAVw+v90KsP3V71OaVtW9Ur2WcH0/p0Rlzi+HjmE2rvQkiJjiOr5AoP/tKTM6AmfsCUA3WtHQ/gDpUkkXcadoIZ9YPkt9mR0WdmzsPFMuQ56L38ZpIRVVytLFrPH9yfsDbffsfRMwTU99x9OOgozJorss2WXY4Da8EROiVvcyS1/2UP/KRoYvbTZGrEVe/a/ii4DIhZOvg==";
         public const double EUROBOT_ODOMETRY_POINT_TO_METER = 1.178449e-06;
         public const double EUROBOT_WHEELS_ANGLE = 1.570796e+00;
@@ -28,6 +30,23 @@ namespace Constants
         public const int HEIGHT_BOXSIZE = 2;
 
         public const double MINIMAL_WORLD_HISTORICAL_DIST = 0.010d;
+
+        public const double PID_SPEED_MOTOR1_KP = 5.0d;
+        public const double PID_SPEED_MOTOR1_KI = 50.0d;
+        public const double PID_SPEED_MOTOR1_KD = 0.0d;
+
+        public const double PID_SPEED_MOTOR2_KP = 5.0d;
+        public const double PID_SPEED_MOTOR2_KI = 50.0d;
+        public const double PID_SPEED_MOTOR2_KD = 0.0d;
+
+        public const double PID_SPEED_MOTOR1_KP_MAX = 4.0d;
+        public const double PID_SPEED_MOTOR1_KI_MAX = 4.0d;
+        public const double PID_SPEED_MOTOR1_KD_MAX = 0.0d;
+
+        public const double PID_SPEED_MOTOR2_KP_MAX = 4.0d;
+        public const double PID_SPEED_MOTOR2_KI_MAX = 4.0d;
+        public const double PID_SPEED_MOTOR2_KD_MAX = 0.0d;
+
 
         public const double PLANNER_MAX_LINEAR_ACCELERATION = 1.0d;
         public const double PLANNER_MAX_ANGULAR_ACCELERATION = Math.PI;
