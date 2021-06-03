@@ -358,10 +358,9 @@ namespace WpfWorldMapDisplay
                 UpdateLidarMap(robotId, localWorldMap.LidarMapRaw, LidarDataType.RawData);
                 UpdateLidarMap(robotId, localWorldMap.LidarMapProcessed, LidarDataType.ProcessedData1);
 
-                UpdateLidarCups(robotId, localWorldMap.LidarCup);
                 UpdateLidarSegments(robotId, localWorldMap.LidarSegment);
             }
-            //UpdateLidarObjects(robotId, localWorldMap.lidarObjectList);
+            UpdateLidarObjects(robotId, localWorldMap.LidarObjectList);
 
             /// Demande d'affichage de la World Map reçue
             UpdateWorldMapDisplay();
@@ -492,9 +491,10 @@ namespace WpfWorldMapDisplay
                 }
 
                 //Rendering des objets Lidar
-                foreach (var cup in TeamMatesDisplayDictionary[r.Key].GetRobotLidarCup())
+                foreach (LidarObject cup in TeamMatesDisplayDictionary[r.Key].GetRobotLidarObjects())
                 {
-                    LidarPtExtendedSeries.AddPtExtended(new PointDExtended(cup.center, cup.color, 15));
+                    if (cup.Type == LidarObjectType.Cup)
+                        LidarPtExtendedSeries.AddPtExtended(new PointDExtended(cup.Shape.Center, cup.color, 15));
                 }
 
 
@@ -507,9 +507,6 @@ namespace WpfWorldMapDisplay
                 {
                     LidarPtExtendedSeries.AddPtExtended(pt);
                 }
-
-                foreach (var polygonObject in TeamMatesDisplayDictionary[r.Key].GetRobotLidarObjects())
-                    ObjectsPolygonSeries.AddOrUpdatePolygonExtended(ObjectsPolygonSeries.Count(), polygonObject);
             }
 
             foreach (var r in OpponentDisplayDictionary)
@@ -664,27 +661,15 @@ namespace WpfWorldMapDisplay
             }
         }
 
-        private void UpdateLidarCups(int robotId, List<Cup> lidarCups)
+        private void UpdateLidarObjects(int robotId, List<LidarObject> lidarObjectList)
         {
-            if (lidarCups == null)
+            if (lidarObjectList == null)
                 return;
             if (TeamMatesDisplayDictionary.ContainsKey(robotId))
             {
-                TeamMatesDisplayDictionary[robotId].SetLidarCup(lidarCups);
+                TeamMatesDisplayDictionary[robotId].SetLidarObjectList(lidarObjectList);
             }
         }
-
-
-
-        //private void UpdateLidarObjects(int robotId, List<PolarPointListExtended> lidarObjectList)
-        //{
-        //    if (lidarObjectList == null)
-        //        return;
-        //    if (TeamMatesDisplayDictionary.ContainsKey(robotId))
-        //    {
-        //        TeamMatesDisplayDictionary[robotId].SetLidarObjectList(lidarObjectList);
-        //    }
-        //}
 
         public void UpdateBallLocationList(List<Location> ballLocationList)
         {

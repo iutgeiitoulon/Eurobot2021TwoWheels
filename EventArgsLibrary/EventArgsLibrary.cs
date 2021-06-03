@@ -47,19 +47,36 @@ namespace EventArgsLibrary
     }
 
 
-    public class LidarObjects : EventArgs
+    public class LidarObject : EventArgs
     {
-        public List<PointD> points { get; set; }
+        public int LIFE { get; set; }
+        public LidarObjectType Type { get; set; }
+        public RectangleOriented Shape { get; set; }
         public Color color { get; set; }
-        public LidarObjects()
+        public LidarObject()
         {
-            points = new List<PointD>();
+            Shape = new RectangleOriented();
             color = Color.White;
+            Type = LidarObjectType.Null;
+            LIFE = 0;
         }
-        public LidarObjects(List<PointD> pointsPointD, Color color_a)
+        public LidarObject(RectangleOriented shape, Color color_a, LidarObjectType type)
         {
-            points = pointsPointD;
+            Shape = shape;
             color = color_a;
+            Type = type;
+            LIFE = ConstVar.LIDAR_OBJECT_DEFAULT_LIFE;
+        }
+
+        public void Gain()
+        {
+            LIFE += ConstVar.LIDAR_OBJECT_GAIN_LIFE;
+            LIFE = LIFE > ConstVar.LIDAR_OBJECT_MAX_LIFE ? ConstVar.LIDAR_OBJECT_MAX_LIFE : LIFE;
+        }
+
+        public void Lose()
+        {
+            LIFE -= ConstVar.LIDAR_OBJECT_LOSE_LIFE;
         }
     }
 
@@ -248,37 +265,6 @@ namespace EventArgsLibrary
             rho = rho_a;
             theta = theta_a;
         }
-    }
-
-    
-
-    public class Cup : EventArgs
-    {
-        public PointD center { get; set; }
-        public double radius { get; set; }
-        public Color color { get; set; }
-
-        public Cup()
-        {
-            center = new PointD();
-            radius = 0;
-            color = Color.White;
-        }
-
-        public Cup(PointD center_a, double radius_a, Color color_a)
-        {
-            center = center_a;
-            radius = radius_a;
-            color = color_a;
-        }
-
-        public Cup(double x, double y, double radius_a, Color color_a)
-        {
-            center = new PointD(x, y);
-            radius = radius_a;
-            color = color_a;
-        }
-
     }
 
     public class IMUDataEventArgs : EventArgs

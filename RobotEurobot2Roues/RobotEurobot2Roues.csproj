@@ -112,6 +112,10 @@
       <Project>{AD4884AD-631B-42E4-B6BB-F86B16BD6A68}</Project>
       <Name>MessageProcessor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ObjectTrackers\ObjectTrackers.csproj">
+      <Project>{2c73e647-7a13-4446-a4e2-1b81fc422a1a}</Project>
+      <Name>ObjectTrackers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Positioning2Wheels\Positioning2Wheels.csproj">
       <Project>{df70181a-3438-4683-9b0c-ea9bea3b663d}</Project>
       <Name>Positioning2Wheels</Name>

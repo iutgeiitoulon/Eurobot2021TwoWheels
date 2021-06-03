@@ -27,9 +27,7 @@ namespace WorldMap
         public virtual List<PointDExtended> LidarMapProcessed { get; set; }
         public virtual List<PointD> LidarLine { get; set; }
         public virtual List<SegmentExtended> LidarSegment { get; set; }
-
-        public virtual List<Cup> LidarCup { get; set; }
-        public virtual List<LidarObjects> LidarObjectList { get; set; }
+        public virtual List<LidarObject> LidarObjectList { get; set; }
 
 
         // public virtual List<PointD> lidarMap { get; set; }
@@ -48,7 +46,7 @@ namespace WorldMap
             RobotGhostLocation = new Location(0, 0, 0, 0, 0, 0);
             WaypointLocations = new List<Location> { };
             RobotHistorical = new List<Location> { RobotLocation };
-            LidarCup = new List<Cup>();
+            LidarObjectList = new List<LidarObject>();
         }
         #endregion
     }

@@ -29,6 +29,17 @@ namespace Constants
         public const int WIDTH_BOXSIZE = 3;
         public const int HEIGHT_BOXSIZE = 2;
 
+        public const double LIDAR_MIN_POINT_DISTANCE = 0.3;
+        public const double LIDAR_MAX_POINT_DISTANCE = 3.60555;/// Math.Sqrt(Math.Pow(WIDTH_BOXSIZE, 2) + Math.Pow(HEIGHT_BOXSIZE, 2));
+
+        public const double LIDAR_OBJECT_MAX_ASSOCIATION_DISTANCE = 0.2;
+        public const int LIDAR_OBJECT_DEFAULT_LIFE = 1;
+        public const int LIDAR_OBJECT_DEATH_LIFE = 0;
+        public const int LIDAR_OBJECT_VALID_LIFE = 10;
+        public const int LIDAR_OBJECT_MAX_LIFE = 20;
+        public const int LIDAR_OBJECT_GAIN_LIFE = 1;
+        public const int LIDAR_OBJECT_LOSE_LIFE = 3;
+
         public const double MINIMAL_WORLD_HISTORICAL_DIST = 0.010d;
 
         public const double PID_SPEED_MOTOR1_KP = 5.0d;

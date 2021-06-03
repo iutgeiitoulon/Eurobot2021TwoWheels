@@ -53,7 +53,7 @@ namespace TrajectoryPlannerNs
             RobotLocation = new Location(x, y, theta, 0, 0, 0);
             WantedDestination = new Location(x, y, theta, 0, 0, 0);
             GhostLocation = new Location(x, y, theta, 0, 0, 0);
-            state = GhostState.Theta;
+            state = GhostState.Angular;
             PIDPositionReset();
         }
 
@@ -90,7 +90,7 @@ namespace TrajectoryPlannerNs
             {
                 PIDPositionReset();
                 ResetGhost();
-                state = GhostState.Theta;
+                state = GhostState.Angular;
             }
 
             switch (state)
@@ -112,7 +112,7 @@ namespace TrajectoryPlannerNs
                     {
                         ResetGhost();
                         if (!isUrgence)
-                            state = GhostState.Theta;
+                            state = GhostState.Angular;
                     }
 
                     GhostLocation.X += (GhostLocation.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Cos(GhostLocation.Theta);
@@ -138,10 +138,10 @@ namespace TrajectoryPlannerNs
                     OnGhostLocation(robotId, GhostLocation);
                     break;
 
-                case GhostState.Theta:
+                case GhostState.Angular:
                     GenerateGhostRotation();
                     break;
-                case GhostState.Lin:
+                case GhostState.Linear:
                     GenerateGhostShifting();
                     break;
             }
@@ -171,7 +171,7 @@ namespace TrajectoryPlannerNs
 
             if (Math.Abs(dThetaRestant) <= Toolbox.DegToRad(ConstVar.PLANNER_ANGULAR_DEAD_ZONE))
             {
-                state = GhostState.Lin;
+                state = GhostState.Linear;
             }
 
 
@@ -283,7 +283,7 @@ namespace TrajectoryPlannerNs
             {
 
                 ResetGhost();
-                state = GhostState.Theta;
+                state = GhostState.Angular;
             }
         }
 

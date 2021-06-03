@@ -31,10 +31,7 @@ namespace WpfWorldMapDisplay
         List<PointDExtended> LidarRawPoints;
         private List<PointDExtended>[] LidarProcessedPoints = new List<PointDExtended>[3];
         List<SegmentExtended> LidarSegment;
-        List<Cup> LidarCup;
-        List<LidarObjects> LidarObjectList;
-        
-        List<PolarPointListExtended> lidarObjectList;
+        List<LidarObject> LidarObjectList;
         public List<Location> ballLocationList;
 
         public RobotDisplay(PolygonExtended rbtShape, PolygonExtended ghstShape, string name)
@@ -124,12 +121,7 @@ namespace WpfWorldMapDisplay
             LidarSegment = segments;
         }
 
-        public void SetLidarCup(List<Cup> cups)
-        {
-            LidarCup = cups;
-        }
-
-        public void SetLidarObjectList(List<LidarObjects> lidarObjectList)
+        public void SetLidarObjectList(List<LidarObject> lidarObjectList)
         {
             this.LidarObjectList = lidarObjectList;
         }
@@ -340,90 +332,17 @@ namespace WpfWorldMapDisplay
             return (LidarProcessedPoints[0] == null)? new List<PointDExtended>():LidarProcessedPoints[0];
         }
 
-
-
-        public Tuple<XyDataSeries<double, double>, List<System.Drawing.Color>> GetRobotObjectsPoints()
-        {
-            var dataSeries = new XyDataSeries<double, double>();
-            List<System.Drawing.Color> colors = new List<System.Drawing.Color>(); 
-            dataSeries.AcceptsUnsortedData = true;
-
-            if (LidarObjectList == null)
-                return new Tuple<XyDataSeries<double, double>, List<System.Drawing.Color>> (dataSeries, colors);
-
-
-            int i;
-            for (i = 0; i < LidarObjectList.Count(); i++)
-            {
-                                                          
-                var listX = LidarObjectList[i].points.Select(e => e.X);
-                var listY = LidarObjectList[i].points.Select(e => e.Y);
-
-                if (listX.Count() == listY.Count())
-                {
-                    int first_index = dataSeries.Count;
-                    dataSeries.Append(listX, listY);
-                    int last_index = dataSeries.Count;
-
-                    colors.AddRange(Enumerable.Repeat(LidarObjectList[i].color, listX.Count()).ToList());
-                }
-            }
-            
-            return new Tuple<XyDataSeries<double, double>, List<System.Drawing.Color>> (dataSeries, colors);
-        }
-
         public List<SegmentExtended> GetRobotLidarSegments()
         {
             return LidarSegment == null?new List<SegmentExtended>():LidarSegment;
         }
 
-        public List<Cup> GetRobotLidarCup()
+        public List<LidarObject> GetRobotLidarObjects()
         {
-            return LidarCup == null ? new List<Cup>() : LidarCup;
-        }
+            if (this.LidarObjectList == null)
+                return new List<LidarObject>();
 
-        public List<PolygonExtended> GetRobotLidarObjects()
-        {
-            var polygonExtendedList = new List<PolygonExtended>();
-            if (this.lidarObjectList == null)
-                return polygonExtendedList;
-
-            foreach (var obj in this.lidarObjectList)
-            {
-                PolygonExtended polygonToDisplay = new PolygonExtended();
-                foreach (var pt in obj.polarPointList)
-                {
-                    polygonToDisplay.polygon.Points.Add(new Point(robotLocation.X + pt.Distance * Math.Cos(pt.Angle+robotLocation.Theta), robotLocation.Y + pt.Distance * Math.Sin(pt.Angle + robotLocation.Theta)));
-                }
-                //Cas des polygones à un seul point (objets représentés par leur centre : 
-                //on trace un second point juste à coté
-                if(obj.polarPointList.Count==1)
-                {
-                    Point pt = polygonToDisplay.polygon.Points[0];
-                    polygonToDisplay.polygon.Points.Add(new Point(pt.X+0.001, pt.Y + 0.001));
-                }
-                switch(obj.type)
-                {
-                    case ObjectType.Obstacle:
-                        polygonToDisplay.borderColor = System.Drawing.Color.Red;
-                        polygonToDisplay.borderWidth = 2;
-                        polygonToDisplay.backgroundColor = System.Drawing.Color.Yellow;
-                        break;
-                    case ObjectType.Balle:
-                        polygonToDisplay.borderColor = System.Drawing.Color.Black;
-                        polygonToDisplay.borderWidth = 2;
-                        polygonToDisplay.backgroundColor = System.Drawing.Color.Yellow;
-                        break;
-                    default:
-                        polygonToDisplay.borderColor = System.Drawing.Color.Black;
-                        polygonToDisplay.borderWidth = 2;
-                        polygonToDisplay.backgroundColor = System.Drawing.Color.LightBlue;
-                        break;
-                }
-                
-                polygonExtendedList.Add(polygonToDisplay);
-            }
-            return polygonExtendedList;
+            return this.LidarObjectList;
         }
     }
 }

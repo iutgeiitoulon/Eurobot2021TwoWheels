@@ -23,6 +23,7 @@ using LogRecorderNs;
 using LogReplayNs;
 using Positioning2WheelsNs;
 using WorldMapManager;
+using ObjectTrackersNs;
 
 namespace RobotEurobot2Roues
 {
@@ -51,6 +52,8 @@ namespace RobotEurobot2Roues
         static LogReplay logReplay;
 
         static Positioning2Wheels positioning2Wheels;
+
+        static ObjectTrackers objectTrackers;
 
         static GameMode competition = GameMode.Eurobot;
 
@@ -85,6 +88,9 @@ namespace RobotEurobot2Roues
 
             logRecorder = new LogRecorder();
             logReplay = new LogReplay();
+
+            
+
 
             strategyManager = new StrategyEurobot(robotId, teamId, "224.16.32.79");
 
@@ -168,6 +174,15 @@ namespace RobotEurobot2Roues
             lidarProcess.OnRawLidarDataEvent += logRecorder.OnRawLidarDataReceived;
             msgProcessor.OnSpeedPolarOdometryFromRobotEvent += logRecorder.OnPolarSpeedDataReceived;
 
+
+            objectTrackers = new ObjectTrackers(robotId);
+
+            lidarProcess.OnProcessLidarObjectsDataEvent += objectTrackers.OnNewObjectListReceived;
+            
+
+            //objectTrackers.OnObjectListUpdateEvent += localWorldMapManager.OnUp
+
+
             #region Local World Map
             localWorldMapManager = new LocalWorldMapManager(robotId, teamId);
             localWorldMapManager.OnUpdateRobotLocationEvent += lidarProcess.OnRobotLocation;
@@ -177,12 +192,13 @@ namespace RobotEurobot2Roues
             lidarProcess.OnProcessLidarPolarDataEvent += localWorldMapManager.OnProcessedLidarDataReceived;
             lidarProcess.OnProcessLidarAbsoluteDataEvent += localWorldMapManager.OnLidarAbsoluteProcessPointReceived;
             lidarProcess.OnProcessLidarLineDataEvent += localWorldMapManager.OnLidarProcessedLineReceived;
-            lidarProcess.OnProcessLidarCupDataEvent += localWorldMapManager.OnLidarProcessedCupReceived;
             lidarProcess.OnLidarSetupRobotLocationEvent += localWorldMapManager.OnRobotLocation;
 
             //lidarProcess.OnProcessLidarObjectsDataEvent += localWorldMap.OnLidarProcesObjectsReceived;
 
             localWorldMapManager.OnLocalWorldMapEvent += strategyManager.OnLocalWorldMapReceived;
+
+            localWorldMapManager.OnUpdateRobotLocationEvent += objectTrackers.OnNewRobotLocationReceived;
             #endregion
 
             #region Position2Wheels

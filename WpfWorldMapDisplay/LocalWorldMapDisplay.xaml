@@ -31,7 +31,7 @@
                 <local:SegmentRenderableSeries x:Name="SegmentSeries" Opacity="0.5">
                 </local:SegmentRenderableSeries>
                 <local:PointListRenderableSeries x:Name="LidarPtExtendedSeries" Opacity="1">
-                </local:PointListRenderableSeries>
+                </local:PointListRenderableSeries>                
                 <s:FastUniformHeatmapRenderableSeries x:Name="heatmapSeries" Opacity="0.6">
                     <s:FastUniformHeatmapRenderableSeries.ColorMap>
                         <s:HeatmapColorPalette Minimum="-1" Maximum="1">
@@ -83,10 +83,10 @@
                         <s:EllipsePointMarker Width="5" Height="5" Fill="Red" Stroke="White" StrokeThickness="1"/>
                     </s:XyScatterRenderableSeries.PointMarker>
                 </s:XyScatterRenderableSeries>
-
-
+                
+                
             </s:SciChartSurface.RenderableSeries>
-
+                
 
             <!--https://support.scichart.com/index.php?/Knowledgebase/Article/View/17209/33/custom-annotations-adding-a-watermark-to-a-chart-->
             <s:SciChartSurface.Annotations>

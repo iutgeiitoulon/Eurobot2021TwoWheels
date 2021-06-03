@@ -17,8 +17,6 @@ namespace StrategyManagerProjetEtudiantNS
         Thread TaskThread;
         Stopwatch sw = new Stopwatch();
 
-        List<Cup> list_of_finished_cups;
-
         public TaskUpdateCupWaypoints(StrategyEurobot parent)
         {
             this.parent = parent;
@@ -35,30 +33,15 @@ namespace StrategyManagerProjetEtudiantNS
             {
                 Thread.Sleep(100);
                 /// NOT FOR FINAL PROD /!\
-                if (parent.localWorldMap.LidarCup.Count == 0)
+                if (parent.localWorldMap.LidarObjectList.Count == 0)
                 {
                     parent.OnSetWaypointsList(new List<Location>());
                 }
-                else if (parent.localWorldMap.WaypointLocations.Count == 0)
-                {
-                    List<PointD> false_ordered_list_of_cups = parent.localWorldMap.LidarCup.OrderBy(x => Toolbox.Distance(x.center, new PointD(parent.localWorldMap.RobotLocation.X, parent.localWorldMap.RobotLocation.Y))).Select(x => x.center).ToList();
-                    List<PointD> real_ordred_list_of_cups = new List<PointD>();
-
-
-                    while (false_ordered_list_of_cups.Count != 0)
-                    {
-                        PointD point = false_ordered_list_of_cups[0];
-                        real_ordred_list_of_cups.Add(point);
-                        false_ordered_list_of_cups.RemoveAt(0);
-                        false_ordered_list_of_cups = false_ordered_list_of_cups.OrderBy(x => Toolbox.Distance(x, point)).ToList();
-                    }
-
-
-                    real_ordred_list_of_cups.ForEach(x => parent.OnSetNewWaypoint(x));
-                }
                 else if (parent.localWorldMap.WaypointLocations.Count >= 0)
                 {
-                    List<PointD> false_ordered_list_of_cups = parent.localWorldMap.LidarCup.OrderBy(x => Toolbox.Distance(x.center, new PointD(parent.localWorldMap.RobotLocation.X, parent.localWorldMap.RobotLocation.Y))).Select(x => x.center).ToList();
+                    List<LidarObject> valid_Objects = parent.localWorldMap.LidarObjectList.Where(x => x.LIFE >= ConstVar.LIDAR_OBJECT_VALID_LIFE).ToList();
+
+                    List<PointD> false_ordered_list_of_cups = valid_Objects.OrderBy(x => Toolbox.Distance(x.Shape.Center, new PointD(parent.localWorldMap.RobotLocation.X, parent.localWorldMap.RobotLocation.Y))).Select(x => x.Shape.Center).ToList();
                     List<PointD> real_ordred_list_of_cups = new List<PointD>();
 
                     while (false_ordered_list_of_cups.Count != 0)

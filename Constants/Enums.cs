@@ -28,10 +28,18 @@ namespace Constants
 
     public enum GhostState
     {
-        Theta,
-        Lin,
+        Angular,
+        Linear,
         Wait,
         Arret,
         ArretUrgence
+    }
+
+    public enum LidarObjectType
+    { 
+        Cup,
+        Robot,
+        Unknow,
+        Null
     }
 }
