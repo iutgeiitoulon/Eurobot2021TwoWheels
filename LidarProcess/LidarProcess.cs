@@ -93,7 +93,7 @@ namespace LidarProcessNS
         {
             List<SegmentExtended> Lines = new List<SegmentExtended>();
 
-            List<PolarPointRssi> validPoint = polarPointRssi.Where(x => x.Distance <= Math.Sqrt(Math.Pow(3, 2) + Math.Pow(2, 2))).ToList();
+            List<PolarPointRssi> validPoint = polarPointRssi.Where(x => x.Distance <= Math.Sqrt(Math.Pow(3, 2) + Math.Pow(2, 2)) && x.Distance >= 0.25).ToList();
             List<PointD> validPointXY = validPoint.Select(x => Toolbox.ConvertPolarToPointD(x)).ToList();
 
             List<PointDExtended> absolutePoints = new List<PointDExtended>();
@@ -353,34 +353,34 @@ namespace LidarProcessNS
                 PointD center_point = new PointD(pointDs.Sum(x => x.X) / pointDs.Count, pointDs.Sum(x => x.Y) / pointDs.Count, pointDs.Sum(x => x.Rssi) / pointDs.Count);
                 return new Cup(center_point, 0.065, color);
             }
-            else if (box_of_cluster.Width / box_of_cluster.Lenght <= 3 && box_of_cluster.Width >= 0.05 && box_of_cluster.Width <= 0.15)
-            {
-                List<PointD> pointDs = cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList();
+            //else if (box_of_cluster.Width / box_of_cluster.Lenght <= 3 && box_of_cluster.Width >= 0.05 && box_of_cluster.Width <= 0.15)
+            //{
+            //    List<PointD> pointDs = cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList();
 
-                double median = 0.80;
+            //    double median = 0.80;
 
-                double b = cluster.points[(int)(cluster.points.Count() * median)].Pt.Rssi;
-                double e = cluster.points[(int)(cluster.points.Count() * (1 - median))].Pt.Rssi;
+            //    double b = cluster.points[(int)(cluster.points.Count() * median)].Pt.Rssi;
+            //    double e = cluster.points[(int)(cluster.points.Count() * (1 - median))].Pt.Rssi;
 
-                double moyenne = (b + e) / 2;
-                Color color = Color.White;
+            //    double moyenne = (b + e) / 2;
+            //    Color color = Color.White;
 
-                if (moyenne >= 9000 && moyenne <= 12000)
-                {
-                    color = Color.DarkGreen;
-                }
-                else if (moyenne >= 12000 && moyenne <= 14000)
-                {
-                    color = Color.DarkRed;
-                }
-                else
-                {
-                    return new Cup();
-                }
+            //    if (moyenne >= 9000 && moyenne <= 12000)
+            //    {
+            //        color = Color.DarkGreen;
+            //    }
+            //    else if (moyenne >= 12000 && moyenne <= 14000)
+            //    {
+            //        color = Color.DarkRed;
+            //    }
+            //    else
+            //    {
+            //        return new Cup();
+            //    }
 
-                PointD center_point = new PointD(pointDs.Sum(x => x.X) / pointDs.Count, pointDs.Sum(x => x.Y) / pointDs.Count, pointDs.Sum(x => x.Rssi) / pointDs.Count);
-                return new Cup(center_point, 0.065, color);
-            }
+            //    PointD center_point = new PointD(pointDs.Sum(x => x.X) / pointDs.Count, pointDs.Sum(x => x.Y) / pointDs.Count, pointDs.Sum(x => x.Rssi) / pointDs.Count);
+            //    return new Cup(center_point, 0.065, color);
+            //}
             else
             {
                 return null;

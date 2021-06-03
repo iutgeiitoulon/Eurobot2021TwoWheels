@@ -58,8 +58,8 @@ namespace StrategyManagerProjetEtudiantNS
                 case TaskMode.Move:
                     parent.OnWaypointsReached(parent.localWorldMap.WaypointLocations[0]);
 
-                    //Random rand = new Random();
-                    //parent.OnSetNewWaypoint(new Location((rand.NextDouble() - 0.5) * 2.6, (rand.NextDouble() - 0.3) * 1, 0, 0, 0, 0)); /// Only for fun
+                    Random rand = new Random();
+                    parent.OnSetNewWaypoint(new Location((rand.NextDouble() - 0.5) * 2.6, (rand.NextDouble() - 0.3) * 1, 0, 0, 0, 0)); /// Only for fun
                     break;
                 default:
                     break;
@@ -74,31 +74,37 @@ namespace StrategyManagerProjetEtudiantNS
             switch (mode)
             {
                 case TaskMode.Stop:
-                    if (parent.localWorldMap.WaypointLocations.Count >= 1)
+                    lock (parent.localWorldMap.WaypointLocations)
                     {
-                        mode = TaskMode.Move;
-                        Location location = parent.localWorldMap.WaypointLocations[0];
-                        UpdateAndLaunch(location);
-                    }
-                    else
-                    {
-                        state = TaskMoveState.Arret;
+                        if (parent.localWorldMap.WaypointLocations.Count >= 1)
+                        {
+                            mode = TaskMode.Move;
+                            Location location = parent.localWorldMap.WaypointLocations[0];
+                            UpdateAndLaunch(location);
+                        }
+                        else
+                        {
+                            state = TaskMoveState.Arret;
+                        }
                     }
                     break;
                 case TaskMode.Move:
-                    if (parent.localWorldMap.WaypointLocations.Count == 0)
+                    lock (parent.localWorldMap.WaypointLocations)
                     {
-                        mode = TaskMode.Stop;
-                        state = TaskMoveState.Arret;
-                        UpdateAndLaunch(parent.robotCurrentLocation);
-                    }
-                    else 
-                    {
-                        state = TaskMoveState.Avance;
-                        if (Toolbox.Distance(parent.localWorldMap.WaypointLocations[0], Destination) >= 0.05)
+                        if (parent.localWorldMap.WaypointLocations.Count == 0)
                         {
-                            Location location = parent.localWorldMap.WaypointLocations[0];
-                            UpdateAndLaunch(location);
+                            //mode = TaskMode.Stop;
+                            //state = TaskMoveState.Arret;
+                            //UpdateAndLaunch(parent.localWorldMap.RobotLocation);
+                        }
+                        else
+                        {
+                            state = TaskMoveState.Avance;
+                            //if (Toolbox.Distance(parent.localWorldMap.WaypointLocations[0], Destination) >= 0.1)
+                            //{
+                            //    //Location location = parent.localWorldMap.WaypointLocations[0];
+                            //    //UpdateAndLaunch(location);
+                            //}
                         }
                     }
                     break;

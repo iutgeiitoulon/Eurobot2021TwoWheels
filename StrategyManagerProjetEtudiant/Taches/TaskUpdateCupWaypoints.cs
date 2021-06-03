@@ -37,7 +37,7 @@ namespace StrategyManagerProjetEtudiantNS
                 /// NOT FOR FINAL PROD /!\
                 if (parent.localWorldMap.LidarCup.Count == 0)
                 {
-                    parent.OnSetWaypointsList(new List<Location>());
+                    //parent.OnSetWaypointsList(new List<Location>());
                 }
                 else if (parent.localWorldMap.WaypointLocations.Count == 0)
                 {
@@ -54,7 +54,7 @@ namespace StrategyManagerProjetEtudiantNS
                     }
 
 
-                    real_ordred_list_of_cups.ForEach(x => parent.OnSetNewWaypoint(x));
+                    //real_ordred_list_of_cups.ForEach(x => parent.OnSetNewWaypoint(x));
                 }
                 else if (parent.localWorldMap.WaypointLocations.Count >= 0)
                 {
@@ -69,7 +69,7 @@ namespace StrategyManagerProjetEtudiantNS
                         false_ordered_list_of_cups = false_ordered_list_of_cups.OrderBy(x => Toolbox.Distance(x, point)).ToList();
                     }
 
-                    parent.OnSetWaypointsList(real_ordred_list_of_cups.Select(x => new Location(x.X, x.Y, 0, 0, 0, 0)).ToList());
+                    //parent.OnSetWaypointsList(real_ordred_list_of_cups.Select(x => new Location(x.X, x.Y, 0, 0, 0, 0)).ToList());
                 }
 
             }
