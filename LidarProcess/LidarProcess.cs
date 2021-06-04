@@ -98,7 +98,7 @@ namespace LidarProcessNS
 
             List<PointDExtended> absolutePoints = new List<PointDExtended>();
 
-            validPointXY = ClustersDetection.ExtractClusterByDBScan(validPointXY, 0.05, 3).SelectMany(x => x.points).ToList().Select(x => Toolbox.ConvertPolarToPointD(x)).ToList().Select(x => x.Pt).ToList();
+            validPointXY = new List<PointD>(); // ClustersDetection.ExtractClusterByDBScan(validPointXY, 0.05, 3).SelectMany(x => x.points).ToList().Select(x => Toolbox.ConvertPolarToPointD(x)).ToList().Select(x => x.Pt).ToList();
             
 
             RectangleOriented best_rectangle = FindRectangle.FindMbrBoxByOverlap(validPointXY);
