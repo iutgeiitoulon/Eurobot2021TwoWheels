@@ -212,8 +212,8 @@ namespace WpfWorldMapDisplay
                     if (competition == GameMode.RoboCup)
                         PolygonTerrainSeries.RedrawAll();
                     PolygonSeries.RedrawAll();
-                    SegmentSeries.RedrawAll();
-                    LidarPtExtendedSeries.RedrawAll();
+                    //SegmentSeries.RedrawAll();
+                    //LidarPtExtendedSeries.RedrawAll();
                     ObjectsPolygonSeries.RedrawAll();
                     BallPolygon.RedrawAll();
                     DrawTeam();

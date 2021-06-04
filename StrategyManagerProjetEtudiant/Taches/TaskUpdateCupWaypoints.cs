@@ -39,7 +39,7 @@ namespace StrategyManagerProjetEtudiantNS
                 }
                 else if (parent.localWorldMap.WaypointLocations.Count >= 0)
                 {
-                    List<LidarObject> valid_Objects = parent.localWorldMap.LidarObjectList.Where(x => x.LIFE >= ConstVar.LIDAR_OBJECT_VALID_LIFE).ToList();
+                    List<LidarObject> valid_Objects = parent.localWorldMap.LidarObjectList.Where(x => x.LIFE >= ConstVar.LIDAR_OBJECT_VALID_LIFE && x.Type == LidarObjectType.Cup).ToList();
 
                     List<PointD> false_ordered_list_of_cups = valid_Objects.OrderBy(x => Toolbox.Distance(x.Shape.Center, new PointD(parent.localWorldMap.RobotLocation.X, parent.localWorldMap.RobotLocation.Y))).Select(x => x.Shape.Center).ToList();
                     List<PointD> real_ordred_list_of_cups = new List<PointD>();

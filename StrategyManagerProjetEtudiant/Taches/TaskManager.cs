@@ -77,11 +77,12 @@ namespace StrategyManagerProjetEtudiantNS
                     if (parent.localWorldMap.WaypointLocations.Count >= 1)
                     {
                         mode = TaskMode.Move;
-                        Location location = parent.localWorldMap.WaypointLocations[0];
-                        UpdateAndLaunch(location);
+                        Destination = parent.localWorldMap.WaypointLocations[0];
+                        UpdateAndLaunch(parent.localWorldMap.WaypointLocations[0]);
                     }
                     else
                     {
+                        Destination = parent.robotCurrentLocation;
                         state = TaskMoveState.Arret;
                     }
                     break;
@@ -90,15 +91,16 @@ namespace StrategyManagerProjetEtudiantNS
                     {
                         mode = TaskMode.Stop;
                         state = TaskMoveState.Arret;
+                        Destination = parent.robotCurrentLocation;
                         UpdateAndLaunch(parent.robotCurrentLocation);
                     }
                     else 
                     {
                         state = TaskMoveState.Avance;
-                        if (Toolbox.Distance(parent.localWorldMap.WaypointLocations[0], Destination) >= 0.05)
+                        if (Toolbox.Distance(parent.localWorldMap.WaypointLocations[0], Destination) >= 0.5)
                         {
-                            Location location = parent.localWorldMap.WaypointLocations[0];
-                            UpdateAndLaunch(location);
+                            UpdateAndLaunch(parent.localWorldMap.WaypointLocations[0]);
+                            Destination = parent.localWorldMap.WaypointLocations[0];
                         }
                     }
                     break;
