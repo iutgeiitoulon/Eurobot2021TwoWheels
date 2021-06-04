@@ -14,7 +14,7 @@
                            s:VisualXcceleratorEngine.IsEnabled="True"
                            s:VisualXcceleratorEngine.FallbackType="{x:Type s:HighQualityRenderSurface}"
                            s:VisualXcceleratorEngine.DowngradeWithoutException="False"
-                           s:VisualXcceleratorEngine.EnableImpossibleMode="False">
+                           s:VisualXcceleratorEngine.EnableImpossibleMode="True">
             <!--  Create a X Axis  -->
             <s:SciChartSurface.XAxis>
                 <s:NumericAxis VisibleRange="-12,12" IsCenterAxis="False" AutoRange="Never"  Visibility="Hidden" DrawMajorGridLines="False" DrawMinorGridLines="False"

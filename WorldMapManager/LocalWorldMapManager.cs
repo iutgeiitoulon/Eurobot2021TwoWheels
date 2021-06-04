@@ -314,7 +314,7 @@ namespace WorldMapManager
 
         public void OnLidarObjectReceived(object sender, List<LidarObject> list_of_object)
         {
-
+            localWorldMap.LidarObjectList = list_of_object;
         }
 
         public void OnLidarAbsoluteProcessPointReceived(object sender, List<PointDExtended> list_of_points)

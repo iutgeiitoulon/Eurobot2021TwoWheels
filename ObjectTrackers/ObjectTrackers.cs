@@ -76,9 +76,9 @@ namespace ObjectTrackersNs
 
         public bool isVisible(LidarObject lidar_object)
         {
-            /// TODO
+            PolarPointRssi point_position = Toolbox.ConvertPointDToPolar(new PointD(lidar_object.Shape.Center.X - RobotLocation.X, lidar_object.Shape.Center.Y - RobotLocation.Y));
 
-            return false;
+            return Math.Abs(Toolbox.Modulo2PiAngleRad(point_position.Angle - RobotLocation.Theta)) <= Math.PI / 2;
         }
 
         #region Input Callback
@@ -92,7 +92,33 @@ namespace ObjectTrackersNs
 
         public void OnNewObjectListReceived(object sender, List<LidarObject> list_of_objects)
         {
-            Update(list_of_objects);
+            List<LidarObject> corrected_list = new List<LidarObject>();
+            
+            foreach(LidarObject lidarObject in list_of_objects)
+            {
+                PolarPointRssi x = Toolbox.ConvertPointDToPolar(lidarObject.Shape.Center);
+
+                LidarObject corrected_object = new LidarObject();
+
+
+                corrected_object.Shape = lidarObject.Shape;
+                corrected_object.Shape.Center = new PointD(
+                        RobotLocation.X + (x.Distance * Math.Cos(RobotLocation.Theta + x.Angle)),
+                        RobotLocation.Y + (x.Distance * Math.Sin(RobotLocation.Theta + x.Angle)),
+                        x.Rssi
+                    );
+
+                // TODO : Angle Correction
+
+                corrected_object.Type = lidarObject.Type;
+                corrected_object.LIFE = lidarObject.LIFE;
+                corrected_object.color = lidarObject.color;
+
+                corrected_list.Add(corrected_object);
+
+            }
+
+            Update(corrected_list);
         }
         #endregion
 

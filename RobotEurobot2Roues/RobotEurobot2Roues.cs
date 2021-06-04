@@ -89,10 +89,18 @@ namespace RobotEurobot2Roues
             logRecorder = new LogRecorder();
             logReplay = new LogReplay();
 
-            
+            localWorldMapManager = new LocalWorldMapManager(robotId, teamId);
 
+            lidar = new SickLidar(ConstVar.SICK_LIDAR_SERIAL_NUMBER); // 18110177
+            lidarProcess = new LidarProcess(robotId, teamId);
+            objectTrackers = new ObjectTrackers(robotId);
+
+            positioning2Wheels = new Positioning2Wheels(robotId);
+            trajectoryPlanner = new TrajectoryPlanner(robotId);
 
             strategyManager = new StrategyEurobot(robotId, teamId, "224.16.32.79");
+
+
 
             #region Communication to Low Lvl
             /// Création des liens entre module, sauf depuis et vers l'interface graphique           
@@ -100,6 +108,11 @@ namespace RobotEurobot2Roues
             msgDecoder.OnCorrectMessageReceivedEvent += msgProcessor.ProcessRobotDecodedMessage;            // Transmission les messages décodés par le Message Decoder au Message Processor
             msgGenerator.OnMessageToRobotGeneratedEvent += msgEncoder.EncodeAndSendMessage;                 // Envoi des messages du générateur de message à l'encoder
             msgEncoder.OnSendMessageEvent += usbDriver.SendUSBMessage;                                      // Envoi des messages en USB depuis le message encoder
+            #endregion
+
+            #region MsgProcessor
+            msgProcessor.OnSpeedPolarOdometryFromRobotEvent += logRecorder.OnPolarSpeedDataReceived;
+            msgProcessor.OnSpeedPolarOdometryFromRobotEvent += positioning2Wheels.OnOdometryRobotSpeedReceived;
             #endregion
 
             #region Console
@@ -158,64 +171,42 @@ namespace RobotEurobot2Roues
             #endregion
             #endregion
 
-            
-
             #region Lidar
-            lidar = new SickLidar(ConstVar.SICK_LIDAR_SERIAL_NUMBER); // 18110177
-            lidarProcess = new LidarProcess(robotId, teamId);
-
             lidar.OnLidarDeviceConnectedEvent += lidarProcess.OnNewLidarConnected;
             lidar.OnLidarDeviceConnectedEvent += ConsoleFormat.NewLidarDeviceConnected;
             lidar.PointsAvailable += lidarProcess.OnRawPointAvailable;
-            
             lidar.Start();
             #endregion
 
+            #region Lidar Process
             lidarProcess.OnRawLidarDataEvent += logRecorder.OnRawLidarDataReceived;
-            msgProcessor.OnSpeedPolarOdometryFromRobotEvent += logRecorder.OnPolarSpeedDataReceived;
-
-
-            objectTrackers = new ObjectTrackers(robotId);
 
             lidarProcess.OnProcessLidarObjectsDataEvent += objectTrackers.OnNewObjectListReceived;
-            
-
-            //objectTrackers.OnObjectListUpdateEvent += localWorldMapManager.OnUp
-
-
-            #region Local World Map
-            localWorldMapManager = new LocalWorldMapManager(robotId, teamId);
-            localWorldMapManager.OnUpdateRobotLocationEvent += lidarProcess.OnRobotLocation;
-            
 
             lidarProcess.OnRawLidarPointPolarEvent += localWorldMapManager.OnRawLidarDataReceived;
             lidarProcess.OnProcessLidarPolarDataEvent += localWorldMapManager.OnProcessedLidarDataReceived;
             lidarProcess.OnProcessLidarAbsoluteDataEvent += localWorldMapManager.OnLidarAbsoluteProcessPointReceived;
             lidarProcess.OnProcessLidarLineDataEvent += localWorldMapManager.OnLidarProcessedLineReceived;
             lidarProcess.OnLidarSetupRobotLocationEvent += localWorldMapManager.OnRobotLocation;
+            #endregion
 
-            //lidarProcess.OnProcessLidarObjectsDataEvent += localWorldMap.OnLidarProcesObjectsReceived;
+            #region Object Trackers
+            objectTrackers.OnObjectListUpdateEvent += localWorldMapManager.OnLidarObjectReceived;
+            #endregion
 
-            localWorldMapManager.OnLocalWorldMapEvent += strategyManager.OnLocalWorldMapReceived;
-
+            #region Local World Map
+            localWorldMapManager.OnUpdateRobotLocationEvent += lidarProcess.OnRobotLocation;
             localWorldMapManager.OnUpdateRobotLocationEvent += objectTrackers.OnNewRobotLocationReceived;
+            localWorldMapManager.OnUpdateRobotLocationEvent += positioning2Wheels.OnSetRobotLocation;
+            localWorldMapManager.OnUpdateRobotLocationEvent += trajectoryPlanner.OnPhysicalPositionReceived;
+            localWorldMapManager.OnLocalWorldMapEvent += strategyManager.OnLocalWorldMapReceived;
             #endregion
 
             #region Position2Wheels
-            positioning2Wheels = new Positioning2Wheels(robotId);
-
-            localWorldMapManager.OnUpdateRobotLocationEvent += positioning2Wheels.OnSetRobotLocation;
-            msgProcessor.OnSpeedPolarOdometryFromRobotEvent += positioning2Wheels.OnOdometryRobotSpeedReceived;
-
-            positioning2Wheels.OnCalculatedLocationEvent += localWorldMapManager.OnRobotLocationArgs;
-
+            positioning2Wheels.OnCalculatedLocationEvent += localWorldMapManager.OnRobotLocationArgs;            
             #endregion
 
             #region TrajectoryPlanner
-            trajectoryPlanner = new TrajectoryPlanner(robotId);
-
-            localWorldMapManager.OnUpdateRobotLocationEvent += trajectoryPlanner.OnPhysicalPositionReceived;
-
             trajectoryPlanner.OnGhostLocationEvent += localWorldMapManager.OnGhostLocation;
             trajectoryPlanner.OnRobotDestinationReachedEvent += strategyManager.OnRobotLocationReached;
             trajectoryPlanner.OnSpeedConsigneEvent += msgGenerator.GenerateMessageSetSpeedConsigneToRobot;
@@ -393,8 +384,8 @@ namespace RobotEurobot2Roues
                 usbDriver.OnUSBDataReceivedEvent -= msgDecoder.BuffReceived;
 
                 logReplay.OnLidarEvent += lidarProcess.OnRawLidarArgs;
-                //logReplay.OnSpeedPolarOdometryFromReplayEvent += interfaceRobot.UpdateSpeedPolarOdometryOnInterface;
-                //logReplay.OnSpeedPolarOdometryFromReplayEvent += positioning2Wheels.OnOdometryRobotSpeedReceived;
+                logReplay.OnSpeedPolarOdometryFromReplayEvent += interfaceRobot.UpdateSpeedPolarOdometryOnInterface;
+                logReplay.OnSpeedPolarOdometryFromReplayEvent += positioning2Wheels.OnOdometryRobotSpeedReceived;
             }
             else
             {
