@@ -28,10 +28,12 @@
             <s:SciChartSurface.RenderableSeries >
                 <local:PolygonRenderableSeries x:Name="PolygonTerrainSeries" Opacity="0.5">
                 </local:PolygonRenderableSeries>
+                <local:PolygonRenderableSeries x:Name="PolygonSeries" Opacity="0.5">
+                </local:PolygonRenderableSeries>
                 <local:SegmentRenderableSeries x:Name="SegmentSeries" Opacity="0.5">
                 </local:SegmentRenderableSeries>
                 <local:PointListRenderableSeries x:Name="LidarPtExtendedSeries" Opacity="1">
-                </local:PointListRenderableSeries>                
+                </local:PointListRenderableSeries>
                 <s:FastUniformHeatmapRenderableSeries x:Name="heatmapSeries" Opacity="0.6">
                     <s:FastUniformHeatmapRenderableSeries.ColorMap>
                         <s:HeatmapColorPalette Minimum="-1" Maximum="1">
@@ -67,8 +69,7 @@
                         <s:EllipsePointMarker Width="4" Height="4" Fill="SteelBlue" Stroke="Orange" StrokeThickness="1"/>
                     </s:XyScatterRenderableSeries.PointMarker>
                 </s:XyScatterRenderableSeries>
-                <local:PolygonRenderableSeries x:Name="PolygonSeries" Opacity="0.5">
-                </local:PolygonRenderableSeries>
+                
                 <s:XyScatterRenderableSeries x:Name="BallPoints" Opacity="0.5">
                     <s:XyScatterRenderableSeries.PointMarker>
                         <s:EllipsePointMarker Width="10" Height="10" Fill="Yellow" Stroke="White" StrokeThickness="1"/>

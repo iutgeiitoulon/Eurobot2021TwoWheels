@@ -22,7 +22,7 @@ namespace LidarProcessNS
     {
         public static Location GetBestLocation(List<Location> list_of_locations, Location actual_location)
         {
-            return list_of_locations.OrderBy(x => Math.Abs(Toolbox.Modulo2PiAngleRad(x.Theta) - Toolbox.Modulo2PiAngleRad(actual_location.Theta))).ToList()[0]; // list_of_locations.OrderBy(x => Toolbox.Distance(new PointD(x.X, x.Y), new PointD(actual_location.X, actual_location.Y))).FirstOrDefault();
+            return /*list_of_locations.OrderBy(x => Math.Abs(Toolbox.Modulo2PiAngleRad(x.Theta) - Toolbox.Modulo2PiAngleRad(actual_location.Theta))).ToList()[0];*/ list_of_locations.OrderBy(x => Toolbox.Distance(new PointD(x.X, x.Y), new PointD(actual_location.X, actual_location.Y))).FirstOrDefault();
 
 
         }
@@ -42,7 +42,7 @@ namespace LidarProcessNS
 
 
 
-            double rotation_angle = Toolbox.ModuloPiAngleRadian(rectangle.Angle);
+            double rotation_angle = rectangle.Angle;
 
             Matrix<double> rotation_matrix = DenseMatrix.OfArray(new double[,] {
                     { Math.Cos(rotation_angle), - Math.Sin(rotation_angle) },
@@ -61,11 +61,37 @@ namespace LidarProcessNS
 
             PointD ref_robot_point = new PointD(-ref_center[0], -ref_center[1]);
 
-            if (rotation_angle > 0 && corner_1_and_2_is_height)
-                rotation_angle *= -1;
+            if (rotation_angle > 0 && !corner_1_and_2_is_height)
+            {
+                ref_center_point.X *= -1;
+                ref_center_point.Y *= -1;
+            }
+                
 
-            Location location_1 = new Location(pt1.X - ref_center_point.X, pt1.Y - ref_center_point.Y, -rotation_angle, 0, 0, 0);
-            Location location_4 = new Location(pt1.X + ref_center_point.X, pt1.Y + ref_center_point.Y, rotation_angle, 0, 0, 0);
+            //if ()
+            //    ref_center_point.X *= -1;
+
+            Location location_1, location_2, location_3, location_4;
+
+            //location_1 = new Location(ref_pt1[0] - ref_center_point.X, ref_pt1[1] - ref_center_point.Y, 0, 0, 0, 0);
+            //location_2 = new Location(ref_pt1[0] - ref_center_point.X, ref_pt1[1] - ref_center_point.Y, 0, 0, 0, 0);
+            //location_3 = new Location(ref_pt1[0] - ref_center_point.X, ref_pt1[1] - ref_center_point.Y, 0, 0, 0, 0);
+            //location_4 = new Location(ref_pt1[0] - ref_center_point.X, ref_pt1[1] - ref_center_point.Y, 0, 0, 0, 0);
+            if (rotation_angle > 0 && !corner_1_and_2_is_height)
+            {
+                location_1 = new Location(pt1.X - ref_center_point.X, pt1.Y - ref_center_point.Y, -rotation_angle + Math.PI, 0, 0, 0);
+                location_4 = new Location(pt1.X + ref_center_point.X, pt1.Y + ref_center_point.Y, -rotation_angle , 0, 0, 0);
+            }
+            else
+            {
+                location_1 = new Location(pt1.X - ref_center_point.X, pt1.Y - ref_center_point.Y, -rotation_angle, 0, 0, 0);
+                location_4 = new Location(pt1.X + ref_center_point.X, pt1.Y + ref_center_point.Y, -rotation_angle + Math.PI, 0, 0, 0);
+            }
+
+
+            Console.WriteLine("Angle: " + rotation_angle * 180 / Math.PI + " Corner - 1-2: " + corner_1_and_2_is_height + " Farthest: " + farthest_point_is_1);
+
+            
 
             return new List<Location>() { location_1, location_4 };
 
@@ -73,65 +99,58 @@ namespace LidarProcessNS
 
         public static Tuple<RectangleOriented, RectangleOriented, RectangleOriented> ListResisableRectangle(RectangleOriented rectangle, double thresold)
         {
-            Tuple<PointD, PointD, PointD, PointD> corners = Toolbox.GetCornerOfAnOrientedRectangle(rectangle);
-            double width_correction_angle_1, height_correction_angle_1, width_correction_angle_2, height_correction_angle_2, width_correction_distance_1, height_correction_distance_1, width_correction_distance_2, height_correction_distance_2;
-
-            PointD point_1 = corners.Item1;
-            PointD point_2 = corners.Item2;
-            PointD point_3 = corners.Item3;
-            PointD point_4 = corners.Item4;
+            double  width_correction_angle_1, height_correction_angle_1, 
+                    width_correction_angle_2, height_correction_angle_2, 
+                    width_correction_distance_1, height_correction_distance_1, 
+                    width_correction_distance_2, height_correction_distance_2;
 
             double Width = Math.Max(rectangle.Lenght, rectangle.Width);
             double Height = Math.Min(rectangle.Lenght, rectangle.Width);
             double Angle = rectangle.Angle;
 
+            width_correction_distance_1 = (ConstVar.WIDTH_BOXSIZE - Height) / 2;
+            height_correction_distance_1 = (ConstVar.HEIGHT_BOXSIZE - Width) / 2;
 
+            width_correction_distance_2 = (ConstVar.WIDTH_BOXSIZE - Width) / 2;
+            height_correction_distance_2 = (ConstVar.HEIGHT_BOXSIZE - Height) / 2;
 
-            width_correction_distance_1 = (ConstVar.WIDTH_BOXSIZE - Width) / 2;
-            height_correction_distance_1 = (ConstVar.HEIGHT_BOXSIZE - Height) / 2;
-
-            width_correction_distance_2 = (ConstVar.WIDTH_BOXSIZE - Height) / 2;
-            height_correction_distance_2 = (ConstVar.HEIGHT_BOXSIZE - Width) / 2;
 
             if (Width >= ConstVar.HEIGHT_BOXSIZE - thresold)
             {
                 //width_correction_distance_1 = 0;
-                height_correction_distance_2 = 0;
+                height_correction_distance_1 = 0;
             }
 
             if (Height >= ConstVar.HEIGHT_BOXSIZE - thresold)
             {
-                height_correction_distance_1 = 0;
+                height_correction_distance_2 = 0;
                 //width_correction_distance_2 = 0;
             }
 
-
             /// 1st
-            width_correction_angle_1 = Toolbox.ModuloPiAngleRadian(Angle) + Math.PI;
-            height_correction_angle_1 = Toolbox.ModuloPiAngleRadian(Angle - Math.PI / 2) + Math.PI;
+            width_correction_angle_1 = Toolbox.ModuloPiAngleRadian(Angle - Math.PI / 2) + Math.PI;
+            height_correction_angle_1 = Toolbox.ModuloPiAngleRadian(Angle) + Math.PI;
 
             PointD width_correction_point_1 = Toolbox.ConvertPolarToPointD(new PolarPointRssi(width_correction_angle_1, width_correction_distance_1, 0));
             PointD height_correction_point_1 = Toolbox.ConvertPolarToPointD(new PolarPointRssi(height_correction_angle_1, height_correction_distance_1, 0));
 
             PointD correct_center_point_1 = new PointD(rectangle.Center.X + width_correction_point_1.X + height_correction_point_1.X, rectangle.Center.Y + width_correction_point_1.Y + height_correction_point_1.Y);
-            PointD correct_center_point_3 = new PointD(rectangle.Center.X - width_correction_point_1.X + height_correction_point_1.X, rectangle.Center.Y - width_correction_point_1.Y + height_correction_point_1.Y);
-
-            /// 2st
-            width_correction_angle_2 = Toolbox.ModuloPiAngleRadian(Angle - Math.PI / 2) + Math.PI;
-            height_correction_angle_2 = Toolbox.ModuloPiAngleRadian(Angle) + Math.PI;
 
 
-            //height_correction_angle_2 += (rectangle.Angle > 0) ? Math.PI : 0;
+            /// 2nd & 3rd
+            width_correction_angle_2 = Toolbox.ModuloPiAngleRadian(Angle) + Math.PI;
+            height_correction_angle_2 = Toolbox.ModuloPiAngleRadian(Angle - Math.PI / 2) + Math.PI;
 
             PointD width_correction_point_2 = Toolbox.ConvertPolarToPointD(new PolarPointRssi(width_correction_angle_2, width_correction_distance_2, 0));
             PointD height_correction_point_2 = Toolbox.ConvertPolarToPointD(new PolarPointRssi(height_correction_angle_2, height_correction_distance_2, 0));
 
-
-
             PointD correct_center_point_2 = new PointD(rectangle.Center.X + width_correction_point_2.X + height_correction_point_2.X, rectangle.Center.Y + width_correction_point_2.Y + height_correction_point_2.Y);
+            PointD correct_center_point_3 = new PointD(rectangle.Center.X - width_correction_point_2.X + height_correction_point_2.X, rectangle.Center.Y - width_correction_point_2.Y + height_correction_point_2.Y);
 
-            RectangleOriented rectangle1 = new RectangleOriented(correct_center_point_1, ConstVar.WIDTH_BOXSIZE, ConstVar.HEIGHT_BOXSIZE, Angle);
-            RectangleOriented rectangle2 = new RectangleOriented(correct_center_point_2, ConstVar.WIDTH_BOXSIZE, ConstVar.HEIGHT_BOXSIZE, Angle + Math.PI / 2);
+
+
+            RectangleOriented rectangle1 = new RectangleOriented(correct_center_point_1, ConstVar.WIDTH_BOXSIZE, ConstVar.HEIGHT_BOXSIZE, Angle + Math.PI / 2);
+            RectangleOriented rectangle2 = new RectangleOriented(correct_center_point_2, ConstVar.WIDTH_BOXSIZE, ConstVar.HEIGHT_BOXSIZE, Angle);
             RectangleOriented rectangle3 = new RectangleOriented(correct_center_point_3, ConstVar.WIDTH_BOXSIZE, ConstVar.HEIGHT_BOXSIZE, Angle);
 
             return new Tuple<RectangleOriented, RectangleOriented, RectangleOriented>(rectangle1, rectangle2, rectangle3);

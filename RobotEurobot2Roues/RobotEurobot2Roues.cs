@@ -386,8 +386,8 @@ namespace RobotEurobot2Roues
                 usbDriver.OnUSBDataReceivedEvent -= msgDecoder.BuffReceived;
 
                 logReplay.OnLidarEvent += lidarProcess.OnRawLidarArgs;
-                logReplay.OnSpeedPolarOdometryFromReplayEvent += interfaceRobot.UpdateSpeedPolarOdometryOnInterface;
-                logReplay.OnSpeedPolarOdometryFromReplayEvent += positioning2Wheels.OnOdometryRobotSpeedReceived;
+                //logReplay.OnSpeedPolarOdometryFromReplayEvent += interfaceRobot.UpdateSpeedPolarOdometryOnInterface;
+                //logReplay.OnSpeedPolarOdometryFromReplayEvent += positioning2Wheels.OnOdometryRobotSpeedReceived;
             }
             else
             {

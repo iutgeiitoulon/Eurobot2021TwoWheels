@@ -121,65 +121,90 @@ namespace LidarProcessNS
             processedPoints.Add(new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(best_rectangle.Center), 10, Color.Black));
 
 
-            //Lines.AddRange(rectangle_segments);
+            Lines.AddRange(rectangle_segments);
 
             //Console.WriteLine("Corners: " + FindRectangle.GetNumberOfVisibleCorners(best_rectangle));
 
             RectangleOriented resized_rectangle = FindRectangle.ResizeRectangle(best_rectangle, thresold);
-            List<Location> list_of_possible_locations;
+            List<Location> list_of_possible_locations = new List<Location>();
 
             if (resized_rectangle != null)
             {
-                //Lines.AddRange(FindRectangle.DrawRectangle(resized_rectangle, Color.LightGreen, 8));
-                //processedPoints.Add(new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(resized_rectangle.Center), 10, Color.Green));
+         
+                Console.ForegroundColor = ConsoleColor.Green;
+                List<Location> green_location = FindRectangle.ListAllPossibleLocation(resized_rectangle);
+                absolutePoints.Add(new PointDExtended(new PointD(green_location[0].X, green_location[0].Y), Color.LightGreen, 10));
+                absolutePoints.Add(new PointDExtended(new PointD(green_location[1].X, green_location[1].Y), Color.DarkGreen, 10));
+                //absolutePoints.AddRange(green_location.Select(x => new PointDExtended(new PointD(x.X, x.Y), Color.Green, 10)).ToList());
+                list_of_possible_locations.AddRange(green_location);
 
-                list_of_possible_locations = FindRectangle.ListAllPossibleLocation(resized_rectangle);
-                //processedPoints.AddRange(list_of_possible_locations.Select(x => new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(new PointD(x.X, x.Y)), 10, (x.Theta != 1) ? Color.Red : Color.DarkRed)).ToList());
+                Lines.AddRange(FindRectangle.DrawRectangle(resized_rectangle, Color.LightGreen, 8));
             }
             else
             {
                 Tuple<RectangleOriented, RectangleOriented, RectangleOriented> list_of_possible_rectangles = FindRectangle.ListResisableRectangle(best_rectangle, thresold);
-                list_of_possible_locations = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item2);
 
-                //Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item1, Color.Yellow, 4));
-                //Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item2, Color.Blue, 4));
-                //Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item3, Color.Red, 4));
+                Console.ForegroundColor = ConsoleColor.Blue;
+                List<Location> blue_location = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item1);
+                absolutePoints.Add(new PointDExtended(new PointD(blue_location[0].X, blue_location[0].Y), Color.LightBlue, 10));
+                absolutePoints.Add(new PointDExtended(new PointD(blue_location[1].X, blue_location[1].Y), Color.DarkBlue, 10));
+                //absolutePoints.AddRange(blue_location.Select(x => new PointDExtended(new PointD(x.X, x.Y), Color.Blue, 10)).ToList());
+                list_of_possible_locations.AddRange(blue_location);
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                List<Location> yellow_location = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item2);
+                absolutePoints.Add(new PointDExtended(new PointD(yellow_location[0].X, yellow_location[0].Y), Color.LightYellow, 10));
+                absolutePoints.Add(new PointDExtended(new PointD(yellow_location[1].X, yellow_location[1].Y), Color.Yellow, 10));
+                //absolutePoints.AddRange(yellow_location.Select(x => new PointDExtended(new PointD(x.X, x.Y), Color.Yellow, 10)).ToList());
+                list_of_possible_locations.AddRange(yellow_location);
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                List<Location> red_location = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item3);
+                absolutePoints.Add(new PointDExtended(new PointD(red_location[0].X, blue_location[0].Y), Color.Red, 10));
+                absolutePoints.Add(new PointDExtended(new PointD(red_location[1].X, blue_location[1].Y), Color.DarkRed, 10));
+                //absolutePoints.AddRange(red_location.Select(x => new PointDExtended(new PointD(x.X, x.Y), Color.Red, 10)).ToList());
+                list_of_possible_locations.AddRange(red_location);
+
+
+                Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item1, Color.Blue, 4));
+                Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item2, Color.Yellow, 4));
+                Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item3, Color.Red, 4));
 
             }
             //processedPoints.AddRange(list_of_possible_locations.Select(x => new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(new PointD(x.X, x.Y)), 10, (x.Theta != 1) ? Color.Red: Color.DarkBlue)).ToList());
 
-            //absolutePoints = list_of_possible_locations.Select(x => new PointDExtended(new PointD(x.X, x.Y), x.Theta > 0 ? Color.Red : Color.Blue, 10)).ToList();
+            //absolutePoints = list_of_possible_locations.Select(x => new PointDExtended(new PointD(x.X, x.Y), x.Theta > 0 ? Color.Red : Color.Red, 10)).ToList();
             Location best_location = FindRectangle.GetBestLocation(list_of_possible_locations, robotLocation);
 
             //processedPoints.Add(new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(new PointD(best_location.X, best_location.Y)), 10, Color.DarkGreen));
-            //OnLidarSetupRobotLocationEvent?.Invoke(this, best_location);
+            OnLidarSetupRobotLocationEvent?.Invoke(this, best_location);
 
 
 
-            List<LidarObject> list_of_objects = new List<LidarObject>();
+            //List<LidarObject> list_of_objects = new List<LidarObject>();
 
-            foreach (ClusterObjects c in inside_clusters)
-            {
-                RectangleOriented cluster_rectangle = FindRectangle.FindMbrBoxByOverlap(c.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList());
-                cluster_rectangle.Width += 0.1;
-                cluster_rectangle.Lenght += 0.1;
+            //foreach (ClusterObjects c in inside_clusters)
+            //{
+            //    RectangleOriented cluster_rectangle = FindRectangle.FindMbrBoxByOverlap(c.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList());
+            //    cluster_rectangle.Width += 0.1;
+            //    cluster_rectangle.Lenght += 0.1;
 
                 
 
-                Color color = Toolbox.ColorFromHSL((list_of_objects.Count * 0.20) % 1, 1, 0.5);                
+            //    Color color = Toolbox.ColorFromHSL((list_of_objects.Count * 0.20) % 1, 1, 0.5);                
 
-                LidarObject cup = DetectCup(c);
-                // The null condition is Bad need to edit
-                if (cup != null)
-                {
-                    list_of_objects.Add(cup);
-                }
-                else
-                    Lines.AddRange(FindRectangle.DrawRectangle(cluster_rectangle, c.points[0].Color, 3));
+            //    LidarObject cup = DetectCup(c);
+            //    // The null condition is Bad need to edit
+            //    if (cup != null)
+            //    {
+            //        list_of_objects.Add(cup);
+            //    }
+            //    else
+            //        Lines.AddRange(FindRectangle.DrawRectangle(cluster_rectangle, c.points[0].Color, 3));
 
-            }
+            //}
 
-            OnProcessLidarObjectsDataEvent?.Invoke(this, list_of_objects);
+            //OnProcessLidarObjectsDataEvent?.Invoke(this, list_of_objects);
 
             OnProcessLidarLineDataEvent?.Invoke(this, Lines);
 
