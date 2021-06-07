@@ -602,6 +602,67 @@ namespace LidarProcessNS
 
 			return list_of_border_points;
 		}
+		public static List<ClusterObjects> FindAllBorderClusters(List<ClusterObjects> list_of_clusters, RectangleOriented rectangle, double thresold)
+        {
+			List<ClusterObjects> list_of_border_clusters = new List<ClusterObjects>();
+
+			double angle = rectangle.Angle;
+
+			Matrix<double> rotation_matrix = DenseMatrix.OfArray(new double[,] {
+					{ Math.Cos(angle), Math.Cos(angle - Math.PI / 2) },
+					{ Math.Cos(angle + Math.PI / 2), Math.Cos(angle) }
+				});
+
+			
+
+			Vector<double> center_point = Vector<double>.Build.DenseOfArray(new double[] { rectangle.Center.X, rectangle.Center.Y });
+
+			Vector<double> rotated_center = rotation_matrix * center_point;
+
+			double min_x = rotated_center[0] - rectangle.Width / 2;
+			double max_x = rotated_center[0] + rectangle.Width / 2;
+
+			double min_y = rotated_center[1] - rectangle.Lenght / 2;
+			double max_y = rotated_center[1] + rectangle.Lenght / 2;
+
+
+			foreach (ClusterObjects cluster in list_of_clusters)
+            {
+				
+				double[,] point_array = new double[cluster.points.Count, 2];
+
+				for (int i = 0; i < cluster.points.Count; i++)
+				{
+					point_array[i, 0] = cluster.points[i].Pt.Distance * Math.Cos(cluster.points[i].Pt.Angle);
+					point_array[i, 1] = cluster.points[i].Pt.Distance * Math.Sin(cluster.points[i].Pt.Angle);
+				}
+
+				Matrix<double> points_matrix = DenseMatrix.OfArray(point_array);
+				Matrix<double> rotated_points = rotation_matrix * points_matrix.Transpose();
+
+				bool[] list_of_rotated_border_points = new bool[rotated_points.ColumnCount];
+
+				for (int i = 0; i < rotated_points.ColumnCount; i++)
+				{
+					double current_x = rotated_points[0, i];
+					double current_y = rotated_points[1, i];
+
+					if (Math.Abs(min_x - current_x) <= thresold || Math.Abs(max_x - current_x) <= thresold)
+					{
+						list_of_border_clusters.Add(cluster);
+						break;
+					}
+
+					if (Math.Abs(min_y - current_y) <= thresold || Math.Abs(max_y - current_y) <= thresold)
+					{
+						list_of_border_clusters.Add(cluster);
+						break;
+					}
+				}
+			}
+
+			return list_of_border_clusters;
+		}
     }
 
 

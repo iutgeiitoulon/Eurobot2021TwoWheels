@@ -1,4 +1,5 @@
-﻿using Constants;
+﻿
+using Constants;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -71,18 +72,24 @@ namespace StrategyManagerProjetEtudiantNS
         {
             if (parent.localWorldMap == null)
                 return;
+
+            Destination = parent.localWorldMap.DestinationLocation;
+
             switch (mode)
             {
                 case TaskMode.Stop:
                     if (parent.localWorldMap.WaypointLocations.Count >= 1)
                     {
                         mode = TaskMode.Move;
-                        Destination = parent.localWorldMap.WaypointLocations[0];
+                        parent.OnDestination(parent.robotId, parent.localWorldMap.WaypointLocations[0]);
                         UpdateAndLaunch(parent.localWorldMap.WaypointLocations[0]);
                     }
                     else
                     {
                         Destination = parent.robotCurrentLocation;
+                        parent.OnDestination(parent.robotId, Destination);
+
+                        UpdateAndLaunch(Destination);
                         state = TaskMoveState.Arret;
                     }
                     break;
@@ -91,16 +98,20 @@ namespace StrategyManagerProjetEtudiantNS
                     {
                         mode = TaskMode.Stop;
                         state = TaskMoveState.Arret;
+
                         Destination = parent.robotCurrentLocation;
-                        UpdateAndLaunch(parent.robotCurrentLocation);
+                        parent.OnDestination(parent.robotId, Destination);
+                        UpdateAndLaunch(Destination);
                     }
                     else 
                     {
                         state = TaskMoveState.Avance;
                         if (Toolbox.Distance(parent.localWorldMap.WaypointLocations[0], Destination) >= 0.5)
                         {
-                            UpdateAndLaunch(parent.localWorldMap.WaypointLocations[0]);
                             Destination = parent.localWorldMap.WaypointLocations[0];
+
+                            parent.OnDestination(parent.robotId, Destination);
+                            UpdateAndLaunch(Destination);
                         }
                     }
                     break;
