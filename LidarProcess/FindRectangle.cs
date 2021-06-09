@@ -20,11 +20,14 @@ namespace LidarProcessNS
 
     public static class FindRectangle
     {
-        public static Location GetBestLocation(List<Location> list_of_locations, Location actual_location)
+        public static Location GetBestAngularLocation(List<Location> list_of_locations, Location actual_location)
         {
-            return /*list_of_locations.OrderBy(x => Math.Abs(Toolbox.Modulo2PiAngleRad(x.Theta) - Toolbox.Modulo2PiAngleRad(actual_location.Theta))).ToList()[0];*/ list_of_locations.OrderBy(x => Toolbox.Distance(new PointD(x.X, x.Y), new PointD(actual_location.X, actual_location.Y))).FirstOrDefault();
+            return list_of_locations.OrderBy(x => Math.Abs(Toolbox.Modulo2PiAngleRad(x.Theta) - Toolbox.Modulo2PiAngleRad(actual_location.Theta))).ToList()[0];
+        }
 
-
+        public static Location GetBestDistanceLocation(List<Location> list_of_locations, Location actual_location)
+        {
+            return list_of_locations.OrderBy(x => Toolbox.Distance(new PointD(x.X, x.Y), new PointD(actual_location.X, actual_location.Y))).FirstOrDefault();
         }
 
         public static List<Location> ListAllPossibleLocation(RectangleOriented rectangle)

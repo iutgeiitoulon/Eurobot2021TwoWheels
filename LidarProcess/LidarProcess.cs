@@ -174,11 +174,13 @@ namespace LidarProcessNS
             //processedPoints.AddRange(list_of_possible_locations.Select(x => new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(new PointD(x.X, x.Y)), 10, (x.Theta != 1) ? Color.Red: Color.DarkBlue)).ToList());
 
             //absolutePoints = list_of_possible_locations.Select(x => new PointDExtended(new PointD(x.X, x.Y), x.Theta > 0 ? Color.Red : Color.Red, 10)).ToList();
-            Location best_location = FindRectangle.GetBestLocation(list_of_possible_locations, robotLocation);
+            Location best_angular_location = FindRectangle.GetBestAngularLocation(list_of_possible_locations, robotLocation);
+            Location best_distance_location = FindRectangle.GetBestDistanceLocation(list_of_possible_locations, robotLocation);
 
-            //processedPoints.Add(new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(new PointD(best_location.X, best_location.Y)), 10, Color.DarkGreen));
-            OnLidarSetupRobotLocationEvent?.Invoke(this, best_location);
-
+            //if (best_angular_location == best_distance_location)
+            {
+                OnLidarSetupRobotLocationEvent?.Invoke(this, best_distance_location);
+            }
 
 
             List<LidarObject> list_of_objects = new List<LidarObject>();
