@@ -98,12 +98,13 @@ namespace RobotEurobot2Roues
 
             #region Console
             // Control:
-            bool hex_viewer = false;
+            bool hex_viewer = true;
             bool hex_sender = false;
             bool hex_viewer_error = true;
             bool hex_sender_error = true;
             bool hex_processor = false;
             bool hex_generator = false;
+
             #region USB Vendor
             //usbDriver.OnDeviceAddedEvent += ConsoleFormat.PrintNewDeviceAdded;
             //usbDriver.OnDeviceRemovedEvent += ConsoleFormat.PrintDeviceRemoved;
@@ -151,8 +152,6 @@ namespace RobotEurobot2Roues
             }
             #endregion
             #endregion
-
-            
 
             #region Lidar
             lidar = new SickLidar(ConstVar.SICK_LIDAR_SERIAL_NUMBER); // 18110177
@@ -226,6 +225,8 @@ namespace RobotEurobot2Roues
             ConsoleFormat.PrintStrategyBoot();
             strategyManager.InitStrategy(); //à faire après avoir abonné les events !
             #endregion
+
+            msgProcessor.OnIOValuesFromRobotGeneratedEvent += strategyManager.OnIOValuesReceived;
 
             if (usingMatchDisplay)
             {
