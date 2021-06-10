@@ -71,6 +71,8 @@ namespace Constants
         BaliseGaucheBas = 26,
         BaliseDroiteHaut = 27,
         BaliseDroiteCentre = 28,
-        BaliseDroiteBas = 29
+        BaliseDroiteBas = 29,
+
+        DeadZone = 30
     }
 }

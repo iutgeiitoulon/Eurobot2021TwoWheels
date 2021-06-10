@@ -118,6 +118,12 @@ namespace WorldMapManager
             OnResetRobotEvent?.Invoke(this, new LocationArgs() { RobotId = localWorldMap.RobotId, Location = location });
             OnLocalWorldMapChange();
         }
+
+        public void SetupDeadZone(List<RectangleOriented> list_of_deadzones)
+        {
+            localWorldMap.DeadZones = list_of_deadzones;
+            OnLocalWorldMapChange();
+        }
         #endregion
 
 
@@ -236,14 +242,12 @@ namespace WorldMapManager
             }
         }
 
-        public void OnPlayingSideReceived(object sender, PlayingSideArgs e)
+        public void OnTeamChangeReceived(object sender, Equipe e)
         {
             if (localWorldMap == null)
                 return;
-            if (localWorldMap.RobotId == e.RobotId)
-            {
-                localWorldMap.playingSide = e.PlaySide;
-            }
+
+            localWorldMap.Team = e;
         }
 
         public void OnRawLidarDataReceived(object sender, List<PolarPointRssiExtended> e)
@@ -325,6 +329,11 @@ namespace WorldMapManager
                 localWorldMap.LidarMapProcessed.AddRange(list_of_points);
             else
                 localWorldMap.LidarMapProcessed = list_of_points.ToList();
+        }
+
+        public void OnNewDeadZonesReceived(object sender, List<RectangleOriented> list_of_deadzones)
+        {
+            SetupDeadZone(list_of_deadzones);
         }
         #endregion
 

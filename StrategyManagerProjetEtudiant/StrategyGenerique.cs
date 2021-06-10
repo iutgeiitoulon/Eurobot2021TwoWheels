@@ -124,18 +124,42 @@ namespace StrategyManagerProjetEtudiantNS
         /****************************************** Events envoyés ***********************************************/
 
         public event EventHandler<LocationArgs> OnDestinationEvent;
+        public event EventHandler<EventArgs> OnUpdateWorldMapDisplayEvent;
+        public event EventHandler<IndependantPIDSetupArgs> On2WheelsIndependantSpeedPIDSetupEvent;
+        public event EventHandler<ByteEventArgs> OnSetAsservissementModeEvent;
+        public event EventHandler<PolarPIDSetupArgs> OnPolarPIDSetupEvent;
+        public event EventHandler<IndependantPIDSetupArgs> OnIndependantPIDSetupEvent;
+        public event EventHandler<SpeedConsigneToMotorArgs> OnSetSpeedConsigneToMotor;
+        public event EventHandler<BoolEventArgs> OnEnableDisableMotorCurrentDataEvent;
+        public event EventHandler<CollisionEventArgs> OnCollisionEvent;
+        public event EventHandler<IOValuesEventArgs> OnIOValuesFromRobotEvent;
+        public event EventHandler<DoubleEventArgs> OnOdometryPointToMeterSetupEvent;
+        public event EventHandler<TwoWheelsAngleArgs> On2WheelsAngleSetupEvent;
+        public event EventHandler<TwoWheelsToPolarMatrixArgs> On2WheelsToPolarMatrixSetupEvent;
+        public event EventHandler<StringEventArgs> OnTextMessageEvent;
+        public event EventHandler<Location> OnWaypointsReachedEvent;
+        public event EventHandler<Location> OnDestinationReachedEvent;
+        public event EventHandler<LocationArgs> OnSetActualLocationEvent;
+        public event EventHandler<PositionArgs> OnSetWantedLocationEvent;
+        public event EventHandler<List<Location>> OnSetWaypointsListEvent;
+        public event EventHandler<Location> OnSetNewWaypointEvent;
+        public event EventHandler<Location> OnSetNewDestinationEvent;
+        public event EventHandler<List<RectangleOriented>> OnNewDeadZonesEvents;
+
+
+
         public virtual void OnDestination(int id, Location location)
         {
             OnDestinationEvent?.Invoke(this, new LocationArgs { RobotId = id, Location = location });
         }
 
-        public EventHandler<EventArgs> OnUpdateWorldMapDisplayEvent;
+        
         public virtual void OnUpdateWorldMapDisplay(int id)
         {
             OnUpdateWorldMapDisplayEvent?.Invoke(this, new EventArgs());
         }
 
-        public event EventHandler<IndependantPIDSetupArgs> On2WheelsIndependantSpeedPIDSetupEvent;
+        
         public virtual void On2WheelsIndependantSpeedPIDSetup(double pM1, double iM1, double dM1, double pM2, double iM2, double dM2,
             double pM1Limit, double iM1Limit, double dM1Limit, double pM2Limit, double iM2Limit, double dM2Limit)
         {
@@ -156,7 +180,7 @@ namespace StrategyManagerProjetEtudiantNS
             });
         }
 
-        public event EventHandler<PolarPIDSetupArgs> OnPolarPIDSetupEvent;
+        
         public virtual void OnSetRobotSpeedPolarPID(double px, double ix, double dx, double py, double iy, double dy, double ptheta, double itheta, double dtheta,
             double pxLimit, double ixLimit, double dxLimit, double pyLimit, double iyLimit, double dyLimit, double pthetaLimit, double ithetaLimit, double dthetaLimit
             )
@@ -184,7 +208,7 @@ namespace StrategyManagerProjetEtudiantNS
             });
         }
 
-        public event EventHandler<IndependantPIDSetupArgs> OnIndependantPIDSetupEvent;
+        
         public virtual void OnSetRobotSpeedIndependantPID(double pM1, double iM1, double dM1, double pM2, double iM2, double dM2, double pM3, double iM3, double dM3, double pM4, double iM4, double dM4,
             double pM1Limit, double iM1Limit, double dM1Limit, double pM2Limit, double iM2Limit, double dM2Limit, double pM3Limit, double iM3Limit, double dM3Limit, double pM4Limit, double iM4Limit, double dM4Limit
             )
@@ -218,49 +242,49 @@ namespace StrategyManagerProjetEtudiantNS
             });
         }
 
-        public event EventHandler<ByteEventArgs> OnSetAsservissementModeEvent;
+        
         public virtual void OnSetAsservissementMode(byte val)
         {
             OnSetAsservissementModeEvent?.Invoke(this, new ByteEventArgs { Value = val });
         }
 
-        public event EventHandler<SpeedConsigneToMotorArgs> OnSetSpeedConsigneToMotor;
+        
         public virtual void OnSetSpeedConsigneToMotorEvent(object sender, SpeedConsigneToMotorArgs e)
         {
             OnSetSpeedConsigneToMotor?.Invoke(sender, e);
         }
 
-        public event EventHandler<BoolEventArgs> OnEnableDisableMotorCurrentDataEvent;
+       
         public virtual void OnEnableDisableMotorCurrentData(bool val)
         {
             OnEnableDisableMotorCurrentDataEvent?.Invoke(this, new BoolEventArgs { value = val });
         }
 
-        public event EventHandler<CollisionEventArgs> OnCollisionEvent;
+        
         public virtual void OnCollision(int id, Location robotLocation)
         {
             OnCollisionEvent?.Invoke(this, new CollisionEventArgs { RobotId = id, RobotRealPositionRefTerrain = robotLocation });
         }
 
-        public event EventHandler<IOValuesEventArgs> OnIOValuesFromRobotEvent;
+        
         public void OnIOValuesFromRobot(object sender, IOValuesEventArgs e)
         {
             OnIOValuesFromRobotEvent?.Invoke(sender, e);
         }
 
-        public event EventHandler<DoubleEventArgs> OnOdometryPointToMeterSetupEvent;
+       
         public void OnOdometryPointToMeter(double value)
         {
             OnOdometryPointToMeterSetupEvent?.Invoke(this, new DoubleEventArgs { Value = value });
         }
 
-        public event EventHandler<TwoWheelsAngleArgs> On2WheelsAngleSetupEvent;
+        
         public void On2WheelsAngleSetup(double angleM1, double angleM2)
         {
             On2WheelsAngleSetupEvent?.Invoke(this, new TwoWheelsAngleArgs { angleMotor1 = angleM1, angleMotor2 = angleM2});
         }
 
-        public event EventHandler<TwoWheelsToPolarMatrixArgs> On2WheelsToPolarMatrixSetupEvent;
+        
         public void On2WheelsToPolarMatrixSetup(double mX1, double mX2, double mTheta1, double mTheta2)
         {
             On2WheelsToPolarMatrixSetupEvent?.Invoke(this, new TwoWheelsToPolarMatrixArgs
@@ -272,29 +296,25 @@ namespace StrategyManagerProjetEtudiantNS
             });
         }
 
-        public event EventHandler<StringEventArgs> OnTextMessageEvent;
+        
         public virtual void OnTextMessage(string str)
         {
             OnTextMessageEvent?.Invoke(this, new StringEventArgs { value = str });
         }
 
-        public event EventHandler<Location> OnWaypointsReachedEvent;
+        
         public virtual void OnWaypointsReached(Location location)
         {
             OnWaypointsReachedEvent?.Invoke(this, location);
         }
 
-        public event EventHandler<Location> OnDestinationReachedEvent;
+        
         public virtual void OnDestinationReached(Location location)
         {
             OnDestinationReachedEvent?.Invoke(this, location);
         }
 
-        public event EventHandler<LocationArgs> OnSetActualLocationEvent;
-        public event EventHandler<PositionArgs> OnSetWantedLocationEvent;
-        public event EventHandler<List<Location>> OnSetWaypointsListEvent;
-        public event EventHandler<Location> OnSetNewWaypointEvent;
-        public event EventHandler<Location> OnSetNewDestinationEvent;
+       
 
         public void OnSetActualLocation(Location location)
         {
@@ -319,6 +339,11 @@ namespace StrategyManagerProjetEtudiantNS
         public void OnSetNewWaypoint(PointD point)
         {
             OnSetNewWaypointEvent?.Invoke(this, new Location(point.X, point.Y, 0, 0, 0, 0)); 
+        }
+
+        public void OnNewDeadZones(List<RectangleOriented> list_of_deadzones)
+        {
+            OnNewDeadZonesEvents?.Invoke(this, list_of_deadzones);
         }
 
     }    

@@ -120,6 +120,10 @@
       <Project>{df70181a-3438-4683-9b0c-ea9bea3b663d}</Project>
       <Name>Positioning2Wheels</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PositionManager\PositionManager.csproj">
+      <Project>{61abd00a-740d-43aa-b377-91da1d0aaea0}</Project>
+      <Name>PositionManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StrategyManagerProjetEtudiant\StrategyManagerProjetEtudiant.csproj">
       <Project>{45B66B72-B07F-4BBD-85F5-DB8A5C438B69}</Project>
       <Name>StrategyManagerProjetEtudiant</Name>

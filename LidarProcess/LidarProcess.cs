@@ -21,7 +21,6 @@ namespace LidarProcessNS
     {
         #region Parameters
         int robotId, teamId, LidarFrame;
-        Location robotLocation;
         List<PolarPointRssi> polarPointRssis;
         List<PointD> pointXYCoord;
         #endregion
@@ -31,7 +30,6 @@ namespace LidarProcessNS
         {
             robotId = robot;
             teamId = team;
-            robotLocation = new Location() { };
             LidarFrame = 0;
         }
         #endregion
@@ -65,14 +63,6 @@ namespace LidarProcessNS
             OnRawLidarPointXYEvent?.Invoke(this, rawLidarArgs.PtList.Select(x => new PointDExtended(Toolbox.ConvertPolarToPointD(x), Color.Blue, 2)).ToList());
             ProcessLidarData(rawLidarArgs.PtList);
         }
-
-        public void OnRobotLocation(object sender, LocationArgs robot)
-        {
-            if (robot.RobotId == robotId)
-            {
-                robotLocation = robot.Location;
-            }
-        }
         #endregion
 
         #region Event
@@ -84,7 +74,7 @@ namespace LidarProcessNS
         public event EventHandler<List<PointDExtended>> OnProcessLidarAbsoluteDataEvent;
         public event EventHandler<List<SegmentExtended>> OnProcessLidarLineDataEvent;
         public event EventHandler<List<LidarObject>> OnProcessLidarObjectsDataEvent;
-        public event EventHandler<Location> OnLidarSetupRobotLocationEvent;
+        public event EventHandler<List<Location>> OnLidarMultiplePositionEvent;
         #endregion
 
         #region Main
@@ -117,70 +107,37 @@ namespace LidarProcessNS
 
             List<SegmentExtended> rectangle_segments = FindRectangle.DrawRectangle(best_rectangle, Color.Green, 1);
 
-
-            processedPoints.Add(new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(best_rectangle.Center), 10, Color.Black));
-
-
-            Lines.AddRange(rectangle_segments);
-
-            //Console.WriteLine("Corners: " + FindRectangle.GetNumberOfVisibleCorners(best_rectangle));
-
             RectangleOriented resized_rectangle = FindRectangle.ResizeRectangle(best_rectangle, thresold);
             List<Location> list_of_possible_locations = new List<Location>();
 
             if (resized_rectangle != null)
             {
-         
-                Console.ForegroundColor = ConsoleColor.Green;
                 List<Location> green_location = FindRectangle.ListAllPossibleLocation(resized_rectangle);
-                //absolutePoints.Add(new PointDExtended(new PointD(green_location[0].X, green_location[0].Y), Color.LightGreen, 10));
-                //absolutePoints.Add(new PointDExtended(new PointD(green_location[1].X, green_location[1].Y), Color.DarkGreen, 10));
-                //absolutePoints.AddRange(green_location.Select(x => new PointDExtended(new PointD(x.X, x.Y), Color.Green, 10)).ToList());
+
                 list_of_possible_locations.AddRange(green_location);
 
-                //Lines.AddRange(FindRectangle.DrawRectangle(resized_rectangle, Color.LightGreen, 8));
             }
             else
             {
                 Tuple<RectangleOriented, RectangleOriented, RectangleOriented> list_of_possible_rectangles = FindRectangle.ListResisableRectangle(best_rectangle, thresold);
 
-                Console.ForegroundColor = ConsoleColor.Blue;
                 List<Location> blue_location = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item1);
-                //absolutePoints.Add(new PointDExtended(new PointD(blue_location[0].X, blue_location[0].Y), Color.LightBlue, 10));
-                //absolutePoints.Add(new PointDExtended(new PointD(blue_location[1].X, blue_location[1].Y), Color.DarkBlue, 10));
-                //absolutePoints.AddRange(blue_location.Select(x => new PointDExtended(new PointD(x.X, x.Y), Color.Blue, 10)).ToList());
+
                 list_of_possible_locations.AddRange(blue_location);
 
-                Console.ForegroundColor = ConsoleColor.Yellow;
                 List<Location> yellow_location = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item2);
-                //absolutePoints.Add(new PointDExtended(new PointD(yellow_location[0].X, yellow_location[0].Y), Color.LightYellow, 10));
-                //absolutePoints.Add(new PointDExtended(new PointD(yellow_location[1].X, yellow_location[1].Y), Color.Yellow, 10));
-                //absolutePoints.AddRange(yellow_location.Select(x => new PointDExtended(new PointD(x.X, x.Y), Color.Yellow, 10)).ToList());
+
                 list_of_possible_locations.AddRange(yellow_location);
 
-                Console.ForegroundColor = ConsoleColor.Red;
                 List<Location> red_location = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item3);
-                //absolutePoints.Add(new PointDExtended(new PointD(red_location[0].X, blue_location[0].Y), Color.Red, 10));
-                //absolutePoints.Add(new PointDExtended(new PointD(red_location[1].X, blue_location[1].Y), Color.DarkRed, 10));
-                //absolutePoints.AddRange(red_location.Select(x => new PointDExtended(new PointD(x.X, x.Y), Color.Red, 10)).ToList());
+
                 list_of_possible_locations.AddRange(red_location);
-
-
-                //Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item1, Color.Blue, 4));
-                //Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item2, Color.Yellow, 4));
-                //Lines.AddRange(FindRectangle.DrawRectangle(list_of_possible_rectangles.Item3, Color.Red, 4));
-
             }
-            //processedPoints.AddRange(list_of_possible_locations.Select(x => new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(new PointD(x.X, x.Y)), 10, (x.Theta != 1) ? Color.Red: Color.DarkBlue)).ToList());
 
-            //absolutePoints = list_of_possible_locations.Select(x => new PointDExtended(new PointD(x.X, x.Y), x.Theta > 0 ? Color.Red : Color.Red, 10)).ToList();
-            Location best_angular_location = FindRectangle.GetBestAngularLocation(list_of_possible_locations, robotLocation);
-            Location best_distance_location = FindRectangle.GetBestDistanceLocation(list_of_possible_locations, robotLocation);
 
-            //if (best_angular_location == best_distance_location)
-            {
-                OnLidarSetupRobotLocationEvent?.Invoke(this, best_distance_location);
-            }
+
+            OnLidarMultiplePositionEvent?.Invoke(this, list_of_possible_locations);
+            
 
 
             List<LidarObject> list_of_objects = new List<LidarObject>();

@@ -15,7 +15,7 @@ namespace WorldMap
         public virtual int RobotId { get; set; }
         public virtual int TeamId { get; set; }
         public virtual Location RobotLocation { get; set; }
-        public virtual PlayingSide playingSide { get; set; }
+        public virtual Equipe Team { get; set; }
         public virtual Location RobotGhostLocation { get; set; }
         public virtual Location DestinationLocation { get; set; }
         public virtual List<Location> WaypointLocations { get; set; }
@@ -25,10 +25,9 @@ namespace WorldMap
         public virtual List<PolarPointRssi> LidarPoints { get; set; }
         public virtual List<PointDExtended> LidarMapRaw { get; set; }
         public virtual List<PointDExtended> LidarMapProcessed { get; set; }
-        public virtual List<PointD> LidarLine { get; set; }
         public virtual List<SegmentExtended> LidarSegment { get; set; }
         public virtual List<LidarObject> LidarObjectList { get; set; }
-
+        public virtual List<RectangleOriented> DeadZones { get; set; }
 
         // public virtual List<PointD> lidarMap { get; set; }
         // public virtual List<PointD> lidarMapProcessed { get; set; }

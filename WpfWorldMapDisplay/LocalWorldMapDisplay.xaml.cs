@@ -136,6 +136,17 @@ namespace WpfWorldMapDisplay
             }
         }
 
+        private void UpdateDeadZones(int robotId, List<RectangleOriented> list_of_deadzone)
+        {
+            if (list_of_deadzone == null)
+                return;
+            if (TeamMatesDisplayDictionary.ContainsKey(robotId))
+            {
+                TeamMatesDisplayDictionary[robotId].SetDeadZones(list_of_deadzone);
+            }
+        }
+
+
         /// <summary>
         /// Initialise la Local World Map
         /// </summary>
@@ -200,12 +211,12 @@ namespace WpfWorldMapDisplay
 
                 Dispatcher.BeginInvoke(new Action(delegate ()
                 {
-                    UpdateBallPolygons();
                     UpdateObstaclesPolygons();
+                    
                     if (TeamMatesDisplayDictionary.Count == 1) //Cas d'un affichage de robot unique (localWorldMap)
                     {
                         AnnotRobotRole.Text = TeamMatesDisplayDictionary.First().Value.robotRole.ToString();
-                        //DrawLidar(); 
+                        DrawLidar(); 
                         DrawHeatMap(TeamMatesDisplayDictionary.First().Key);
                     }
 
@@ -215,8 +226,9 @@ namespace WpfWorldMapDisplay
                     SegmentSeries.RedrawAll();
                     LidarPtExtendedSeries.RedrawAll();
                     ObjectsPolygonSeries.RedrawAll();
-                    BallPolygon.RedrawAll();
+                    DeadZoneSeries.RedrawAll();
                     DrawTeam();
+                    DrawDeadZones();
                 }));
                 Thread.Sleep(10);
             }
@@ -337,23 +349,20 @@ namespace WpfWorldMapDisplay
             int robotId = localWorldMap.RobotId + localWorldMap.TeamId;
             UpdateRobotLocation(robotId, localWorldMap.RobotLocation);
             //UpdateRobotRole(robotId, localWorldMap.Robot);
-            UpdatePlayingSide(robotId, localWorldMap.playingSide);
+            //UpdatePlayingSide(robotId, localWorldMap.playingSide);
             UpdateRobotGhostLocation(robotId, localWorldMap.RobotGhostLocation);
             UpdateRobotDestination(robotId, localWorldMap.DestinationLocation);
             UpdateRobotWaypoint(robotId, localWorldMap.WaypointLocations);
 
-            if (lwmdType == LocalWorldMapDisplayType.StrategyMap)
+
+            if (lwmdType == LocalWorldMapDisplayType.WayPointMap)
             {
-                //if (localWorldMap.heatMapStrategy != null)
-                //    UpdateHeatMap(robotId, localWorldMap.heatMapStrategy.BaseHeatMapData);
-            }
-            else if (lwmdType == LocalWorldMapDisplayType.WayPointMap)
-            {
+                UpdateDeadZones(robotId, localWorldMap.DeadZones);
+                
                 //if (localWorldMap.heatMapWaypoint != null)
                 //    UpdateHeatMap(robotId, localWorldMap.heatMapWaypoint.BaseHeatMapData);
             }
-            //Affichage du lidar uniquement dans la strategy map
-            if (lwmdType == LocalWorldMapDisplayType.StrategyMap)
+            else if (lwmdType == LocalWorldMapDisplayType.StrategyMap)
             {
                 UpdateLidarMap(robotId, localWorldMap.LidarMapRaw, LidarDataType.RawData);
                 UpdateLidarMap(robotId, localWorldMap.LidarMapProcessed, LidarDataType.ProcessedData1);
@@ -361,7 +370,7 @@ namespace WpfWorldMapDisplay
                 UpdateLidarSegments(robotId, localWorldMap.LidarSegment);
             }
             UpdateLidarObjects(robotId, localWorldMap.LidarObjectList);
-
+            
             /// Demande d'affichage de la World Map reçue
             UpdateWorldMapDisplay();
         }
@@ -399,20 +408,6 @@ namespace WpfWorldMapDisplay
             }
         }
 
-        public void UpdateBallPolygons()
-        {
-            lock (BallDisplayList)
-            {
-                int indexBall = 0;
-                foreach (var ball in BallDisplayList)
-                {
-                    //Affichage de la balle
-                    BallPolygon.AddOrUpdatePolygonExtended((int)BallId.Ball + indexBall, ball.GetBallPolygon());
-                    BallPolygon.AddOrUpdatePolygonExtended((int)BallId.Ball + indexBall + (int)Caracteristique.Speed, ball.GetBallSpeedArrow());
-                    indexBall++;
-                }
-            }
-        }
         public void UpdateObstaclesPolygons()
         {
             lock (ObstacleDisplayList)
@@ -431,6 +426,22 @@ namespace WpfWorldMapDisplay
                 //    indexObstacle++;
                 //}
             }
+        }
+
+        public void DrawDeadZones()
+        {
+            DeadZoneSeries.Clear();
+            int index = 0;
+            foreach (var r in TeamMatesDisplayDictionary)
+            {
+                List<PolygonExtended> list_of_polygons_deadzones = TeamMatesDisplayDictionary[r.Key].GetDeadZonesPolygon();
+                for (int i = 0; i < list_of_polygons_deadzones.Count; i++)
+                {
+                    DeadZoneSeries.AddOrUpdatePolygonExtended(index++, list_of_polygons_deadzones[i]);
+                }
+            }
+                
+            
         }
 
         public void DrawTeam()
@@ -494,7 +505,7 @@ namespace WpfWorldMapDisplay
                 foreach (LidarObject cup in TeamMatesDisplayDictionary[r.Key].GetRobotLidarObjects())
                 {
                     if (cup.Type == LidarObjectType.Cup)
-                        LidarPtExtendedSeries.AddPtExtended(new PointDExtended(cup.Shape.Center, cup.color, 15));
+                        LidarPtExtendedSeries.AddPtExtended(new PointDExtended(cup.Shape.Center, cup.color, 10));
                 }
 
 
@@ -1097,6 +1108,7 @@ namespace WpfWorldMapDisplay
             PolygonTerrainSeries.AddOrUpdatePolygonExtended((int)Terrain.BaliseDroiteBas, p);
         }
 
+        
 
         //Récupération de la position cliquée sur la heatmap
         private void sciChart_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -1127,6 +1139,7 @@ namespace WpfWorldMapDisplay
                 }
             }
         }
+
 
         private void sciChart_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {

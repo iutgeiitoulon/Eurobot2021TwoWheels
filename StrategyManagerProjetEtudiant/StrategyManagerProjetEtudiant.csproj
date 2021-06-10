@@ -68,6 +68,7 @@
     <Compile Include="Taches\TaskDemoMessage.cs" />
     <Compile Include="Taches\TaskManager.cs" />
     <Compile Include="Taches\TaskDemoMove.cs" />
+    <Compile Include="Taches\TaskSetupDeadZone.cs" />
     <Compile Include="Taches\TaskUpdateCupWaypoints.cs" />
   </ItemGroup>
   <ItemGroup>

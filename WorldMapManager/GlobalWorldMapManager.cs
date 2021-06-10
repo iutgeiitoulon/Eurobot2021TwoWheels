@@ -112,7 +112,7 @@ namespace WorldMapManager
                 //On ajoute le message à afficher des robots de l'équipe dans la WorldMap
                 //globalWorldMap.teammateDisplayMessageList.Add(localMap.Key, localMap.Value.messageDisplay);
                 //On ajoute le playing Side des robots de l'équipe dans la WorldMap
-                globalWorldMap.teammatePlayingSideList.Add(localMap.Key, localMap.Value.playingSide);
+                //globalWorldMap.teammatePlayingSideList.Add(localMap.Key, localMap.Value.playingSide);
                 //On ajoute le ghost (position théorique) des robots de l'équipe dans la WorldMap
                 globalWorldMap.teammateGhostLocationList.Add(localMap.Key, localMap.Value.RobotGhostLocation);
                 //On ajoute la destination des robots de l'équipe dans la WorldMap

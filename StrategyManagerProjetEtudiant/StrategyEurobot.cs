@@ -24,6 +24,7 @@ namespace StrategyManagerProjetEtudiantNS
         TaskDemoMessage taskDemoMessage;
         TaskDestination taskDestination;
         TaskUpdateCupWaypoints taskSetupWaypoints;
+        TaskSetupDeadZone taskSetupDeadZone;
 
         int robotId, teamId;
 
@@ -36,6 +37,7 @@ namespace StrategyManagerProjetEtudiantNS
             taskDemoMessage = new TaskDemoMessage(this);
             taskDestination = new TaskDestination(this);
             taskSetupWaypoints = new TaskUpdateCupWaypoints(this);
+            taskSetupDeadZone = new TaskSetupDeadZone(this);
 
             this.robotId = robotId;
             this.teamId = teamId;
@@ -96,6 +98,5 @@ namespace StrategyManagerProjetEtudiantNS
         }
 
         /*********************************** Events de sortie **********************************************/
-
     }
 }

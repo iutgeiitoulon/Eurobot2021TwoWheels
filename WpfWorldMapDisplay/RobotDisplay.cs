@@ -32,6 +32,7 @@ namespace WpfWorldMapDisplay
         private List<PointDExtended>[] LidarProcessedPoints = new List<PointDExtended>[3];
         List<SegmentExtended> LidarSegment;
         List<LidarObject> LidarObjectList;
+        List<RectangleOriented> DeadZones;
         public List<Location> ballLocationList;
 
         public RobotDisplay(PolygonExtended rbtShape, PolygonExtended ghstShape, string name)
@@ -129,6 +130,11 @@ namespace WpfWorldMapDisplay
         public void SetBallList(List<Location> ballLocationList)
         {
             this.ballLocationList = ballLocationList;
+        }
+
+        public void SetDeadZones(List<RectangleOriented> list_of_dead_zones)
+        {
+            DeadZones = list_of_dead_zones;
         }
 
         public Location GetRobotLocation()
@@ -343,6 +349,32 @@ namespace WpfWorldMapDisplay
                 return new List<LidarObject>();
 
             return this.LidarObjectList;
+        }
+
+        public List<PolygonExtended> GetDeadZonesPolygon()
+        {
+            if (DeadZones == null)
+                return new List<PolygonExtended>();
+
+            List<PolygonExtended> list_of_polygons = new List<PolygonExtended>();
+
+            for (int i = 0; i < DeadZones.Count; i++)
+            {
+                Tuple<PointD, PointD, PointD, PointD> corners = Toolbox.GetCornerOfAnOrientedRectangle(DeadZones[i]);
+                PolygonExtended p = new PolygonExtended();
+
+
+                p.polygon.Points.Add(new Point(corners.Item1.X, corners.Item1.Y));
+                p.polygon.Points.Add(new Point(corners.Item2.X, corners.Item2.Y));
+                p.polygon.Points.Add(new Point(corners.Item4.X, corners.Item4.Y));
+                p.polygon.Points.Add(new Point(corners.Item3.X, corners.Item3.Y));
+                p.polygon.Points.Add(new Point(corners.Item1.X, corners.Item1.Y));
+                p.borderWidth = 1;
+                p.borderColor = System.Drawing.Color.FromArgb(0xF0, 0xFF, 0x00, 0x00);
+                p.backgroundColor = System.Drawing.Color.FromArgb(0x4F, 0xFF, 0x00, 0x00);
+                list_of_polygons.Add(p);
+            }
+            return list_of_polygons;
         }
     }
 }

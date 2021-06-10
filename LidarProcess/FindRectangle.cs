@@ -90,11 +90,7 @@ namespace LidarProcessNS
                 location_1 = new Location(pt1.X - ref_center_point.X, pt1.Y - ref_center_point.Y, -rotation_angle, 0, 0, 0);
                 location_4 = new Location(pt1.X + ref_center_point.X, pt1.Y + ref_center_point.Y, -rotation_angle + Math.PI, 0, 0, 0);
             }
-
-
-            Console.WriteLine("Angle: " + rotation_angle * 180 / Math.PI + " Corner - 1-2: " + corner_1_and_2_is_height + " Farthest: " + farthest_point_is_1);
-
-            
+           
 
             return new List<Location>() { location_1, location_4 };
 

@@ -12,13 +12,19 @@ namespace PositionManagerNs
     public class PositionManager
     {
         int robotId;
-        Location lidar_location;
-        Location odometry_location;
+        int errorCount;
+        bool askForCalibration;
+        List<Location> moving_list;
+        Location RobotLocation;
+        Location BestLocation;
 
 
         public PositionManager(int robotID)
         {
             robotId = robotID;
+            errorCount = 0;
+            askForCalibration = false;
+            RobotLocation = new Location(0, 0, 0, 0, 0, 0);
         }
 
         public Location GetBestAngularLocation(List<Location> list_of_locations, Location actual_location)
@@ -31,27 +37,71 @@ namespace PositionManagerNs
             return list_of_locations.OrderBy(x => Toolbox.Distance(x, actual_location)).FirstOrDefault();
         }
 
-        //public void OnNewSafeLidarLocation(List<Location> )
+        public void OnNewSafeLidarLocation(List<Location> list_of_locations)
+        {
+            /// TEMP:
 
+            if (askForCalibration)
+            {
+                OnPositionMerged(GetBestDistanceLocation(list_of_locations, RobotLocation));
+                askForCalibration = false;
+            }
+                
+        }
 
+        public void ResetSafeLidarLocation()
+        {
+            moving_list = new List<Location>();
+        }
+
+        //public void OnTest 
 
         #region InputsCallback
         public void OnCalibatrionAsked(object sender, EventArgs e)
         {
-
+            askForCalibration = true;
         }
 
         public void OnLidarMultiplePostionReceived(object sender, List<Location> list_of_possibles_locations)
         {
+            if (list_of_possibles_locations == null)
+                return;
 
+            if (list_of_possibles_locations.Count == 2)
+                OnNewSafeLidarLocation(list_of_possibles_locations);
+            else if (list_of_possibles_locations.Count > 2)
+            {
+                ResetSafeLidarLocation();
+            }
+
+            Location bestLocation = GetBestAngularLocation(list_of_possibles_locations, RobotLocation);
+            if (Toolbox.Distance(bestLocation, RobotLocation) >= 0.3)
+            {
+                errorCount++;
+                if (errorCount >= 10)
+                    askForCalibration = true;
+            }
+            else
+            {
+                errorCount = 0;
+            }
         }
 
+        
 
         public void OnOdometryPositionReceived(object sender, LocationArgs e)
         {
             if (e.RobotId == robotId)
             {
+                OnPositionMerged(e.Location);
+            }
+        }
 
+        public void OnPositionReceived(object sender, LocationArgs e)
+        {
+            if (e.RobotId == robotId)
+            {
+                RobotLocation = e.Location;
             }
         }
         #endregion

@@ -73,10 +73,12 @@ namespace StrategyManagerProjetEtudiantNS
             if (parent.localWorldMap == null)
                 return;
 
-            Destination = parent.localWorldMap.DestinationLocation;
+            
 
             lock (parent.localWorldMap)
             {
+                Destination = parent.localWorldMap.DestinationLocation;
+
                 switch (mode)
                 {
                     case TaskMode.Stop:

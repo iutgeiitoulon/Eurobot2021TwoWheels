@@ -69,15 +69,9 @@
                         <s:EllipsePointMarker Width="4" Height="4" Fill="SteelBlue" Stroke="Orange" StrokeThickness="1"/>
                     </s:XyScatterRenderableSeries.PointMarker>
                 </s:XyScatterRenderableSeries>
-                
-                <s:XyScatterRenderableSeries x:Name="BallPoints" Opacity="0.5">
-                    <s:XyScatterRenderableSeries.PointMarker>
-                        <s:EllipsePointMarker Width="10" Height="10" Fill="Yellow" Stroke="White" StrokeThickness="1"/>
-                    </s:XyScatterRenderableSeries.PointMarker>
-                </s:XyScatterRenderableSeries>
-                <local:PolygonRenderableSeries x:Name="BallPolygon" Opacity="0.8" >
-                </local:PolygonRenderableSeries>
                 <local:PolygonRenderableSeries x:Name="ObjectsPolygonSeries" Opacity="0.8" >
+                </local:PolygonRenderableSeries>
+                <local:PolygonRenderableSeries x:Name="DeadZoneSeries" Opacity="0.4" >
                 </local:PolygonRenderableSeries>
                 <s:XyScatterRenderableSeries x:Name="ObstaclePoints" Opacity="0.5">
                     <s:XyScatterRenderableSeries.PointMarker>
