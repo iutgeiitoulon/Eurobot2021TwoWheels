@@ -21,7 +21,7 @@ namespace StrategyManagerProjetEtudiantNS
     }
 
     public enum TaskMode
-    { 
+    {
         Action,
         Move,
         Stop,
@@ -36,7 +36,7 @@ namespace StrategyManagerProjetEtudiantNS
         Location Destination = new Location();
 
         Stopwatch sw = new Stopwatch();
-        
+
         public TaskDestination(StrategyEurobot parent)
         {
             this.parent = parent;
@@ -51,77 +51,71 @@ namespace StrategyManagerProjetEtudiantNS
         {
             this.state = state;
         }
-           
+
         public void TaskReached()
         {
             switch (mode)
             {
                 case TaskMode.Move:
                     parent.OnWaypointsReached(parent.localWorldMap.WaypointLocations[0]);
-
-                    //Random rand = new Random();
-                    //parent.OnSetNewWaypoint(new Location((rand.NextDouble() - 0.5) * 2.6, (rand.NextDouble() - 0.3) * 1, 0, 0, 0, 0)); /// Only for fun
                     break;
                 default:
                     break;
             }
             mode = TaskMode.Stop;
         }
-        
+
         void UpdateTaskMode()
         {
             if (parent.localWorldMap == null)
                 return;
 
-            
 
-            lock (parent.localWorldMap)
+            Destination = parent.localWorldMap.DestinationLocation;
+            List<Location> WaypointListCopy = parent.localWorldMap.WaypointLocations.ToList();
+            switch (mode)
             {
-                Destination = parent.localWorldMap.DestinationLocation;
+                case TaskMode.Stop:
+                    if (WaypointListCopy.Count >= 1)
+                    {
+                        mode = TaskMode.Move;
+                        parent.OnDestination(parent.robotId, WaypointListCopy[0]);
+                        UpdateAndLaunch(WaypointListCopy[0]);
+                    }
+                    else
+                    {
+                        Destination = parent.robotCurrentLocation;
+                        parent.OnDestination(parent.robotId, Destination);
 
-                switch (mode)
-                {
-                    case TaskMode.Stop:
-                        if (parent.localWorldMap.WaypointLocations.Count >= 1)
+                        UpdateAndLaunch(Destination);
+                        state = TaskMoveState.Arret;
+                    }
+                    break;
+                case TaskMode.Move:
+                    if (WaypointListCopy.Count == 0)
+                    {
+                        mode = TaskMode.Stop;
+                        state = TaskMoveState.Arret;
+
+                        Destination = parent.robotCurrentLocation;
+                        parent.OnDestination(parent.robotId, Destination);
+                        UpdateAndLaunch(Destination);
+                    }
+                    else
+                    {
+                        state = TaskMoveState.Avance;
+                        if (Toolbox.Distance(WaypointListCopy[0], Destination) >= 0.5)
                         {
-                            mode = TaskMode.Move;
-                            parent.OnDestination(parent.robotId, parent.localWorldMap.WaypointLocations[0]);
-                            UpdateAndLaunch(parent.localWorldMap.WaypointLocations[0]);
-                        }
-                        else
-                        {
-                            Destination = parent.robotCurrentLocation;
+                            Destination = WaypointListCopy[0];
+
                             parent.OnDestination(parent.robotId, Destination);
-
-                            UpdateAndLaunch(Destination);
-                            state = TaskMoveState.Arret;
-                        }
-                        break;
-                    case TaskMode.Move:
-                        if (parent.localWorldMap.WaypointLocations.Count == 0)
-                        {
-                            mode = TaskMode.Stop;
-                            state = TaskMoveState.Arret;
-
-                            Destination = parent.robotCurrentLocation;
-                            parent.OnDestination(parent.robotId, Destination);
                             UpdateAndLaunch(Destination);
                         }
-                        else
-                        {
-                            state = TaskMoveState.Avance;
-                            if (Toolbox.Distance(parent.localWorldMap.WaypointLocations[0], Destination) >= 0.5)
-                            {
-                                Destination = parent.localWorldMap.WaypointLocations[0];
+                    }
+                    break;
+                default:
+                    break;
 
-                                parent.OnDestination(parent.robotId, Destination);
-                                UpdateAndLaunch(Destination);
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
             }
         }
 
@@ -134,10 +128,10 @@ namespace StrategyManagerProjetEtudiantNS
                     case TaskMoveState.Arret:
                         sw.Restart();
                         UpdateTaskMode();
-                        break;                    
+                        break;
                     case TaskMoveState.AvanceEnCours:
                         if (sw.ElapsedMilliseconds > 500)
-                            state = TaskMoveState.Avance;                           
+                            state = TaskMoveState.Avance;
                         break;
                     case TaskMoveState.Avance:
                         sw.Restart();

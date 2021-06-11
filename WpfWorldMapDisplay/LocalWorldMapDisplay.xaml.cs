@@ -136,13 +136,13 @@ namespace WpfWorldMapDisplay
             }
         }
 
-        private void UpdateDeadZones(int robotId, List<RectangleOriented> list_of_deadzone)
+        private void UpdateDeadZones(int robotId, List<Field> list_of_fields)
         {
-            if (list_of_deadzone == null)
+            if (list_of_fields == null)
                 return;
             if (TeamMatesDisplayDictionary.ContainsKey(robotId))
             {
-                TeamMatesDisplayDictionary[robotId].SetDeadZones(list_of_deadzone);
+                TeamMatesDisplayDictionary[robotId].SetFields(list_of_fields);
             }
         }
 
@@ -357,7 +357,7 @@ namespace WpfWorldMapDisplay
 
             if (lwmdType == LocalWorldMapDisplayType.WayPointMap)
             {
-                UpdateDeadZones(robotId, localWorldMap.DeadZones);
+                UpdateDeadZones(robotId, localWorldMap.Fields);
                 
                 //if (localWorldMap.heatMapWaypoint != null)
                 //    UpdateHeatMap(robotId, localWorldMap.heatMapWaypoint.BaseHeatMapData);

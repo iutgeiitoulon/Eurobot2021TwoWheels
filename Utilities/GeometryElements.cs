@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Shapes;
 using ZeroFormatter;
+using Constants;
 
 namespace Utilities
 {
@@ -115,6 +116,23 @@ namespace Utilities
         }
     }
 
+    public class Field
+    {
+        public RectangleOriented Shape { get; set; }
+        public FieldType Type { get; set; }
+
+        public Field()
+        {
+            Shape = new RectangleOriented();
+            Type = FieldType.None;
+        }
+
+        public Field(RectangleOriented shape, FieldType type)
+        {
+            Shape = shape;
+            Type = type;
+        }
+    }
     public class PolarPoint
     {
         public double Distance;

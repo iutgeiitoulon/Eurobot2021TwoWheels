@@ -42,4 +42,16 @@ namespace Constants
         Unknow,
         Null
     }
+
+    public enum FieldType
+    {
+        DeadZone,
+        StartZone,
+        NorthField,
+        SouthField,
+        Harbor,
+        RedHarbor,
+        GreenHarbor,
+        None
+    }
 }

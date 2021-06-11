@@ -24,7 +24,7 @@ namespace StrategyManagerProjetEtudiantNS
         TaskDemoMessage taskDemoMessage;
         TaskDestination taskDestination;
         TaskUpdateCupWaypoints taskSetupWaypoints;
-        TaskSetupDeadZone taskSetupDeadZone;
+        TaskSetupFieldZone taskSetupDeadZone;
 
         int robotId, teamId;
 
@@ -37,7 +37,7 @@ namespace StrategyManagerProjetEtudiantNS
             taskDemoMessage = new TaskDemoMessage(this);
             taskDestination = new TaskDestination(this);
             taskSetupWaypoints = new TaskUpdateCupWaypoints(this);
-            taskSetupDeadZone = new TaskSetupDeadZone(this);
+            taskSetupDeadZone = new TaskSetupFieldZone(this);
 
             this.robotId = robotId;
             this.teamId = teamId;
@@ -48,11 +48,8 @@ namespace StrategyManagerProjetEtudiantNS
         public override void InitStrategy()
         {
             configTimer = new System.Timers.Timer(1000);
-            configTimer.Elapsed += ConfigTimer_Elapsed; ;
+            configTimer.Elapsed += ConfigTimer_Elapsed;
             configTimer.Start();
-
-            /// Use only when the robot is disconnect
-            //GhostTimer.Start();
         }
 
         private void ConfigTimer_Elapsed(object sender, ElapsedEventArgs e)

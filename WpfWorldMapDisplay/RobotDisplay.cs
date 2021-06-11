@@ -32,7 +32,7 @@ namespace WpfWorldMapDisplay
         private List<PointDExtended>[] LidarProcessedPoints = new List<PointDExtended>[3];
         List<SegmentExtended> LidarSegment;
         List<LidarObject> LidarObjectList;
-        List<RectangleOriented> DeadZones;
+        List<Field> Fields;
         public List<Location> ballLocationList;
 
         public RobotDisplay(PolygonExtended rbtShape, PolygonExtended ghstShape, string name)
@@ -132,9 +132,9 @@ namespace WpfWorldMapDisplay
             this.ballLocationList = ballLocationList;
         }
 
-        public void SetDeadZones(List<RectangleOriented> list_of_dead_zones)
+        public void SetFields(List<Field> list_of_zones)
         {
-            DeadZones = list_of_dead_zones;
+            Fields = list_of_zones;
         }
 
         public Location GetRobotLocation()
@@ -353,14 +353,14 @@ namespace WpfWorldMapDisplay
 
         public List<PolygonExtended> GetDeadZonesPolygon()
         {
-            if (DeadZones == null)
+            if (Fields == null)
                 return new List<PolygonExtended>();
 
             List<PolygonExtended> list_of_polygons = new List<PolygonExtended>();
 
-            for (int i = 0; i < DeadZones.Count; i++)
+            for (int i = 0; i < Fields.Count; i++)
             {
-                Tuple<PointD, PointD, PointD, PointD> corners = Toolbox.GetCornerOfAnOrientedRectangle(DeadZones[i]);
+                Tuple<PointD, PointD, PointD, PointD> corners = Toolbox.GetCornerOfAnOrientedRectangle(Fields[i].Shape);
                 PolygonExtended p = new PolygonExtended();
 
 
@@ -369,9 +369,46 @@ namespace WpfWorldMapDisplay
                 p.polygon.Points.Add(new Point(corners.Item4.X, corners.Item4.Y));
                 p.polygon.Points.Add(new Point(corners.Item3.X, corners.Item3.Y));
                 p.polygon.Points.Add(new Point(corners.Item1.X, corners.Item1.Y));
-                p.borderWidth = 1;
-                p.borderColor = System.Drawing.Color.FromArgb(0xF0, 0xFF, 0x00, 0x00);
-                p.backgroundColor = System.Drawing.Color.FromArgb(0x4F, 0xFF, 0x00, 0x00);
+
+                switch (Fields[i].Type)
+                {
+                    case FieldType.DeadZone:
+                        p.borderWidth = 1;
+                        p.borderColor = System.Drawing.Color.FromArgb(0xF0, 0xFF, 0x00, 0x00);
+                        p.backgroundColor = System.Drawing.Color.FromArgb(0x1F, 0xFF, 0x00, 0x00);
+                        break;
+                    case FieldType.Harbor:
+                        p.borderWidth = 1;
+                        p.borderColor = System.Drawing.Color.FromArgb(0xFF, 0x00, 0x3E, 0xA5);
+                        p.backgroundColor = System.Drawing.Color.FromArgb(0x5F, 0x00, 0xCB, 0xD3);
+                        break;
+                    case FieldType.RedHarbor:
+                        p.borderWidth = 1;
+                        p.borderColor = System.Drawing.Color.FromArgb(0xFF, 0xFF, 0x00, 0x00);
+                        p.backgroundColor = System.Drawing.Color.FromArgb(0xAA, 0xFF, 0x00, 0x00);
+                        break;
+                    case FieldType.GreenHarbor:
+                        p.borderWidth = 1;
+                        p.borderColor = System.Drawing.Color.FromArgb(0xFF, 0x00, 0xFF, 0x00);
+                        p.backgroundColor = System.Drawing.Color.FromArgb(0xAA, 0x00, 0xFF, 0x00);
+                        break;
+                    case FieldType.NorthField:
+                        p.borderWidth = 1;
+                        p.borderColor = System.Drawing.Color.FromArgb(0xFF, 0x40, 0x70, 0x80);
+                        p.backgroundColor = System.Drawing.Color.FromArgb(0x1F, 0x40, 0x70, 0x80);
+                        break;
+                    case FieldType.SouthField:
+                        p.borderWidth = 1;
+                        p.borderColor = System.Drawing.Color.FromArgb(0xFF, 0xF6, 0xF6, 0xF6);
+                        p.backgroundColor = System.Drawing.Color.FromArgb(0x1F, 0xF6, 0xF6, 0xF6);
+                        break;
+                    case FieldType.StartZone:
+                        p.borderWidth = 1;
+                        p.borderColor = System.Drawing.Color.FromArgb(0xFF, 0x00, 0x00, 0x00);
+                        p.backgroundColor = System.Drawing.Color.FromArgb(0x11, 0x00, 0x00, 0x00);
+                        break;
+                }
+                
                 list_of_polygons.Add(p);
             }
             return list_of_polygons;

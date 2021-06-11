@@ -119,9 +119,9 @@ namespace WorldMapManager
             OnLocalWorldMapChange();
         }
 
-        public void SetupDeadZone(List<RectangleOriented> list_of_deadzones)
+        public void SetupFieldsZone(List<Field> list_of_fields)
         {
-            localWorldMap.DeadZones = list_of_deadzones;
+            localWorldMap.Fields = list_of_fields;
             OnLocalWorldMapChange();
         }
         #endregion
@@ -331,9 +331,9 @@ namespace WorldMapManager
                 localWorldMap.LidarMapProcessed = list_of_points.ToList();
         }
 
-        public void OnNewDeadZonesReceived(object sender, List<RectangleOriented> list_of_deadzones)
+        public void OnNewFieldsReceived(object sender, List<Field> list_of_zones)
         {
-            SetupDeadZone(list_of_deadzones);
+            SetupFieldsZone(list_of_zones);
         }
         #endregion
 

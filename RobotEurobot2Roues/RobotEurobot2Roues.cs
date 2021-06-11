@@ -230,7 +230,7 @@ namespace RobotEurobot2Roues
 
             strategyManager.OnDestinationReachedEvent += localWorldMapManager.OnDestinationReached;
             strategyManager.OnWaypointsReachedEvent += localWorldMapManager.OnWaypointReached;
-            strategyManager.OnNewDeadZonesEvents += localWorldMapManager.OnNewDeadZonesReceived;
+            strategyManager.OnNewFieldsEvent += localWorldMapManager.OnNewFieldsReceived;
 
             strategyManager.OnSetWantedLocationEvent += trajectoryPlanner.SetDestination;
 

@@ -27,7 +27,7 @@ namespace WorldMap
         public virtual List<PointDExtended> LidarMapProcessed { get; set; }
         public virtual List<SegmentExtended> LidarSegment { get; set; }
         public virtual List<LidarObject> LidarObjectList { get; set; }
-        public virtual List<RectangleOriented> DeadZones { get; set; }
+        public virtual List<Field> Fields { get; set; }
 
         // public virtual List<PointD> lidarMap { get; set; }
         // public virtual List<PointD> lidarMapProcessed { get; set; }

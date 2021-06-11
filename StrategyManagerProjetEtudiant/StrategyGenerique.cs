@@ -144,7 +144,7 @@ namespace StrategyManagerProjetEtudiantNS
         public event EventHandler<List<Location>> OnSetWaypointsListEvent;
         public event EventHandler<Location> OnSetNewWaypointEvent;
         public event EventHandler<Location> OnSetNewDestinationEvent;
-        public event EventHandler<List<RectangleOriented>> OnNewDeadZonesEvents;
+        public event EventHandler<List<Field>> OnNewFieldsEvent;
 
 
 
@@ -341,9 +341,9 @@ namespace StrategyManagerProjetEtudiantNS
             OnSetNewWaypointEvent?.Invoke(this, new Location(point.X, point.Y, 0, 0, 0, 0)); 
         }
 
-        public void OnNewDeadZones(List<RectangleOriented> list_of_deadzones)
+        public void OnNewFields(List<Field> list_of_fields)
         {
-            OnNewDeadZonesEvents?.Invoke(this, list_of_deadzones);
+            OnNewFieldsEvent?.Invoke(this, list_of_fields);
         }
 
     }    
