@@ -75,7 +75,7 @@ namespace PositionManagerNs
             }
 
             Location bestLocation = GetBestAngularLocation(list_of_possibles_locations, RobotLocation);
-            if (Toolbox.Distance(bestLocation, RobotLocation) >= 0.3)
+            if (Toolbox.Distance(bestLocation, RobotLocation) >= 0.2)
             {
                 errorCount++;
                 if (errorCount >= 10)
