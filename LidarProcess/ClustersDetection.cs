@@ -134,8 +134,8 @@ namespace LidarProcessNS
                                 List<PointD> neighbors_points_prime = Get_neighbors_points_for_DbScan(DictionnaryOfDBScan, selected_point, epsilon);
                                 if (neighbors_points_prime.Count() >= min_points)
                                 {
-                                    neighbors_points.AddRange(neighbors_points_prime);
-                                    neighbors_points = neighbors_points.Distinct().ToList(); // Supress the duplicates
+                                    neighbors_points.AddRange(neighbors_points_prime.Except(neighbors_points).ToList());
+                                    //neighbors_points = neighbors_points.Distinct().ToList(); // Supress the duplicates
                                 }
                             }
 

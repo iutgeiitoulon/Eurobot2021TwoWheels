@@ -42,7 +42,6 @@ namespace StrategyManagerProjetEtudiantNS
             this.robotId = robotId;
             this.teamId = teamId;
             localWorldMap = new LocalWorldMap(robotId, teamId);
-
         }
 
         public override void InitStrategy()
@@ -92,6 +91,16 @@ namespace StrategyManagerProjetEtudiantNS
         {
             if (taskDestination != null)
                 taskDestination.TaskReached();
+        }
+
+        public override void OnIOValuesReceived(object sender, IOValuesEventArgs e)
+        {
+            byte configStatus = Convert.ToByte(e.ioValues);
+            bool jack = (configStatus & 1) != 0;
+            bool config1 = (configStatus & 2) != 0;
+            bool config2 = (configStatus & 4) != 0;
+            bool config3 = (configStatus & 8) != 0;
+            bool config4 = (configStatus & 16) != 0;
         }
 
         /*********************************** Events de sortie **********************************************/

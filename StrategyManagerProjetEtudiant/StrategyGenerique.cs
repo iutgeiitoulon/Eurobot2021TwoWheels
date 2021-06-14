@@ -119,6 +119,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         public abstract void OnGhostLocationReached(object sender, LocationArgs e);
         public abstract void OnRobotLocationReached(object sender, LocationArgs e);
+        public abstract void OnIOValuesReceived(object sender, IOValuesEventArgs e);
 
 
         /****************************************** Events envoyés ***********************************************/

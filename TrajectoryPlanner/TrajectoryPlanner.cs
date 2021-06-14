@@ -98,6 +98,18 @@ namespace TrajectoryPlannerNs
                 case GhostState.Wait:
                     GhostLocation.Vtheta = 0;
                     GhostLocation.Vx = 0;
+
+                    if (Toolbox.Distance(RobotLocation, GhostLocation) <= 0.03)
+                    {
+                        OnRobotDestinationReached();
+                    }
+                    else
+                    {
+                        if(Toolbox.Distance(RobotLocation, GhostLocation) > 0.03)
+                            ResetGhost();
+                        state = GhostState.Arret;
+                    }
+
                     break;
 
                 case GhostState.Arret:
@@ -228,7 +240,6 @@ namespace TrajectoryPlannerNs
                     }
                     else
                         GhostLocation.Vx += ConstVar.PLANNER_MAX_LINEAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
-
                 }
             }
 
@@ -274,17 +285,6 @@ namespace TrajectoryPlannerNs
             /// Indispensable en permanence, sinon la sécurité de l'embarqué reset le contrôle moteur
             /// en l'absence d'orde pendant 200ms
             OnSpeedConsigneToRobot(robotId, VxeaireRobot, vAngulaireRobot);
-
-            if (state == GhostState.Wait && Toolbox.Distance(RobotLocation, GhostLocation) <= 0.03)
-            {
-                OnRobotDestinationReached();
-            }
-            else if (state == GhostState.Wait)
-            {
-
-                ResetGhost();
-                state = GhostState.Angular;
-            }
         }
 
         void PIDPositionReset()
