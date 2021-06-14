@@ -300,17 +300,17 @@ namespace LidarProcessNS
 
                 return new LidarObject(box_of_cluster, color, LidarObjectType.Cup);
             }
-            //else if (box_of_cluster.Width / box_of_cluster.Lenght <= 3 && box_of_cluster.Width >= 0.05 && box_of_cluster.Width <= 0.15)
-            //{
-            //    List<PointD> pointDs = cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList();
+            else if (box_of_cluster.Width / box_of_cluster.Lenght <= 3 && box_of_cluster.Width >= 0.05 && box_of_cluster.Width <= 0.15)
+            {
+                List<PointD> pointDs = cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList();
 
-            //    double median = 0.80;
+                double median = 0.80;
 
-            //    double b = cluster.points[(int)(cluster.points.Count() * median)].Pt.Rssi;
-            //    double e = cluster.points[(int)(cluster.points.Count() * (1 - median))].Pt.Rssi;
+                double b = cluster.points[(int)(cluster.points.Count() * median)].Pt.Rssi;
+                double e = cluster.points[(int)(cluster.points.Count() * (1 - median))].Pt.Rssi;
 
-            //    double moyenne = (b + e) / 2;
-            //    Color color = Color.White;
+                double moyenne = (b + e) / 2;
+                Color color = Color.White;
 
                 if (moyenne >= 9000 && moyenne <= 12000)
                 {
