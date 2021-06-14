@@ -16,9 +16,7 @@ namespace StrategyManagerProjetEtudiantNS
     public class StrategyEurobot : StrategyGenerique
     {
         Stopwatch sw = new Stopwatch();
-
-        public PointD robotDestination = new PointD(0, 0);
-        PlayingSide playingSide = PlayingSide.Left;     
+      
 
         TaskDemoMove taskDemoMove;
         TaskDemoMessage taskDemoMessage;
@@ -27,7 +25,7 @@ namespace StrategyManagerProjetEtudiantNS
         TaskSetupFieldZone taskSetupDeadZone;
 
         int robotId, teamId;
-
+        
         Timer configTimer;
 
 
@@ -78,7 +76,12 @@ namespace StrategyManagerProjetEtudiantNS
 
             OnSetAsservissementMode((byte) AsservissementMode.Independant2Wheels);
         }
-
+        private void IOValues(bool jack, bool team)
+        {
+            JackState = jack;
+            OnEnableDisableAsserv(!jack);
+            OnSetupTeamColor(team ? TeamColor.Yellow : TeamColor.Blue);
+        }
 
         /*********************************** Events reçus **********************************************/
 
@@ -101,6 +104,8 @@ namespace StrategyManagerProjetEtudiantNS
             bool config2 = (configStatus & 4) != 0;
             bool config3 = (configStatus & 8) != 0;
             bool config4 = (configStatus & 16) != 0;
+
+            IOValues(!jack, config1);
         }
 
         /*********************************** Events de sortie **********************************************/

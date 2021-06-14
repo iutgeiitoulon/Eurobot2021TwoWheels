@@ -242,7 +242,7 @@ namespace WorldMapManager
             }
         }
 
-        public void OnTeamChangeReceived(object sender, Equipe e)
+        public void OnTeamChangeReceived(object sender, TeamColor e)
         {
             if (localWorldMap == null)
                 return;

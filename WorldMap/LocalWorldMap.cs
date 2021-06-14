@@ -15,7 +15,7 @@ namespace WorldMap
         public virtual int RobotId { get; set; }
         public virtual int TeamId { get; set; }
         public virtual Location RobotLocation { get; set; }
-        public virtual Equipe Team { get; set; }
+        public virtual TeamColor Team { get; set; }
         public virtual Location RobotGhostLocation { get; set; }
         public virtual Location DestinationLocation { get; set; }
         public virtual List<Location> WaypointLocations { get; set; }

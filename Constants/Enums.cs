@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Constants
 {
-    public enum Equipe
+    public enum TeamColor
     {
-        Jaune,
-        Bleue,
+        Yellow,
+        Blue,
     }
 
     public enum GameMode

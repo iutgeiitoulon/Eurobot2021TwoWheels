@@ -52,8 +52,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         public GlobalWorldMap globalWorldMap;
         public LocalWorldMap localWorldMap;
-        public Location robotCurrentLocation = new Location(0, 0, 0, 0, 0, 0);
-        public double robotOrientation;
+        public bool JackState;
 
         
         System.Timers.Timer timerStrategy;
@@ -63,6 +62,7 @@ namespace StrategyManagerProjetEtudiantNS
             this.teamId = teamId;
             this.robotId = robotId;
             this.teamIpAddress = teamIpAddress;
+            this.JackState = true;
 
             globalWorldMap = new GlobalWorldMap();
 
@@ -94,19 +94,6 @@ namespace StrategyManagerProjetEtudiantNS
             {
                 globalWorldMap = e;
             }
-        }
-
-        /// Evènement envoyé par le module de calcul de Positioning
-        public void OnPositionRobotReceived(object sender, LocationArgs location)
-        {
-
-            robotCurrentLocation.X = location.Location.X;
-            robotCurrentLocation.Y = location.Location.Y;
-            robotCurrentLocation.Theta = location.Location.Theta;
-
-            robotCurrentLocation.Vx = location.Location.Vx;
-            robotCurrentLocation.Vy = location.Location.Vy;
-            robotCurrentLocation.Vtheta = location.Location.Vtheta;
         }
 
         private void TimerStrategy_Elapsed(object sender, ElapsedEventArgs e)
@@ -146,6 +133,8 @@ namespace StrategyManagerProjetEtudiantNS
         public event EventHandler<Location> OnSetNewWaypointEvent;
         public event EventHandler<Location> OnSetNewDestinationEvent;
         public event EventHandler<List<Field>> OnNewFieldsEvent;
+        public event EventHandler<TeamColor> OnSetupTeamColorEvent;
+        public event EventHandler<bool> OnEnableDisableAsservEvent;
 
 
 
@@ -267,13 +256,6 @@ namespace StrategyManagerProjetEtudiantNS
             OnCollisionEvent?.Invoke(this, new CollisionEventArgs { RobotId = id, RobotRealPositionRefTerrain = robotLocation });
         }
 
-        
-        public void OnIOValuesFromRobot(object sender, IOValuesEventArgs e)
-        {
-            OnIOValuesFromRobotEvent?.Invoke(sender, e);
-        }
-
-       
         public void OnOdometryPointToMeter(double value)
         {
             OnOdometryPointToMeterSetupEvent?.Invoke(this, new DoubleEventArgs { Value = value });
@@ -345,6 +327,16 @@ namespace StrategyManagerProjetEtudiantNS
         public void OnNewFields(List<Field> list_of_fields)
         {
             OnNewFieldsEvent?.Invoke(this, list_of_fields);
+        }
+
+        public void OnSetupTeamColor(TeamColor team)
+        {
+            OnSetupTeamColorEvent?.Invoke(this, team);
+        }
+
+        public void OnEnableDisableAsserv(bool asserv)
+        {
+            OnEnableDisableAsservEvent?.Invoke(this, asserv);
         }
 
     }    

@@ -20,6 +20,7 @@ namespace TrajectoryPlannerNs
 
         double MajorationLin, ecartement;
 
+        bool isEnslave = true;
         bool isReversed = false;
         bool isUrgence = false;
 
@@ -284,7 +285,10 @@ namespace TrajectoryPlannerNs
             /// On envoie les vitesses consigne.
             /// Indispensable en permanence, sinon la sécurité de l'embarqué reset le contrôle moteur
             /// en l'absence d'orde pendant 200ms
-            OnSpeedConsigneToRobot(robotId, VxeaireRobot, vAngulaireRobot);
+            if (isEnslave)
+                OnSpeedConsigneToRobot(robotId, VxeaireRobot, vAngulaireRobot);
+            else
+                OnSpeedConsigneToRobot(robotId, 0, 0);
         }
 
         void PIDPositionReset()
@@ -318,6 +322,11 @@ namespace TrajectoryPlannerNs
                 SelectMajoration(ConstVar.PLANNER_MAJORATION_LINEAR_MIN, ConstVar.PLANNER_MAJORATION_LINEAR_MAX, ConstVar.PLANNER_MAJORATION_LINEAR_COEFF);
                 state = GhostState.Arret;
             }
+        }
+
+        public void OnEnableDisableAsservReceived(object sender, bool e)
+        {
+            isEnslave = e;
         }
         #endregion
 

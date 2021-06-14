@@ -117,6 +117,7 @@ namespace RobotEurobot2Roues
             #region MsgProcessor
             msgProcessor.OnSpeedPolarOdometryFromRobotEvent += logRecorder.OnPolarSpeedDataReceived;
             msgProcessor.OnSpeedPolarOdometryFromRobotEvent += positioning2Wheels.OnOdometryRobotSpeedReceived;
+            msgProcessor.OnIOValuesFromRobotGeneratedEvent += strategyManager.OnIOValuesReceived;
             #endregion
 
             #region Console
@@ -234,16 +235,15 @@ namespace RobotEurobot2Roues
             strategyManager.OnNewFieldsEvent += localWorldMapManager.OnNewFieldsReceived;
 
             strategyManager.OnSetWantedLocationEvent += trajectoryPlanner.SetDestination;
+            strategyManager.OnEnableDisableAsservEvent += trajectoryPlanner.OnEnableDisableAsservReceived;  
 
-            
 
             strategyManager.OnDestinationEvent += localWorldMapManager.OnDestinationReceived;
             strategyManager.OnSetWaypointsListEvent += localWorldMapManager.SetNewWaypointsList;
             strategyManager.OnSetNewWaypointEvent += localWorldMapManager.AddNewWaypointsEvent;
             strategyManager.OnSetNewDestinationEvent += localWorldMapManager.SetDestinationLocationEvent;
+            strategyManager.OnSetupTeamColorEvent += localWorldMapManager.OnTeamChangeReceived;
             
-
-            //strategyManager.OnUpdateGhostCalculationOrderEvent += trajectoryPlanner.OnCalculateGhostMovement;
 
             ConsoleFormat.PrintStrategyBoot();
             strategyManager.InitStrategy(); //à faire après avoir abonné les events !

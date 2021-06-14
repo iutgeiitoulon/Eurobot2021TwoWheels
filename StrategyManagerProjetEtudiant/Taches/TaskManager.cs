@@ -16,7 +16,6 @@ namespace StrategyManagerProjetEtudiantNS
         Arret,
         Avance,
         Waypoint,
-        Destination,
         AvanceEnCours,
     }
 
@@ -25,6 +24,7 @@ namespace StrategyManagerProjetEtudiantNS
         Action,
         Move,
         Stop,
+        Halt
     }
 
     public class TaskDestination
@@ -69,38 +69,36 @@ namespace StrategyManagerProjetEtudiantNS
         {
             if (parent.localWorldMap == null)
                 return;
-
+            if (parent.JackState)
+                mode = TaskMode.Halt;
 
             Destination = parent.localWorldMap.DestinationLocation;
             List<Location> WaypointListCopy = parent.localWorldMap.WaypointLocations.ToList();
             switch (mode)
             {
+                case TaskMode.Halt:
+                    if (!parent.JackState)
+                        mode = TaskMode.Stop;
+                    break;
                 case TaskMode.Stop:
-                    if (WaypointListCopy.Count >= 1)
+                    if (WaypointListCopy.Count == 0)
                     {
-                        mode = TaskMode.Move;
-                        parent.OnDestination(parent.robotId, WaypointListCopy[0]);
-                        UpdateAndLaunch(WaypointListCopy[0]);
+                        state = TaskMoveState.Arret;
+                        Destination = parent.localWorldMap.RobotLocation;
+                        parent.OnDestination(parent.robotId, Destination);
+                        UpdateAndLaunch(Destination);
                     }
                     else
                     {
-                        Destination = parent.robotCurrentLocation;
+                        mode = TaskMode.Move;
+                        Destination = WaypointListCopy[0];
                         parent.OnDestination(parent.robotId, Destination);
-
                         UpdateAndLaunch(Destination);
-                        state = TaskMoveState.Arret;
-                    }
+                    }                    
                     break;
                 case TaskMode.Move:
                     if (WaypointListCopy.Count == 0)
-                    {
                         mode = TaskMode.Stop;
-                        state = TaskMoveState.Arret;
-
-                        Destination = parent.robotCurrentLocation;
-                        parent.OnDestination(parent.robotId, Destination);
-                        UpdateAndLaunch(Destination);
-                    }
                     else
                     {
                         state = TaskMoveState.Avance;

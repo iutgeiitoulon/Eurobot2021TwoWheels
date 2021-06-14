@@ -33,10 +33,10 @@ namespace StrategyManagerProjetEtudiantNS
             list_of_fields.AddRange(CommonFields());
             switch (parent.localWorldMap.Team)
             {
-                case Equipe.Bleue:
+                case TeamColor.Blue:
                     list_of_fields.AddRange(BlueFields());
                     break;
-                case Equipe.Jaune:
+                case TeamColor.Yellow:
                     list_of_fields.AddRange(YellowFields());
                     break;
             }
@@ -63,7 +63,20 @@ namespace StrategyManagerProjetEtudiantNS
             list_of_blue_field.Add(new Field (new RectangleOriented(new PointD(1.275, 0.2), 0.45, 1.4, 0), FieldType.DeadZone));    /// Big Harbor
             list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(- 0.3, -0.820), 0.5, 0.4, 0), FieldType.DeadZone));  /// Small Harbor
 
-            /// 
+            /// Big Harbor
+            list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(-1.3, 0.2), 0.4, 0.6, 0), FieldType.StartZone));
+            list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(-1.3, 0.2), 0.4, 0.6, 0), FieldType.Harbor));
+            list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(-1.3, 0.485), 0.4, 0.03, 0), FieldType.GreenHarbor));
+            list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(-1.3, -0.085), 0.4, 0.03, 0), FieldType.RedHarbor));
+
+            /// Little Harbor
+            list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(0.3, -0.87), 0.32, 0.3, 0), FieldType.Harbor));
+            list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(0.4, -0.87), 0.1, 0.29, 0), FieldType.RedHarbor));
+            list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(0.2, -0.87), 0.1, 0.29, 0), FieldType.GreenHarbor));
+
+            /// North South
+            list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(-1.3, 0.7), 0.4, 0.4, 0), FieldType.NorthField));
+            list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(-1.3, -0.3), 0.4, 0.4, 0), FieldType.SouthField));
 
             return list_of_blue_field;
         }
@@ -84,8 +97,8 @@ namespace StrategyManagerProjetEtudiantNS
 
             /// Little Harbor
             list_of_yellow_field.Add(new Field(new RectangleOriented(new PointD(-0.3, -0.87), 0.32, 0.3, 0), FieldType.Harbor));
-            list_of_yellow_field.Add(new Field(new RectangleOriented(new PointD(-0.4, -0.87), 0.1, 0.29, 0), FieldType.RedHarbor));
-            list_of_yellow_field.Add(new Field(new RectangleOriented(new PointD(-0.2, -0.87), 0.1, 0.29, 0), FieldType.GreenHarbor));
+            list_of_yellow_field.Add(new Field(new RectangleOriented(new PointD(-0.4, -0.87), 0.1, 0.29, 0), FieldType.GreenHarbor));
+            list_of_yellow_field.Add(new Field(new RectangleOriented(new PointD(-0.2, -0.87), 0.1, 0.29, 0), FieldType.RedHarbor));
 
             /// North South
             list_of_yellow_field.Add(new Field(new RectangleOriented(new PointD(1.3, 0.7), 0.4, 0.4, 0), FieldType.NorthField));
