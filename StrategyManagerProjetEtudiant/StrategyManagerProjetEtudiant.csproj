@@ -65,6 +65,9 @@
     <Compile Include="StrategyGenerique.cs" />
     <Compile Include="StrategyEurobot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Task\TaskReturnHarbor.cs" />
+    <Compile Include="Task\TaskStrategy.cs" />
+    <Compile Include="Task\TaskWindFlag.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Constants\Constants.csproj">
@@ -88,9 +91,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Task\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

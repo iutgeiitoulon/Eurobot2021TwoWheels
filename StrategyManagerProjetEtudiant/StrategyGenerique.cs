@@ -53,6 +53,7 @@ namespace StrategyManagerProjetEtudiantNS
         public GlobalWorldMap globalWorldMap;
         public LocalWorldMap localWorldMap;
         public bool JackState;
+        public bool isEndRotation = false;
 
         
         System.Timers.Timer timerStrategy;
@@ -73,6 +74,19 @@ namespace StrategyManagerProjetEtudiantNS
         }
 
         public abstract void InitStrategy();
+
+
+
+        public bool isDeplacementFinished
+        {
+            get
+            {
+                    return (Toolbox.Distance(localWorldMap.RobotLocation, localWorldMap.DestinationLocation) < ConstVar.PLANNER_LINEAR_DEAD_ZONE) &&
+                    (!isEndRotation || Math.Abs(localWorldMap.RobotLocation.Theta - localWorldMap.DestinationLocation.Theta) <= ConstVar.PLANNER_ANGULAR_DEAD_ZONE);
+            }
+            private set {}
+        }
+
 
         //************************ Events reçus ************************************************/
         //public abstract void OnRefBoxMsgReceived(object sender, WorldMap.RefBoxMessageArgs e);
@@ -134,7 +148,8 @@ namespace StrategyManagerProjetEtudiantNS
         public event EventHandler<Location> OnSetNewDestinationEvent;
         public event EventHandler<List<Field>> OnNewFieldsEvent;
         public event EventHandler<TeamColor> OnSetupTeamColorEvent;
-        public event EventHandler<bool> OnEnableDisableAsservEvent;
+        public event EventHandler<bool> OnEnableDisableMotorsEvent;
+        public event EventHandler<bool> OnEnableDisableEndRotationEvent;
 
 
 
@@ -334,10 +349,15 @@ namespace StrategyManagerProjetEtudiantNS
             OnSetupTeamColorEvent?.Invoke(this, team);
         }
 
-        public void OnEnableDisableAsserv(bool asserv)
+        public void OnEnableDisableMotors(bool asserv)
         {
-            OnEnableDisableAsservEvent?.Invoke(this, asserv);
+            OnEnableDisableMotorsEvent?.Invoke(this, asserv);
         }
 
+        public void OnEnableDisableRotation(bool rotation)
+        {
+            isEndRotation = rotation;
+            OnEnableDisableEndRotationEvent?.Invoke(this, rotation);
+        }
     }    
 }

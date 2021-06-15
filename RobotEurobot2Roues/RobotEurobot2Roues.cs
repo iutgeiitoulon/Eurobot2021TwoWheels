@@ -224,8 +224,10 @@ namespace RobotEurobot2Roues
 
             #region TrajectoryPlanner
             trajectoryPlanner.OnGhostLocationEvent += localWorldMapManager.OnGhostLocation;
+            trajectoryPlanner.OnDestinationSetEvent += localWorldMapManager.OnDestinationReceived;
             trajectoryPlanner.OnRobotDestinationReachedEvent += strategyManager.OnRobotLocationReached;
             trajectoryPlanner.OnSpeedConsigneEvent += msgGenerator.GenerateMessageSetSpeedConsigneToRobot;
+            
             #endregion
 
             #region Position Manager
@@ -244,10 +246,9 @@ namespace RobotEurobot2Roues
             strategyManager.OnNewFieldsEvent += localWorldMapManager.OnNewFieldsReceived;
 
             strategyManager.OnSetWantedLocationEvent += trajectoryPlanner.SetDestination;
-            strategyManager.OnEnableDisableAsservEvent += trajectoryPlanner.OnEnableDisableAsservReceived;  
+            strategyManager.OnEnableDisableMotorsEvent += trajectoryPlanner.OnEnableDisableAsservReceived;
+            strategyManager.OnEnableDisableEndRotationEvent += trajectoryPlanner.OnEndRotateEnableDisableReceived;
 
-
-            strategyManager.OnDestinationEvent += localWorldMapManager.OnDestinationReceived;
             strategyManager.OnSetWaypointsListEvent += localWorldMapManager.SetNewWaypointsList;
             strategyManager.OnSetNewWaypointEvent += localWorldMapManager.AddNewWaypointsEvent;
             strategyManager.OnSetNewDestinationEvent += localWorldMapManager.SetDestinationLocationEvent;
@@ -260,13 +261,9 @@ namespace RobotEurobot2Roues
 
 
             if (usingMatchDisplay)
-            {
                 StartMatchInterface();
-            }
             else
-            {
                 StartRobotInterface();
-            }
                       
             ConsoleFormat.EndMainBootSequence();
 

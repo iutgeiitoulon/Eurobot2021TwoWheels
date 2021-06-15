@@ -20,19 +20,27 @@ namespace StrategyManagerProjetEtudiantNS
         
         Timer configTimer;
 
+        public TaskStrategy taskStrategy;
+        public TaskWindFlag taskWindFlag;
+        public TaskReturnHarbor taskReturnHarbor;
+
 
         public StrategyEurobot(int robotId, int teamId, string multicastIpAddress) : base(robotId, teamId, multicastIpAddress)
         {
             this.robotId = robotId;
             this.teamId = teamId;
             localWorldMap = new LocalWorldMap(robotId, teamId);
+
+            taskWindFlag = new TaskWindFlag(this);
+            taskReturnHarbor = new TaskReturnHarbor(this);
+            taskStrategy = new TaskStrategy(this);
         }
 
         public override void InitStrategy()
         {
-            configTimer = new System.Timers.Timer(1000);
+            configTimer = new Timer(1000);
             configTimer.Elapsed += ConfigTimer_Elapsed;
-            configTimer.Start();
+            configTimer.Start();          
         }
 
         private void ConfigTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -64,8 +72,7 @@ namespace StrategyManagerProjetEtudiantNS
         }
         private void IOValues(bool jack, bool team)
         {
-            JackState = jack;
-            OnEnableDisableAsserv(!jack);
+            taskStrategy.Jack = jack;
             OnSetupTeamColor(team ? TeamColor.Yellow : TeamColor.Blue);
         }
 
@@ -90,7 +97,7 @@ namespace StrategyManagerProjetEtudiantNS
             bool config3 = (configStatus & 8) != 0;
             bool config4 = (configStatus & 16) != 0;
 
-            IOValues(!jack, config1);
+            IOValues(jack, config1);
         }
 
         /*********************************** Events de sortie **********************************************/

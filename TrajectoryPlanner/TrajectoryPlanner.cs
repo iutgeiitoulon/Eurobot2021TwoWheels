@@ -20,6 +20,7 @@ namespace TrajectoryPlannerNs
 
         double MajorationLin, ecartement;
 
+        bool isEndRotating = false;
         bool isEnslave = true;
         bool isReversed = false;
         bool isUrgence = false;
@@ -106,7 +107,7 @@ namespace TrajectoryPlannerNs
                     }
                     else
                     {
-                        if(Toolbox.Distance(RobotLocation, GhostLocation) > 0.03)
+                        if (Toolbox.Distance(RobotLocation, GhostLocation) > 0.03)
                             ResetGhost();
                         state = GhostState.Arret;
                     }
@@ -154,19 +155,40 @@ namespace TrajectoryPlannerNs
                 case GhostState.Angular:
                     GenerateGhostRotation();
                     break;
+                case GhostState.AngularEnd:
+                    state = GhostState.Linear;
+                    break;
                 case GhostState.Linear:
                     GenerateGhostShifting();
+                    break;
+                case GhostState.LinearEnd:
+                    if (isEndRotating)
+                        state = GhostState.AngularTurn;
+                    else
+                        state = GhostState.Wait;
+                    break;
+                case GhostState.AngularTurn:
+                    GenerateGhostRotation(true);
+                    break;
+                case GhostState.AngularTurnEnd:
+                    state = GhostState.Wait;
                     break;
             }
         }
 
-        void GenerateGhostRotation()
+        void GenerateGhostRotation(bool isEndTurn = false)
         {
-            double ThetaCorrect = Math.Atan2(WantedDestination.Y - GhostLocation.Y, WantedDestination.X - GhostLocation.X);
-            ThetaCorrect += (isReversed) ? Math.PI : 0;
+            double WantedTheta;
+
+            if (!isEndTurn)
+                WantedTheta = Math.Atan2(WantedDestination.Y - GhostLocation.Y, WantedDestination.X - GhostLocation.X);
+            else
+                WantedTheta = WantedDestination.Theta;
+
+            WantedTheta += (isReversed) ? Math.PI : 0;
 
             double dThetaFreinage = (Math.Pow(GhostLocation.Vtheta, 2)) / (2 * ConstVar.PLANNER_MAX_ANGULAR_ACCELERATION);
-            double dThetaRestant = ThetaCorrect - Toolbox.ModuloByAngle(ThetaCorrect, GhostLocation.Theta);
+            double dThetaRestant = WantedTheta - Toolbox.ModuloByAngle(WantedTheta, GhostLocation.Theta);
 
             if (dThetaFreinage * ConstVar.PLANNER_MAJORATION_ANGULAR < Math.Abs(dThetaRestant))
             {
@@ -183,12 +205,10 @@ namespace TrajectoryPlannerNs
             OnGhostLocation(robotId, GhostLocation);
 
             if (Math.Abs(dThetaRestant) <= Toolbox.DegToRad(ConstVar.PLANNER_ANGULAR_DEAD_ZONE))
-            {
-                state = GhostState.Linear;
-            }
-
-
-
+                if (!isEndTurn)
+                    state = GhostState.AngularEnd;
+                else
+                    state = GhostState.AngularTurnEnd;
         }
 
         void GenerateGhostShifting()
@@ -250,7 +270,7 @@ namespace TrajectoryPlannerNs
             OnGhostLocation(robotId, GhostLocation);
 
             if (dLinRestant <= ConstVar.PLANNER_LINEAR_DEAD_ZONE && Math.Abs(GhostLocation.Vx) <= ConstVar.PLANNER_LINEAR_SPEED_MIN)
-                state = GhostState.Wait;
+                state = GhostState.LinearEnd;
         }
 
         #endregion
@@ -318,6 +338,7 @@ namespace TrajectoryPlannerNs
             if (e.RobotId == robotId)
             {
                 WantedDestination = new Location(e.X, e.Y, e.Theta, 0, 0, 0);
+                OnDestinationSet(robotId, WantedDestination);
 
                 SelectMajoration(ConstVar.PLANNER_MAJORATION_LINEAR_MIN, ConstVar.PLANNER_MAJORATION_LINEAR_MAX, ConstVar.PLANNER_MAJORATION_LINEAR_COEFF);
                 state = GhostState.Arret;
@@ -328,6 +349,11 @@ namespace TrajectoryPlannerNs
         {
             isEnslave = e;
         }
+
+        public void OnEndRotateEnableDisableReceived(object sender, bool e)
+        {
+            isEndRotating = e;
+        }
         #endregion
 
         #region Events
@@ -335,6 +361,7 @@ namespace TrajectoryPlannerNs
         public event EventHandler<PolarSpeedArgs> OnSpeedConsigneEvent;
         public event EventHandler<LocationArgs> OnGhostDestinationReachedEvent;
         public event EventHandler<LocationArgs> OnRobotDestinationReachedEvent;
+        public event EventHandler<LocationArgs> OnDestinationSetEvent;
 
         public virtual void OnGhostLocation(int id, Location loc)
         {
@@ -356,6 +383,12 @@ namespace TrajectoryPlannerNs
             OnRobotDestinationReachedEvent?.Invoke(this, new LocationArgs { RobotId = robotId, Location = RobotLocation });
         }
 
+        public virtual void OnDestinationSet(int robotId, Location destination)
+        {
+            OnDestinationSetEvent?.Invoke(this, new LocationArgs { RobotId = robotId, Location = destination });
+        }
+
+        
         #endregion
     }
 

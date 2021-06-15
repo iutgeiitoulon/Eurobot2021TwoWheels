@@ -29,7 +29,11 @@ namespace Constants
     public enum GhostState
     {
         Angular,
+        AngularEnd,
         Linear,
+        LinearEnd,
+        AngularTurn,
+        AngularTurnEnd,
         Wait,
         Arret,
         ArretUrgence
