@@ -58,4 +58,11 @@ namespace Constants
         GreenHarbor,
         None
     }
+
+    public enum ReefType
+    { 
+        Private,
+        TeamSide,
+        OpponentSide
+    }
 }

@@ -23,6 +23,7 @@ namespace StrategyManagerProjetEtudiantNS
         public TaskStrategy taskStrategy;
         public TaskWindFlag taskWindFlag;
         public TaskReturnHarbor taskReturnHarbor;
+        public TaskActivateBeacon taskActivateBeacon;
 
 
         public StrategyEurobot(int robotId, int teamId, string multicastIpAddress) : base(robotId, teamId, multicastIpAddress)
@@ -33,6 +34,7 @@ namespace StrategyManagerProjetEtudiantNS
 
             taskWindFlag = new TaskWindFlag(this);
             taskReturnHarbor = new TaskReturnHarbor(this);
+            taskActivateBeacon = new TaskActivateBeacon(this);
             taskStrategy = new TaskStrategy(this);
         }
 

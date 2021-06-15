@@ -40,6 +40,8 @@ namespace StrategyManagerProjetEtudiantNS
             Wait,
             PushFlags,
             PushFlagsWaiting,
+            ActivateBeacon,
+            ActivateBeaconWaiting,
             ReturnHome,
             ReturnHomeWaiting,
             Finished
@@ -55,6 +57,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         public void Init()
         {
+            timeStamp.Reset();
             parentManager.taskWindFlag.Init();
             parentManager.taskReturnHarbor.Init();
             state = TaskStrategyState.InitialPositioning;
@@ -86,7 +89,6 @@ namespace StrategyManagerProjetEtudiantNS
                                 parentManager.taskWindFlag.Start();
                                 state = TaskStrategyState.PushFlags;
                                 StartSw();
-
                             }
                             break;
 
@@ -96,8 +98,17 @@ namespace StrategyManagerProjetEtudiantNS
                             break;
                         case TaskStrategyState.PushFlagsWaiting:
                             if (parentManager.taskWindFlag.isFinished)
+                                state = TaskStrategyState.ActivateBeacon;
+                            break;
+                        case TaskStrategyState.ActivateBeacon:
+                            parentManager.taskActivateBeacon.Start();
+                            state = TaskStrategyState.ActivateBeaconWaiting;
+                            break;
+                        case TaskStrategyState.ActivateBeaconWaiting:
+                            if (parentManager.taskActivateBeacon.isFinished)
                                 state = TaskStrategyState.ReturnHome;
                             break;
+
                         case TaskStrategyState.ReturnHome:
                             parentManager.taskReturnHarbor.Start();
                             state = TaskStrategyState.ReturnHomeWaiting;
@@ -110,7 +121,7 @@ namespace StrategyManagerProjetEtudiantNS
                 }
                 else
                 {
-                    Init();
+                    //Init();
                     if (!isStoped)
                     {
                         //parentManager.taskFinDeMatch.Start();

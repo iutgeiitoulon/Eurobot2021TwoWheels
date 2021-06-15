@@ -99,6 +99,6 @@ namespace StrategyManagerProjetEtudiantNS
                 }
                 Thread.Sleep(10);
             }
+        }
     }
-}
 }
