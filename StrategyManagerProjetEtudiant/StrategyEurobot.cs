@@ -16,13 +16,6 @@ namespace StrategyManagerProjetEtudiantNS
     public class StrategyEurobot : StrategyGenerique
     {
         Stopwatch sw = new Stopwatch();
-      
-
-        TaskDemoMove taskDemoMove;
-        TaskDemoMessage taskDemoMessage;
-        TaskDestination taskDestination;
-        TaskUpdateCupWaypoints taskSetupWaypoints;
-
         int robotId, teamId;
         
         Timer configTimer;
@@ -30,11 +23,6 @@ namespace StrategyManagerProjetEtudiantNS
 
         public StrategyEurobot(int robotId, int teamId, string multicastIpAddress) : base(robotId, teamId, multicastIpAddress)
         {
-            taskDemoMove = new TaskDemoMove(this);
-            taskDemoMessage = new TaskDemoMessage(this);
-            taskDestination = new TaskDestination(this);
-            taskSetupWaypoints = new TaskUpdateCupWaypoints(this);
-
             this.robotId = robotId;
             this.teamId = teamId;
             localWorldMap = new LocalWorldMap(robotId, teamId);
@@ -90,8 +78,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         public override void OnRobotLocationReached(object sender, LocationArgs e)
         {
-            if (taskDestination != null)
-                taskDestination.TaskReached();
+
         }
 
         public override void OnIOValuesReceived(object sender, IOValuesEventArgs e)
