@@ -25,8 +25,6 @@ namespace StrategyManagerProjetEtudiantNS
             Wait,
             MoveToHarbor,
             MoveToHarborWaiting,
-            TurnToCenter,
-            TurnToCenterWaiting,
             Finished,
         }
 
@@ -88,17 +86,6 @@ namespace StrategyManagerProjetEtudiantNS
                         StartSw();
                         break;
                     case TaskReturnHarborState.MoveToHarborWaiting:
-                        if (parentManager.isDeplacementFinished || sw.ElapsedMilliseconds > 5000)
-                        {
-                            state = TaskReturnHarborState.TurnToCenter;
-                            StopSw();
-                        }
-                        break;
-                    case TaskReturnHarborState.TurnToCenter:
-                        state = TaskReturnHarborState.TurnToCenterWaiting;
-                        StartSw();
-                        break;
-                    case TaskReturnHarborState.TurnToCenterWaiting:
                         if (parentManager.isDeplacementFinished || sw.ElapsedMilliseconds > 5000)
                         {
                             state = TaskReturnHarborState.Finished;

@@ -17,7 +17,10 @@ namespace StrategyManagerProjetEtudiantNS
         Thread TaskThread;
         TaskStrategyState state = TaskStrategyState.Wait;
         StrategyEurobot parentManager;
+
+        public bool isStoped = false;
         public bool Jack = true;
+
         Stopwatch timeStamp = new Stopwatch();
         private void StopSw()
         {
@@ -118,6 +121,6 @@ namespace StrategyManagerProjetEtudiantNS
                 Thread.Sleep(1);
             }
         }
-        bool isStoped = false;
+        
     }
 }
