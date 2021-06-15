@@ -87,53 +87,54 @@ namespace StrategyManagerProjetEtudiantNS
                     case TaskReefCupState.Init:
                         state = TaskReefCupState.Wait;
                         break;
-                    case TaskReefCupState.MoveToReefSafety:
-                        parentManager.OnEnableDisableRotation(false);
-                        if (parentManager.localWorldMap.Team == TeamColor.Blue)
-                        {
-                            switch (Reef)
-                            {
-                                case 
-                            }
+                    //case TaskReefCupState.MoveToReefSafety:
+                    //    parentManager.OnEnableDisableRotation(false);
+                    //    if (parentManager.localWorldMap.Team == TeamColor.Blue)
+                    //    {
+                    //        switch (Reef)
+                    //        {
+                    //            //case ReefType.Private:
 
-                        }
-                        else if (parentManager.localWorldMap.Team == TeamColor.Yellow)
-                        {
-                            parentManager.OnSetWantedLocation(new Location(1.3, 0.8, 0, 0, 0, 0));
-                        }
+                    //        }
+
+                    //    }
+                    //    else if (parentManager.localWorldMap.Team == TeamColor.Yellow)
+                    //    {
+                    //        parentManager.OnSetWantedLocation(new Location(1.3, 0.8, 0, 0, 0, 0));
+                    //    }
 
 
-                        state = TaskReefCupState.MoveToReefSafetyWaiting;
-                        StartSw();
-                        break;
-                    case TaskReefCupState.MoveToReefSafetyWaiting:
-                        if (parentManager.isDeplacementFinished || sw.ElapsedMilliseconds > 5000)
-                        {
-                            state = TaskReefCupState.PushBeacon;
-                            StopSw();
-                        }
-                        break;
-                    case TaskReefCupState.PushBeacon:
-                        parentManager.OnEnableDisableRotation(false);
-                        if (parentManager.localWorldMap.Team == TeamColor.Blue)
-                            parentManager.OnSetWantedLocation(new Location(-1, 0.8, 0, 0, 0, 0));
-                        else if (parentManager.localWorldMap.Team == TeamColor.Yellow)
-                            parentManager.OnSetWantedLocation(new Location(1, 0.8, 0, 0, 0, 0));
+                    //    state = TaskReefCupState.MoveToReefSafetyWaiting;
+                    //    StartSw();
+                    //    break;
+                    //case TaskReefCupState.MoveToReefSafetyWaiting:
+                    //    if (parentManager.isDeplacementFinished || sw.ElapsedMilliseconds > 5000)
+                    //    {
+                    //        state = TaskReefCupState.PushBeacon;
+                    //        StopSw();
+                    //    }
+                    //    break;
+                    //case TaskReefCupState.PushBeacon:
+                    //    parentManager.OnEnableDisableRotation(false);
+                    //    if (parentManager.localWorldMap.Team == TeamColor.Blue)
+                    //        parentManager.OnSetWantedLocation(new Location(-1, 0.8, 0, 0, 0, 0));
+                    //    else if (parentManager.localWorldMap.Team == TeamColor.Yellow)
+                    //        parentManager.OnSetWantedLocation(new Location(1, 0.8, 0, 0, 0, 0));
 
-                        state = TaskReefCupState.PushBeaconWaiting;
-                        StartSw();
-                        break;
-                    case TaskReefCupState.PushBeaconWaiting:
-                        if (parentManager.isDeplacementFinished || sw.ElapsedMilliseconds > 5000)
-                        {
-                            state = TaskReefCupState.Finished;
-                            StopSw();
-                        }
-                        break;
-                    case TaskReefCupState.Finished:
-                        isFinished = true;
-                        state = TaskReefCupState.Wait;
-                        break;
+                    //    state = TaskReefCupState.PushBeaconWaiting;
+                    //    StartSw();
+                    //    break;
+                    //case TaskReefCupState.PushBeaconWaiting:
+                    //    if (parentManager.isDeplacementFinished || sw.ElapsedMilliseconds > 5000)
+                    //    {
+                    //        state = TaskReefCupState.Finished;
+                    //        StopSw();
+                    //    }
+                    //    break;
+                    //case TaskReefCupState.Finished:
+                    //    isFinished = true;
+                    //    state = TaskReefCupState.Wait;
+                    //    break;
                 }
                 Thread.Sleep(10);
             }
