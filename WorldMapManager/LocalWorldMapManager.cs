@@ -248,6 +248,7 @@ namespace WorldMapManager
                 return;
 
             localWorldMap.Team = e;
+            OnTeamColorChange(e);
         }
 
         public void OnRawLidarDataReceived(object sender, List<PolarPointRssiExtended> e)
@@ -349,7 +350,7 @@ namespace WorldMapManager
         public event EventHandler<DataReceivedArgs> OnMulticastSendLocalWorldMapEvent;
         public event EventHandler<LocalWorldMap> OnLocalWorldMapToGlobalWorldMapGeneratorEvent;
         public event EventHandler<LocalWorldMap> OnLocalWorldMapForDisplayOnlyEvent;
-
+        public event EventHandler<TeamColor> OnTeamColorChangeEvent;
         public virtual void OnLocalWorldMapChange()
         {
             OnLocalWorldMapEvent?.Invoke(this, localWorldMap);
@@ -369,6 +370,11 @@ namespace WorldMapManager
         public virtual void OnLocalWorldMapForDisplayOnly(LocalWorldMap map)
         {
             OnLocalWorldMapForDisplayOnlyEvent?.Invoke(this, map);
+        }
+
+        public virtual void OnTeamColorChange(TeamColor team)
+        {
+            OnTeamColorChangeEvent?.Invoke(this, team);
         }
         #endregion
     }

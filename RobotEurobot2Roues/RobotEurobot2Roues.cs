@@ -25,6 +25,7 @@ using Positioning2WheelsNs;
 using WorldMapManager;
 using ObjectTrackersNs;
 using PositionManagerNs;
+using FieldSetterNs;
 
 namespace RobotEurobot2Roues
 {
@@ -43,6 +44,8 @@ namespace RobotEurobot2Roues
         static LidarProcess lidarProcess;
 
         static LocalWorldMapManager localWorldMapManager;
+
+        static FieldSetter fieldSetter;
 
         static TrajectoryPlanner trajectoryPlanner;
 
@@ -92,6 +95,8 @@ namespace RobotEurobot2Roues
             logReplay = new LogReplay();
 
             localWorldMapManager = new LocalWorldMapManager(robotId, teamId);
+
+            fieldSetter = new FieldSetter(robotId);
 
             lidar = new SickLidar(ConstVar.SICK_LIDAR_SERIAL_NUMBER); // 18110177
             lidarProcess = new LidarProcess(robotId, teamId);
@@ -206,7 +211,11 @@ namespace RobotEurobot2Roues
             localWorldMapManager.OnUpdateRobotLocationEvent += trajectoryPlanner.OnPhysicalPositionReceived;
             localWorldMapManager.OnUpdateRobotLocationEvent += positionManager.OnPositionReceived;
             localWorldMapManager.OnLocalWorldMapEvent += strategyManager.OnLocalWorldMapReceived;
-            
+            localWorldMapManager.OnTeamColorChangeEvent += fieldSetter.OnTeamChangeReceived;
+            #endregion
+
+            #region Fields
+            fieldSetter.OnSetupFieldsEvent += localWorldMapManager.OnNewFieldsReceived;
             #endregion
 
             #region Position2Wheels
@@ -249,7 +258,6 @@ namespace RobotEurobot2Roues
             strategyManager.InitStrategy(); //à faire après avoir abonné les events !
             #endregion
 
-            msgProcessor.OnIOValuesFromRobotGeneratedEvent += strategyManager.OnIOValuesReceived;
 
             if (usingMatchDisplay)
             {

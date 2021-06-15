@@ -22,7 +22,6 @@ namespace StrategyManagerProjetEtudiantNS
         TaskDemoMessage taskDemoMessage;
         TaskDestination taskDestination;
         TaskUpdateCupWaypoints taskSetupWaypoints;
-        TaskSetupFieldZone taskSetupDeadZone;
 
         int robotId, teamId;
         
@@ -35,7 +34,6 @@ namespace StrategyManagerProjetEtudiantNS
             taskDemoMessage = new TaskDemoMessage(this);
             taskDestination = new TaskDestination(this);
             taskSetupWaypoints = new TaskUpdateCupWaypoints(this);
-            taskSetupDeadZone = new TaskSetupFieldZone(this);
 
             this.robotId = robotId;
             this.teamId = teamId;
