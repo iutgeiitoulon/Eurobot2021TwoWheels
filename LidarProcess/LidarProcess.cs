@@ -85,7 +85,7 @@ namespace LidarProcessNS
             List<SegmentExtended> Lines = new List<SegmentExtended>();
 
 
-            List<PolarPointRssi> validPoint = polarPointRssi.Where(x => x.Distance >= ConstVar.LIDAR_MIN_POINT_DISTANCE  && x.Distance <= ConstVar.LIDAR_MAX_POINT_DISTANCE).ToList();
+            List<PolarPointRssi> validPoint = polarPointRssi.Where(x => x.Distance >= ConstVar.LIDAR_MIN_POINT_DISTANCE && x.Distance <= ConstVar.LIDAR_MAX_POINT_DISTANCE).ToList();
             List<PointD> validPointXY = validPoint.Select(x => Toolbox.ConvertPolarToPointD(x)).ToList();
 
             validPointXY = ClustersDetection.ExtractClusterByDBScan(validPointXY, 0.05, 3).SelectMany(x => x.points).ToList().Select(x => Toolbox.ConvertPolarToPointD(x)).ToList().Select(x => x.Pt).ToList();
@@ -95,82 +95,95 @@ namespace LidarProcessNS
 
 
             RectangleOriented best_rectangle = FindRectangle.FindMbrBoxByOverlap(allPointXY);
-            //List<PointD> border_points = FindRectangle.FindAllBorderPoints(validPointXY, best_rectangle, 0.05);
-            List<ClusterObjects> borders_clusters = FindRectangle.FindAllBorderClusters(list_of_all_clusters, best_rectangle, 0.05);
 
-            List<ClusterObjects> inside_clusters = list_of_all_clusters.Where(x => borders_clusters.IndexOf(x) == -1).ToList();
-            List<PolarPointRssiExtended> processedPoints = ClustersDetection.SetColorsOfClustersObjects(inside_clusters);
-                        
-            Tuple<PointD, PointD, PointD, PointD> corners = Toolbox.GetCornerOfAnOrientedRectangle(best_rectangle);
+            List<PolarPointRssiExtended> processedPoints = validPoint.Select(x => new PolarPointRssiExtended(x, 2, Color.White)).ToList();
 
-            
-
-            List<SegmentExtended> rectangle_segments = FindRectangle.DrawRectangle(best_rectangle, Color.Green, 1);
-
-            RectangleOriented resized_rectangle = FindRectangle.ResizeRectangle(best_rectangle, thresold);
-            List<Location> list_of_possible_locations = new List<Location>();
-
-            if (resized_rectangle != null)
+            if (best_rectangle.Lenght <= ConstVar.WIDTH_BOXSIZE + thresold && best_rectangle.Width <= ConstVar.WIDTH_BOXSIZE + thresold)
             {
-                List<Location> green_location = FindRectangle.ListAllPossibleLocation(resized_rectangle);
 
-                list_of_possible_locations.AddRange(green_location);
 
-            }
-            else
-            {
-                Tuple<RectangleOriented, RectangleOriented, RectangleOriented> list_of_possible_rectangles = FindRectangle.ListResisableRectangle(best_rectangle, thresold);
+                //List<PointD> border_points = FindRectangle.FindAllBorderPoints(validPointXY, best_rectangle, 0.05);
+                List<ClusterObjects> borders_clusters = FindRectangle.FindAllBorderClusters(list_of_all_clusters, best_rectangle, 0.05);
 
-                List<Location> blue_location = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item1);
+                List<ClusterObjects> inside_clusters = list_of_all_clusters.Where(x => borders_clusters.IndexOf(x) == -1).ToList();
+                processedPoints = ClustersDetection.SetColorsOfClustersObjects(inside_clusters);
 
-                list_of_possible_locations.AddRange(blue_location);
-
-                List<Location> yellow_location = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item2);
-
-                list_of_possible_locations.AddRange(yellow_location);
-
-                List<Location> red_location = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item3);
-
-                list_of_possible_locations.AddRange(red_location);
-            }
+                Tuple<PointD, PointD, PointD, PointD> corners = Toolbox.GetCornerOfAnOrientedRectangle(best_rectangle);
 
 
 
-            OnLidarMultiplePositionEvent?.Invoke(this, list_of_possible_locations);
-            
+                List<SegmentExtended> rectangle_segments = FindRectangle.DrawRectangle(best_rectangle, Color.Green, 1);
 
+                RectangleOriented resized_rectangle = FindRectangle.ResizeRectangle(best_rectangle, thresold);
+                List<Location> list_of_possible_locations = new List<Location>();
 
-            List<LidarObject> list_of_objects = new List<LidarObject>();
-
-            foreach (ClusterObjects c in inside_clusters)
-            {
-                RectangleOriented cluster_rectangle = FindRectangle.FindMbrBoxByOverlap(c.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList());
-                cluster_rectangle.Width += 0.1;
-                cluster_rectangle.Lenght += 0.1;
-
-
-
-                Color color = Toolbox.ColorFromHSL((list_of_objects.Count * 0.20) % 1, 1, 0.5);
-
-                LidarObject cup = DetectCup(c);
-                // The null condition is Bad need to edit
-                if (cup != null)
+                if (resized_rectangle != null)
                 {
-                    list_of_objects.Add(cup);
+                    List<Location> green_location = FindRectangle.ListAllPossibleLocation(resized_rectangle);
+
+                    list_of_possible_locations.AddRange(green_location);
+
                 }
                 else
-                    Lines.AddRange(FindRectangle.DrawRectangle(cluster_rectangle, c.points[0].Color, 3));
+                {
+                    Tuple<RectangleOriented, RectangleOriented, RectangleOriented> list_of_possible_rectangles = FindRectangle.ListResisableRectangle(best_rectangle, thresold);
 
+                    List<Location> blue_location = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item1);
+
+                    list_of_possible_locations.AddRange(blue_location);
+
+                    List<Location> yellow_location = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item2);
+
+                    list_of_possible_locations.AddRange(yellow_location);
+
+                    List<Location> red_location = FindRectangle.ListAllPossibleLocation(list_of_possible_rectangles.Item3);
+
+                    list_of_possible_locations.AddRange(red_location);
+                }
+
+
+
+                OnLidarMultiplePositionEvent?.Invoke(this, list_of_possible_locations);
+
+
+
+                List<LidarObject> list_of_objects = new List<LidarObject>();
+
+                foreach (ClusterObjects c in inside_clusters)
+                {
+                    RectangleOriented cluster_rectangle = FindRectangle.FindMbrBoxByOverlap(c.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList());
+                    cluster_rectangle.Width += 0.1;
+                    cluster_rectangle.Lenght += 0.1;
+
+
+
+                    Color color = Toolbox.ColorFromHSL((list_of_objects.Count * 0.20) % 1, 1, 0.5);
+
+                    LidarObject cup = DetectCup(c);
+                    // The null condition is Bad need to edit
+                    if (cup != null)
+                    {
+                        list_of_objects.Add(cup);
+                    }
+                    else
+                        Lines.AddRange(FindRectangle.DrawRectangle(cluster_rectangle, c.points[0].Color, 3));
+
+                }
+
+                
+                
+
+                OnProcessLidarObjectsDataEvent?.Invoke(this, list_of_objects);
+                
+                
+                OnProcessLidarLineDataEvent?.Invoke(this, Lines);
             }
-
-            OnProcessLidarObjectsDataEvent?.Invoke(this, list_of_objects);
-
-            OnProcessLidarLineDataEvent?.Invoke(this, Lines);
 
             RawLidarArgs processLidar = new RawLidarArgs() { RobotId = robotId, LidarFrameNumber = LidarFrame, PtList = processedPoints.Select(x => x.Pt).ToList() };
             OnProcessLidarDataEvent?.Invoke(this, processLidar);
             OnProcessLidarPolarDataEvent?.Invoke(this, processedPoints);
-            OnProcessLidarAbsoluteDataEvent?.Invoke(this, absolutePoints);
+
+
         }
         #endregion
 

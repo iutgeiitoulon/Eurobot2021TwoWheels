@@ -73,6 +73,7 @@ namespace StrategyManagerProjetEtudiantNS
                             break;
                         case TaskStrategyState.InitialPositioning:  //Le positionnement initial est manuel de manière à pouvoir coller deux robots très proches sans mouvement parasite
                             parentManager.OnEnableDisableMotors(false);
+                            parentManager.OnSetWantedLocation(parentManager.localWorldMap.RobotLocation);
                             state = TaskStrategyState.InitialPositioningWaiting;
                             break;
                         case TaskStrategyState.InitialPositioningWaiting:
