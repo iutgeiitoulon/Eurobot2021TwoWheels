@@ -80,7 +80,7 @@ namespace StrategyManagerProjetEtudiantNS
                         state = TaskCalibrateState.Wait;
                         break;
                     case TaskCalibrateState.TurnTo1Third:
-                        
+                        parentManager.OnCalibatrionAsked();
                         Location location1 = new Location(parentManager.localWorldMap.RobotLocation.X,
                             parentManager.localWorldMap.RobotLocation.Y,
                             Toolbox.Modulo2PiAngleRad(parentManager.localWorldMap.RobotLocation.Theta + 120 * Math.PI / 180), 0, 0, 0);
