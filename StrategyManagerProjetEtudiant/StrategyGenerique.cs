@@ -54,8 +54,9 @@ namespace StrategyManagerProjetEtudiantNS
         public LocalWorldMap localWorldMap;
         public bool JackState;
         public bool isEndRotation = false;
+        public bool isDeplacementFinished = false;
 
-        
+
         System.Timers.Timer timerStrategy;
 
         public StrategyGenerique(int robotId, int teamId, string teamIpAddress)
@@ -77,15 +78,7 @@ namespace StrategyManagerProjetEtudiantNS
 
 
 
-        public bool isDeplacementFinished
-        {
-            get
-            {
-                    return (Toolbox.Distance(localWorldMap.RobotLocation, localWorldMap.DestinationLocation) < ConstVar.PLANNER_LINEAR_DEAD_ZONE) &&
-                    (!isEndRotation || Math.Abs(localWorldMap.RobotLocation.Theta - localWorldMap.DestinationLocation.Theta) <= ConstVar.PLANNER_ANGULAR_DEAD_ZONE);
-            }
-            private set {}
-        }
+        
 
 
         //************************ Events reçus ************************************************/
@@ -117,10 +110,14 @@ namespace StrategyManagerProjetEtudiantNS
 
         }
 
+        public void OnRobotLocationReached(object sender, LocationArgs e)
+        {
+            if (e.RobotId == robotId)
+                isDeplacementFinished = true;
+        }
 
-        public abstract void OnGhostLocationReached(object sender, LocationArgs e);
-        public abstract void OnRobotLocationReached(object sender, LocationArgs e);
         public abstract void OnIOValuesReceived(object sender, IOValuesEventArgs e);
+
 
 
         /****************************************** Events envoyés ***********************************************/
@@ -150,6 +147,7 @@ namespace StrategyManagerProjetEtudiantNS
         public event EventHandler<TeamColor> OnSetupTeamColorEvent;
         public event EventHandler<bool> OnEnableDisableMotorsEvent;
         public event EventHandler<bool> OnEnableDisableEndRotationEvent;
+        public event EventHandler<EventArgs> OnCalibrationAskedEvent;
 
 
 
@@ -319,8 +317,10 @@ namespace StrategyManagerProjetEtudiantNS
             OnSetActualLocationEvent?.Invoke(this, new LocationArgs { RobotId = robotId , Location = location });
         }
 
-        public void OnSetWantedLocation(Location location)
+        public void OnSetWantedLocation(Location location, bool isRotating = false)
         {
+            isDeplacementFinished = false;
+            OnEnableDisableRotation(isRotating);
             OnSetWantedLocationEvent?.Invoke(this, new PositionArgs { RobotId = robotId, X = location.X, Y = location.Y, Theta = location.Theta, Reliability = 0 });
         }
 
@@ -358,6 +358,11 @@ namespace StrategyManagerProjetEtudiantNS
         {
             isEndRotation = rotation;
             OnEnableDisableEndRotationEvent?.Invoke(this, rotation);
+        }
+
+        public void OnCalibatrionAsked()
+        {
+            OnCalibrationAskedEvent?.Invoke(this, new EventArgs());
         }
     }    
 }

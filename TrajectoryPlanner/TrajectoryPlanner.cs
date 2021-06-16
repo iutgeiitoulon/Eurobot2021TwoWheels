@@ -41,13 +41,15 @@ namespace TrajectoryPlannerNs
 
         void InitPositionPID()
         {
-            PID_Position_Lineaire = new AsservissementPID(ConstVar.PLANNER_PID_POSITION_LINEAR_KP, ConstVar.PLANNER_PID_POSITION_LINEAR_KI,
-                ConstVar.PLANNER_PID_POSITION_LINEAR_KD, ConstVar.PLANNER_PID_POSITION_LINEAR_MAX_KP, ConstVar.PLANNER_PID_POSITION_LINEAR_MAX_KI,
-                ConstVar.PLANNER_PID_POSITION_LINEAR_MAX_KD);
+            PID_Position_Lineaire = new AsservissementPID(
+                ConstVar.PLANNER_PID_POSITION_LINEAR_KP, ConstVar.PLANNER_PID_POSITION_LINEAR_KI, ConstVar.PLANNER_PID_POSITION_LINEAR_KD, 
+                ConstVar.PLANNER_PID_POSITION_LINEAR_MAX_KP, ConstVar.PLANNER_PID_POSITION_LINEAR_MAX_KI, ConstVar.PLANNER_PID_POSITION_LINEAR_MAX_KD
+                );
 
-            PID_Position_Angulaire = new AsservissementPID(ConstVar.PLANNER_PID_POSITION_ANGULAR_KP, ConstVar.PLANNER_PID_POSITION_ANGULAR_KI,
-                ConstVar.PLANNER_PID_POSITION_ANGULAR_KD, ConstVar.PLANNER_PID_POSITION_ANGULAR_MAX_KP, ConstVar.PLANNER_PID_POSITION_ANGULAR_MAX_KI,
-                ConstVar.PLANNER_PID_POSITION_ANGULAR_MAX_KD);
+            PID_Position_Angulaire = new AsservissementPID(
+                ConstVar.PLANNER_PID_POSITION_ANGULAR_KP, ConstVar.PLANNER_PID_POSITION_ANGULAR_KI, ConstVar.PLANNER_PID_POSITION_ANGULAR_KD,
+                ConstVar.PLANNER_PID_POSITION_ANGULAR_MAX_KP, ConstVar.PLANNER_PID_POSITION_ANGULAR_MAX_KI, ConstVar.PLANNER_PID_POSITION_ANGULAR_MAX_KD
+                );
         }
 
         public void InitRobotPosition(double x, double y, double theta)
@@ -63,11 +65,9 @@ namespace TrajectoryPlannerNs
 
         public void SelectMajoration(double min, double max, double coef)
         {
-            MajorationLin = Math.Pow(Toolbox.Distance(GhostLocation.X, GhostLocation.Y, WantedDestination.X, WantedDestination.Y), 2) * coef;
-            if (MajorationLin < min)
-                MajorationLin = min;
-            if (MajorationLin > max)
-                MajorationLin = max;
+            MajorationLin = Math.Pow(Toolbox.Distance(GhostLocation, WantedDestination), 2) * coef;
+            MajorationLin = Math.Max(MajorationLin, min);
+            MajorationLin = Math.Min(MajorationLin, max);
         }
 
         public void ResetGhost()
@@ -75,9 +75,21 @@ namespace TrajectoryPlannerNs
             GhostLocation = new Location(RobotLocation.X, RobotLocation.Y, RobotLocation.Theta, 0, 0, 0);
         }
 
+        public void Start(Location e)
+        {
+            //Console.WriteLine(e.Theta * 180 / Math.PI);
+            WantedDestination = e;
+
+            ResetGhost();
+            OnDestinationSet(robotId, WantedDestination);
+            SelectMajoration(ConstVar.PLANNER_MAJORATION_LINEAR_MIN, ConstVar.PLANNER_MAJORATION_LINEAR_MAX, ConstVar.PLANNER_MAJORATION_LINEAR_COEFF);
+            state = GhostState.Angular;
+        }
+
         public void Stop()
         {
-            state = GhostState.ArretUrgence;
+            isUrgence = true;
+            state = GhostState.Arret;
         }
 
 
@@ -101,14 +113,11 @@ namespace TrajectoryPlannerNs
                     GhostLocation.Vtheta = 0;
                     GhostLocation.Vx = 0;
 
-                    if (Toolbox.Distance(RobotLocation, GhostLocation) <= 0.03)
-                    {
+                    if (Toolbox.Distance(RobotLocation, GhostLocation) <= ConstVar.PLANNER_LINEAR_ROBOT_DEAD_ZONE)
                         OnRobotDestinationReached();
-                    }
                     else
                     {
-                        if (Toolbox.Distance(RobotLocation, GhostLocation) > 0.03)
-                            ResetGhost();
+                        ResetGhost();
                         state = GhostState.Arret;
                     }
 
@@ -116,12 +125,10 @@ namespace TrajectoryPlannerNs
 
                 case GhostState.Arret:
                     if (Math.Abs(GhostLocation.Vx) >= ConstVar.PLANNER_LINEAR_SPEED_MIN)
-                    {
                         if (isReversed)
                             GhostLocation.Vx += ConstVar.PLANNER_MAX_LINEAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
                         else
                             GhostLocation.Vx -= ConstVar.PLANNER_MAX_LINEAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
-                    }
                     else
                     {
                         ResetGhost();
@@ -129,26 +136,8 @@ namespace TrajectoryPlannerNs
                             state = GhostState.Angular;
                     }
 
-                    GhostLocation.X += (GhostLocation.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Cos(GhostLocation.Theta);
-                    GhostLocation.Y += (GhostLocation.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Sin(GhostLocation.Theta);
-                    OnGhostLocation(robotId, GhostLocation);
-                    break;
-
-                case GhostState.ArretUrgence:
-                    if (Math.Abs(GhostLocation.Vx) >= ConstVar.PLANNER_LINEAR_SPEED_MIN)
-                    {
-                        if (isReversed)
-                            GhostLocation.Vx += ConstVar.PLANNER_MAX_LINEAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
-                        else
-                            GhostLocation.Vx -= ConstVar.PLANNER_MAX_LINEAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
-                    }
-                    else
-                    {
-                        ResetGhost();
-                    }
-
-                    GhostLocation.X += (GhostLocation.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Cos(GhostLocation.Theta);
-                    GhostLocation.Y += (GhostLocation.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Sin(GhostLocation.Theta);
+                    GhostLocation.X += GhostLocation.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ * Math.Cos(GhostLocation.Theta);
+                    GhostLocation.Y += GhostLocation.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ * Math.Sin(GhostLocation.Theta);
                     OnGhostLocation(robotId, GhostLocation);
                     break;
 
@@ -185,26 +174,31 @@ namespace TrajectoryPlannerNs
             else
                 WantedTheta = WantedDestination.Theta;
 
-            WantedTheta += (isReversed) ? Math.PI : 0;
+            
 
-            double dThetaFreinage = (Math.Pow(GhostLocation.Vtheta, 2)) / (2 * ConstVar.PLANNER_MAX_ANGULAR_ACCELERATION);
+            WantedTheta += isReversed ? Math.PI : 0;
+
+            
+
+            double dThetaFreinage = Math.Pow(GhostLocation.Vtheta, 2) / (2 * ConstVar.PLANNER_MAX_ANGULAR_ACCELERATION);
             double dThetaRestant = WantedTheta - Toolbox.ModuloByAngle(WantedTheta, GhostLocation.Theta);
 
+            if ((Toolbox.Distance(GhostLocation, WantedDestination) == 0) && !isEndTurn)
+                dThetaRestant = 0;
+
             if (dThetaFreinage * ConstVar.PLANNER_MAJORATION_ANGULAR < Math.Abs(dThetaRestant))
-            {
                 GhostLocation.Vtheta += Math.Sign(dThetaRestant) * ConstVar.PLANNER_MAX_ANGULAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
-            }
             else
-            {
                 GhostLocation.Vtheta -= Math.Sign(GhostLocation.Vtheta) * ConstVar.PLANNER_MAX_ANGULAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
-            }
 
             GhostLocation.Vtheta = Toolbox.LimitToInterval(GhostLocation.Vtheta, -ConstVar.PLANNER_MAX_ANGULAR_SPEED, ConstVar.PLANNER_MAX_ANGULAR_SPEED);
             GhostLocation.Theta += GhostLocation.Vtheta / ConstVar.ODOMETRY_FREQ_IN_HZ;
 
             OnGhostLocation(robotId, GhostLocation);
 
-            if (Math.Abs(dThetaRestant) <= Toolbox.DegToRad(ConstVar.PLANNER_ANGULAR_DEAD_ZONE))
+            Console.WriteLine(WantedDestination.Theta * 180 / Math.PI + " : " + WantedTheta * 180 / Math.PI + " - " + !isEndTurn + " ? " + dThetaRestant * 180 / Math.PI);
+
+            if (Math.Abs(dThetaRestant) <= Toolbox.DegToRad(ConstVar.PLANNER_ANGULAR_GHOST_DEAD_ZONE))
                 if (!isEndTurn)
                     state = GhostState.AngularEnd;
                 else
@@ -218,10 +212,10 @@ namespace TrajectoryPlannerNs
 
             PointD project_point = new PointD(xy_ghost.X + Math.Cos(GhostLocation.Theta), xy_ghost.Y + Math.Sin(GhostLocation.Theta));
 
-            //Calcul du point projeté + remplacement du waypoint par ce point
+            /// Calcul du point projeté + remplacement du waypoint par ce point
             PointD projectedGhost = Toolbox.ProjectedPointOnLineFromWaypoint(xy_wanted, xy_ghost, project_point); /// Make A projection for avoiding infinity movement
 
-            double dLinFreinage = (Math.Pow(GhostLocation.Vx, 2)) / (2 * ConstVar.PLANNER_MAX_LINEAR_ACCELERATION);
+            double dLinFreinage = Math.Pow(GhostLocation.Vx, 2) / (2 * ConstVar.PLANNER_MAX_LINEAR_ACCELERATION);
             double dLinRestant = Toolbox.Distance(GhostLocation.X, GhostLocation.Y, projectedGhost.X, projectedGhost.Y);
 
             double thetaCor = Math.Atan2(projectedGhost.Y - GhostLocation.Y, projectedGhost.X - GhostLocation.X);
@@ -246,7 +240,7 @@ namespace TrajectoryPlannerNs
                 }
 
             }
-            else
+            else if (!cibleDevantLin)
             {
                 if (GhostLocation.Vx > 0)
                     GhostLocation.Vx -= ConstVar.PLANNER_MAX_LINEAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
@@ -257,19 +251,18 @@ namespace TrajectoryPlannerNs
                     {
                         if (Math.Abs(GhostLocation.Vx) < ConstVar.PLANNER_MAX_LINEAR_SPEED)
                             GhostLocation.Vx -= ConstVar.PLANNER_MAX_LINEAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
-
                     }
                     else
                         GhostLocation.Vx += ConstVar.PLANNER_MAX_LINEAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
                 }
             }
 
-            GhostLocation.X += (GhostLocation.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Cos(GhostLocation.Theta);
-            GhostLocation.Y += (GhostLocation.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Sin(GhostLocation.Theta);
+            GhostLocation.X += GhostLocation.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ * Math.Cos(GhostLocation.Theta);
+            GhostLocation.Y += GhostLocation.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ * Math.Sin(GhostLocation.Theta);
 
             OnGhostLocation(robotId, GhostLocation);
 
-            if (dLinRestant <= ConstVar.PLANNER_LINEAR_DEAD_ZONE && Math.Abs(GhostLocation.Vx) <= ConstVar.PLANNER_LINEAR_SPEED_MIN)
+            if (dLinRestant <= ConstVar.PLANNER_LINEAR_GHOST_DEAD_ZONE && Math.Abs(GhostLocation.Vx) <= ConstVar.PLANNER_LINEAR_SPEED_MIN)
                 state = GhostState.LinearEnd;
         }
 
@@ -337,11 +330,7 @@ namespace TrajectoryPlannerNs
         {
             if (e.RobotId == robotId)
             {
-                WantedDestination = new Location(e.X, e.Y, e.Theta, 0, 0, 0);
-                OnDestinationSet(robotId, WantedDestination);
-
-                SelectMajoration(ConstVar.PLANNER_MAJORATION_LINEAR_MIN, ConstVar.PLANNER_MAJORATION_LINEAR_MAX, ConstVar.PLANNER_MAJORATION_LINEAR_COEFF);
-                state = GhostState.Arret;
+                Start(new Location(e.X, e.Y, e.Theta, 0, 0, 0));
             }
         }
 

@@ -66,6 +66,7 @@
     <Compile Include="StrategyEurobot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Task\TaskActivateBeacon.cs" />
+    <Compile Include="Task\TaskCalibrate.cs" />
     <Compile Include="Task\TaskGetReefCup.cs" />
     <Compile Include="Task\TaskReturnHarbor.cs" />
     <Compile Include="Task\TaskStrategy.cs" />

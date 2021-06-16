@@ -44,6 +44,8 @@ namespace StrategyManagerProjetEtudiantNS
             ActivateBeaconWaiting,
             ReturnHome,
             ReturnHomeWaiting,
+            Calibrate,
+            CalibrateWaiting,
             Finished
         }
 
@@ -60,6 +62,8 @@ namespace StrategyManagerProjetEtudiantNS
             timeStamp.Reset();
             parentManager.taskWindFlag.Init();
             parentManager.taskReturnHarbor.Init();
+            parentManager.taskActivateBeacon.Init();
+            parentManager.taskCalibrate.Init();
             state = TaskStrategyState.InitialPositioning;
         }
 
@@ -86,12 +90,18 @@ namespace StrategyManagerProjetEtudiantNS
                             if (!Jack)
                             {
                                 parentManager.OnEnableDisableMotors(true);
-                                parentManager.taskWindFlag.Start();
-                                state = TaskStrategyState.PushFlags;
+                                state = TaskStrategyState.Calibrate;
                                 StartSw();
                             }
                             break;
-
+                        case TaskStrategyState.Calibrate:
+                            parentManager.taskCalibrate.Start();
+                            state = TaskStrategyState.CalibrateWaiting;
+                            break;
+                        case TaskStrategyState.CalibrateWaiting:
+                            if (parentManager.taskCalibrate.isFinished)
+                                state = TaskStrategyState.PushFlags;
+                            break;
                         case TaskStrategyState.PushFlags:
                             parentManager.taskWindFlag.Start();
                             state = TaskStrategyState.PushFlagsWaiting;

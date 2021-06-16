@@ -11,26 +11,26 @@ using System.Diagnostics;
 
 namespace StrategyManagerProjetEtudiantNS
 {
-    public class TaskActivateBeacon
+    public class TaskCalibrate
     {
         Thread TaskThread;
         StrategyEurobot parentManager;
         Stopwatch sw = new Stopwatch();
-        TaskActivateBeaconState state = TaskActivateBeaconState.Wait;
+        TaskCalibrateState state = TaskCalibrateState.Wait;
         public bool isFinished = false;
 
-        enum TaskActivateBeaconState
+        enum TaskCalibrateState
         {
             Init,
             Wait,
-            MoveToBeacon,
-            MoveToBeaconWaiting,
-            PushBeacon,
-            PushBeaconWaiting,
+            TurnTo1Third,
+            TurnTo1ThirdWaiting,
+            TurnTo2Third,
+            TurnTo2ThirdWaiting,
             Finished,
         }
 
-        public TaskActivateBeacon(StrategyEurobot manager)
+        public TaskCalibrate(StrategyEurobot manager)
         {
             isFinished = false;
             parentManager = manager;
@@ -51,19 +51,19 @@ namespace StrategyManagerProjetEtudiantNS
         }
         public void Init()
         {
-            state = TaskActivateBeaconState.Init;
+            state = TaskCalibrateState.Init;
             isFinished = false;
             StopSw();
         }
         public void Start()
         {
-            state = TaskActivateBeaconState.MoveToBeacon;
+            state = TaskCalibrateState.TurnTo1Third;
             isFinished = false;
             StopSw();
         }
         public void Pause()
         {
-            state = TaskActivateBeaconState.Wait;
+            state = TaskCalibrateState.Wait;
             isFinished = false;
             StopSw();
         }
@@ -74,51 +74,51 @@ namespace StrategyManagerProjetEtudiantNS
             {
                 switch (state)
                 {
-                    case TaskActivateBeaconState.Wait:
+                    case TaskCalibrateState.Wait:
                         break;
-                    case TaskActivateBeaconState.Init:
-                        state = TaskActivateBeaconState.Wait;
+                    case TaskCalibrateState.Init:
+                        state = TaskCalibrateState.Wait;
                         break;
-                    case TaskActivateBeaconState.MoveToBeacon:
-                        if (parentManager.localWorldMap.Team == TeamColor.Blue)
-                            parentManager.OnSetWantedLocation(new Location(-1.3, 0.8, 0, 0, 0, 0));
-                        else if (parentManager.localWorldMap.Team == TeamColor.Yellow)
-                            parentManager.OnSetWantedLocation(new Location(1.3, 0.8, 0, 0, 0, 0));
-
-                        state = TaskActivateBeaconState.MoveToBeaconWaiting;
+                    case TaskCalibrateState.TurnTo1Third:
+                        
+                        Location location1 = new Location(parentManager.localWorldMap.RobotLocation.X,
+                            parentManager.localWorldMap.RobotLocation.Y,
+                            Toolbox.Modulo2PiAngleRad(parentManager.localWorldMap.RobotLocation.Theta + 120 * Math.PI / 180), 0, 0, 0);
+                        parentManager.OnSetWantedLocation(location1, true);
+                        state = TaskCalibrateState.TurnTo1ThirdWaiting;
                         StartSw();
                         break;
-                    case TaskActivateBeaconState.MoveToBeaconWaiting:
+                    case TaskCalibrateState.TurnTo1ThirdWaiting:
                         if (parentManager.isDeplacementFinished || sw.ElapsedMilliseconds > 5000)
                         {
-                            state = TaskActivateBeaconState.PushBeacon;
+                            state = TaskCalibrateState.TurnTo2Third;
                             StopSw();
                         }
                         break;
-                    case TaskActivateBeaconState.PushBeacon:
-                        if (parentManager.localWorldMap.Team == TeamColor.Blue)
-                            parentManager.OnSetWantedLocation(new Location(-1, 0.8, 0, 0, 0, 0));
-                        else if (parentManager.localWorldMap.Team == TeamColor.Yellow)
-                            parentManager.OnSetWantedLocation(new Location(1, 0.8, 0, 0, 0, 0));
+                    case TaskCalibrateState.TurnTo2Third:
+                        Location location2 = new Location(parentManager.localWorldMap.RobotLocation.X,
+                            parentManager.localWorldMap.RobotLocation.Y,
+                            Toolbox.Modulo2PiAngleRad(parentManager.localWorldMap.RobotLocation.Theta + 120 * Math.PI / 180), 0, 0, 0);
+                        parentManager.OnSetWantedLocation(location2, true);
 
-                        state = TaskActivateBeaconState.PushBeaconWaiting;
+                        state = TaskCalibrateState.TurnTo2ThirdWaiting;
                         StartSw();
                         break;
-                    case TaskActivateBeaconState.PushBeaconWaiting:
+                    case TaskCalibrateState.TurnTo2ThirdWaiting:
                         if (parentManager.isDeplacementFinished || sw.ElapsedMilliseconds > 5000)
                         {
-                            state = TaskActivateBeaconState.Finished;
+                            state = TaskCalibrateState.Finished;
                             StopSw();
                         }
                         break;
-                    case TaskActivateBeaconState.Finished:
+                    case TaskCalibrateState.Finished:
                         isFinished = true;
-                        state = TaskActivateBeaconState.Wait;
+                        state = TaskCalibrateState.Wait;
                         break;
                 }
                 Thread.Sleep(10);
             }
         }
     }
-
 }
+

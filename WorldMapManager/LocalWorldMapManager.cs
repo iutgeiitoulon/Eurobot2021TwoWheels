@@ -92,12 +92,6 @@ namespace WorldMapManager
             OnLocalWorldMapChange();
         }
 
-        public void SetRobotLocation(Location location)
-        {
-            localWorldMap.RobotLocation = location;
-            OnLocalWorldMapChange();
-        }
-
         public void SetGhostRobotLocation(Location location)
         {
             localWorldMap.RobotGhostLocation = location;
@@ -116,6 +110,7 @@ namespace WorldMapManager
             localWorldMap.WaypointLocations = new List<Location> { };
             localWorldMap.RobotHistorical = new List<Location> { localWorldMap.RobotLocation };
             OnResetRobotEvent?.Invoke(this, new LocationArgs() { RobotId = localWorldMap.RobotId, Location = location });
+            OnUpdateRobotLocation(location);
             OnLocalWorldMapChange();
         }
 
@@ -198,17 +193,6 @@ namespace WorldMapManager
         public void OnDestinationReached(object sender, Location location)
         {
             ResetDestination();
-        }
-
-        public void OnPhysicalPositionReceived(object sender, LocationArgs e)
-        {
-            if (localWorldMap == null)
-                return;
-            if (localWorldMap.RobotId == e.RobotId)
-            {
-                SetRobotLocation(e.Location); //Update de la robot Location dans la local world map
-                OnLocalWorldMapForDisplayOnly(localWorldMap); //Event de transmission de la local world map
-            }
         }
 
         public void OnWaypointReceived(object sender, LocationArgs e)

@@ -21,6 +21,7 @@ namespace StrategyManagerProjetEtudiantNS
         Timer configTimer;
 
         public TaskStrategy taskStrategy;
+        public TaskCalibrate taskCalibrate;
         public TaskWindFlag taskWindFlag;
         public TaskReturnHarbor taskReturnHarbor;
         public TaskActivateBeacon taskActivateBeacon;
@@ -35,6 +36,7 @@ namespace StrategyManagerProjetEtudiantNS
             taskWindFlag = new TaskWindFlag(this);
             taskReturnHarbor = new TaskReturnHarbor(this);
             taskActivateBeacon = new TaskActivateBeacon(this);
+            taskCalibrate = new TaskCalibrate(this);
             taskStrategy = new TaskStrategy(this);
         }
 
@@ -79,17 +81,6 @@ namespace StrategyManagerProjetEtudiantNS
         }
 
         /*********************************** Events reçus **********************************************/
-
-        public override void OnGhostLocationReached(object sender, LocationArgs location)
-        {
-            
-        }
-
-        public override void OnRobotLocationReached(object sender, LocationArgs e)
-        {
-
-        }
-
         public override void OnIOValuesReceived(object sender, IOValuesEventArgs e)
         {
             byte configStatus = Convert.ToByte(e.ioValues);

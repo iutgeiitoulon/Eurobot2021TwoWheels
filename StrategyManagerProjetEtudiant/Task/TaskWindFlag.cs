@@ -80,7 +80,6 @@ namespace StrategyManagerProjetEtudiantNS
                         state = TaskWindFlagStates.Wait;
                         break;
                     case TaskWindFlagStates.MoveToFlag:
-                        parentManager.OnEnableDisableRotation(false);
                         if (parentManager.localWorldMap.Team == TeamColor.Blue)
                             parentManager.OnSetWantedLocation(new Location(-1.3, -0.8, 0, 0, 0, 0));
                         else if (parentManager.localWorldMap.Team == TeamColor.Yellow)
@@ -97,7 +96,6 @@ namespace StrategyManagerProjetEtudiantNS
                         }
                         break;
                     case TaskWindFlagStates.MoveToPushedFlag2:
-                        parentManager.OnEnableDisableRotation(false);
                         if (parentManager.localWorldMap.Team == TeamColor.Blue)
                             parentManager.OnSetWantedLocation(new Location(-0.8, -0.8, 0, 0, 0, 0));
                         else if (parentManager.localWorldMap.Team == TeamColor.Yellow)

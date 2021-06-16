@@ -78,10 +78,9 @@ namespace StrategyManagerProjetEtudiantNS
                         state = TaskReturnHarborState.Wait;
                         break;
                     case TaskReturnHarborState.MoveToHarbor:
-                        parentManager.OnEnableDisableRotation(true);
                         PointD home_point = parentManager.localWorldMap.Fields.Where(x => x.Type == FieldType.StartZone).FirstOrDefault().Shape.Center;
                         Location destination = new Location(home_point.X, home_point.Y, Toolbox.Angle(home_point, new PointD(0, 0)), 0, 0, 0);
-                        parentManager.OnSetWantedLocation(destination);
+                        parentManager.OnSetWantedLocation(destination, true);
                         state = TaskReturnHarborState.MoveToHarborWaiting;
                         StartSw();
                         break;

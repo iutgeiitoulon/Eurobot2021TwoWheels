@@ -244,15 +244,18 @@ namespace RobotEurobot2Roues
             strategyManager.OnDestinationReachedEvent += localWorldMapManager.OnDestinationReached;
             strategyManager.OnWaypointsReachedEvent += localWorldMapManager.OnWaypointReached;
             strategyManager.OnNewFieldsEvent += localWorldMapManager.OnNewFieldsReceived;
+            strategyManager.OnSetWaypointsListEvent += localWorldMapManager.SetNewWaypointsList;
+            strategyManager.OnSetNewWaypointEvent += localWorldMapManager.AddNewWaypointsEvent;
+            strategyManager.OnSetNewDestinationEvent += localWorldMapManager.SetDestinationLocationEvent;
+            strategyManager.OnSetupTeamColorEvent += localWorldMapManager.OnTeamChangeReceived;
+
+            strategyManager.OnCalibrationAskedEvent += positionManager.OnCalibatrionAsked;
 
             strategyManager.OnSetWantedLocationEvent += trajectoryPlanner.SetDestination;
             strategyManager.OnEnableDisableMotorsEvent += trajectoryPlanner.OnEnableDisableAsservReceived;
             strategyManager.OnEnableDisableEndRotationEvent += trajectoryPlanner.OnEndRotateEnableDisableReceived;
 
-            strategyManager.OnSetWaypointsListEvent += localWorldMapManager.SetNewWaypointsList;
-            strategyManager.OnSetNewWaypointEvent += localWorldMapManager.AddNewWaypointsEvent;
-            strategyManager.OnSetNewDestinationEvent += localWorldMapManager.SetDestinationLocationEvent;
-            strategyManager.OnSetupTeamColorEvent += localWorldMapManager.OnTeamChangeReceived;
+            
             
 
             ConsoleFormat.PrintStrategyBoot();
@@ -268,9 +271,7 @@ namespace RobotEurobot2Roues
             ConsoleFormat.EndMainBootSequence();
 
             while (!exitSystem)
-            {
                 Thread.Sleep(500);
-            }
         }
 
 
@@ -284,8 +285,6 @@ namespace RobotEurobot2Roues
                 interfaceRobot = new WpfRobot2RouesInterface(competition);
                 interfaceRobot.Loaded += RegisterRobotInterfaceEvents;
                 interfaceRobot.ShowDialog();
-
-
             });
             t1.SetApartmentState(ApartmentState.STA);
             t1.Start();   

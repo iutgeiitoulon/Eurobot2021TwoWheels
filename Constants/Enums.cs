@@ -36,7 +36,6 @@ namespace Constants
         AngularTurnEnd,
         Wait,
         Arret,
-        ArretUrgence
     }
 
     public enum LidarObjectType
