@@ -81,9 +81,9 @@ namespace StrategyManagerProjetEtudiantNS
                         break;
                     case TaskWindFlagStates.MoveToFlag:
                         if (parentManager.localWorldMap.Team == TeamColor.Blue)
-                            parentManager.OnSetWantedLocation(new Location(-1.3, -0.8, 0, 0, 0, 0));
+                            parentManager.OnSetWantedLocation(new Location(-1.25, -0.75, 0, 0, 0, 0));
                         else if (parentManager.localWorldMap.Team == TeamColor.Yellow)
-                            parentManager.OnSetWantedLocation(new Location(1.3, -0.8, 0, 0, 0, 0));
+                            parentManager.OnSetWantedLocation(new Location(1.25, -0.75, 0, 0, 0, 0));
 
                         state = TaskWindFlagStates.MoveToFlagWaiting;
                         StartSw();
@@ -97,9 +97,9 @@ namespace StrategyManagerProjetEtudiantNS
                         break;
                     case TaskWindFlagStates.MoveToPushedFlag2:
                         if (parentManager.localWorldMap.Team == TeamColor.Blue)
-                            parentManager.OnSetWantedLocation(new Location(-0.8, -0.8, 0, 0, 0, 0));
+                            parentManager.OnSetWantedLocation(new Location(-0.8, -0.75, 0, 0, 0, 0));
                         else if (parentManager.localWorldMap.Team == TeamColor.Yellow)
-                            parentManager.OnSetWantedLocation(new Location(0.8, -0.8, 0, 0, 0, 0));
+                            parentManager.OnSetWantedLocation(new Location(0.8, -0.75, 0, 0, 0, 0));
 
                         state = TaskWindFlagStates.MoveToPushedFlag2Waiting;
                         StartSw();
