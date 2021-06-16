@@ -232,6 +232,7 @@ namespace RobotEurobot2Roues
 
             #region Position Manager
             positionManager.OnPositionMergedEvent += localWorldMapManager.OnRobotLocationArgs;
+            positionManager.OnPositionCorrectedEvent += trajectoryPlanner.OnResetOrder;
             #endregion
 
             #region Strategy /!\ Need to be Last /!\

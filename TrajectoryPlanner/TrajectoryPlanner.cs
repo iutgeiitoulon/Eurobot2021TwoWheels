@@ -77,7 +77,6 @@ namespace TrajectoryPlannerNs
 
         public void Start(Location e)
         {
-            //Console.WriteLine(e.Theta * 180 / Math.PI);
             WantedDestination = e;
 
             ResetGhost();
@@ -195,8 +194,6 @@ namespace TrajectoryPlannerNs
             GhostLocation.Theta += GhostLocation.Vtheta / ConstVar.ODOMETRY_FREQ_IN_HZ;
 
             OnGhostLocation(robotId, GhostLocation);
-
-            Console.WriteLine(WantedDestination.Theta * 180 / Math.PI + " : " + WantedTheta * 180 / Math.PI + " - " + !isEndTurn + " ? " + dThetaRestant * 180 / Math.PI);
 
             if (Math.Abs(dThetaRestant) <= Toolbox.DegToRad(ConstVar.PLANNER_ANGULAR_GHOST_DEAD_ZONE))
                 if (!isEndTurn)
