@@ -334,6 +334,11 @@ namespace TrajectoryPlannerNs
             }
         }
 
+        public void OnResetOrder(object sender, EventArgs e)
+        {
+            Start(WantedDestination);
+        }
+
         public void OnEnableDisableAsservReceived(object sender, bool e)
         {
             isEnslave = e;

@@ -48,8 +48,6 @@ namespace StrategyManagerProjetEtudiantNS
             Calibrate1Waiting,
             Calibrate2,
             Calibrate2Waiting,
-            Calibrate3,
-            Calibrate3Waiting,
             Finished
         }
 
@@ -114,14 +112,6 @@ namespace StrategyManagerProjetEtudiantNS
                             if (parentManager.taskCalibrate.isFinished)
                                 state = TaskStrategyState.ActivateBeacon;
                             break;
-                        case TaskStrategyState.Calibrate3:
-                            parentManager.taskCalibrate.Start();
-                            state = TaskStrategyState.Calibrate3Waiting;
-                            break;
-                        case TaskStrategyState.Calibrate3Waiting:
-                            if (parentManager.taskCalibrate.isFinished)
-                                state = TaskStrategyState.ReturnHome;
-                            break;
                         case TaskStrategyState.PushFlags:
                             parentManager.taskWindFlag.Start();
                             state = TaskStrategyState.PushFlagsWaiting;
@@ -136,7 +126,7 @@ namespace StrategyManagerProjetEtudiantNS
                             break;
                         case TaskStrategyState.ActivateBeaconWaiting:
                             if (parentManager.taskActivateBeacon.isFinished)
-                                state = TaskStrategyState.Calibrate3;
+                                state = TaskStrategyState.ReturnHome;
                             break;
 
                         case TaskStrategyState.ReturnHome:

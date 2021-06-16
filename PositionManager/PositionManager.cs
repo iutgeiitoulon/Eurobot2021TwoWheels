@@ -43,7 +43,9 @@ namespace PositionManagerNs
 
             if (askForCalibration)
             {
+                
                 OnPositionMerged(GetBestDistanceLocation(list_of_locations, RobotLocation));
+                OnPositionCorrected();
                 askForCalibration = false;
             }
                 
@@ -105,12 +107,16 @@ namespace PositionManagerNs
 
         #region Events
         public event EventHandler<LocationArgs> OnPositionMergedEvent;
-
+        public event EventHandler<EventArgs> OnPositionCorrectedEvent;
         public void OnPositionMerged(Location location)
         {
             OnPositionMergedEvent?.Invoke(this, new LocationArgs { RobotId = robotId, Location = location });
         }
 
+        public void OnPositionCorrected()
+        {
+            OnPositionCorrectedEvent?.Invoke(this, new EventArgs());
+        }
         #endregion
     }
 }
