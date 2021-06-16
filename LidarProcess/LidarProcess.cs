@@ -88,7 +88,7 @@ namespace LidarProcessNS
             List<PolarPointRssi> validPoint = polarPointRssi.Where(x => x.Distance >= ConstVar.LIDAR_MIN_POINT_DISTANCE && x.Distance <= ConstVar.LIDAR_MAX_POINT_DISTANCE).ToList();
             List<PointD> validPointXY = validPoint.Select(x => Toolbox.ConvertPolarToPointD(x)).ToList();
 
-            validPointXY = ClustersDetection.ExtractClusterByDBScan(validPointXY, 0.05, 3).SelectMany(x => x.points).ToList().Select(x => Toolbox.ConvertPolarToPointD(x)).ToList().Select(x => x.Pt).ToList();
+            validPointXY = ClustersDetection.DetectClusterOfPoint(validPointXY, 0.005, 10).SelectMany(x => x.points).ToList().Select(x => Toolbox.ConvertPolarToPointD(x)).ToList().Select(x => x.Pt).ToList();
 
             List<ClusterObjects> list_of_all_clusters = ClustersDetection.ExtractClusterByDBScan(validPointXY, 0.05, 3);
             List<PointD> allPointXY = list_of_all_clusters.SelectMany(x => x.points).ToList().Select(x => Toolbox.ConvertPolarToPointD(x)).ToList().Select(x => x.Pt).ToList();

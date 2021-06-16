@@ -30,10 +30,6 @@
                 </local:PolygonRenderableSeries>
                 <local:PolygonRenderableSeries x:Name="PolygonSeries" Opacity="0.5">
                 </local:PolygonRenderableSeries>
-                <local:SegmentRenderableSeries x:Name="SegmentSeries" Opacity="0.5">
-                </local:SegmentRenderableSeries>
-                <local:PointListRenderableSeries x:Name="LidarPtExtendedSeries" Opacity="1">
-                </local:PointListRenderableSeries>
                 <s:FastUniformHeatmapRenderableSeries x:Name="heatmapSeries" Opacity="0.6">
                     <s:FastUniformHeatmapRenderableSeries.ColorMap>
                         <s:HeatmapColorPalette Minimum="-1" Maximum="1">
@@ -57,16 +53,6 @@
                 <s:XyScatterRenderableSeries x:Name="LidarProcessedPoints1" Opacity="0.5">
                     <s:XyScatterRenderableSeries.PointMarker>
                         <s:EllipsePointMarker Width="4" Height="4" Fill="SteelBlue" Stroke="Blue" StrokeThickness="1"/>
-                    </s:XyScatterRenderableSeries.PointMarker>
-                </s:XyScatterRenderableSeries>
-                <s:XyScatterRenderableSeries x:Name="LidarProcessedPoints2" Opacity="0.5">
-                    <s:XyScatterRenderableSeries.PointMarker>
-                        <s:EllipsePointMarker Width="4" Height="4" Fill="SteelBlue" Stroke="Green" StrokeThickness="1"/>
-                    </s:XyScatterRenderableSeries.PointMarker>
-                </s:XyScatterRenderableSeries>
-                <s:XyScatterRenderableSeries x:Name="LidarProcessedPoints3" Opacity="0.5">
-                    <s:XyScatterRenderableSeries.PointMarker>
-                        <s:EllipsePointMarker Width="4" Height="4" Fill="SteelBlue" Stroke="Orange" StrokeThickness="1"/>
                     </s:XyScatterRenderableSeries.PointMarker>
                 </s:XyScatterRenderableSeries>
                 <local:PolygonRenderableSeries x:Name="ObjectsPolygonSeries" Opacity="0.8" >

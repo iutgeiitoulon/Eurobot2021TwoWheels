@@ -19,7 +19,7 @@ namespace LidarProcessNS
         /// <param name="thresold"></param>
         /// <param name="mininum_amount_of_points"></param>
         /// <returns></returns>
-        public static List<ClusterObjects> DetectClusterOfPoint(List<PolarPointRssiExtended> pointsList, double thresold, int mininum_amount_of_points = 5)
+        public static List<ClusterObjects> DetectClusterOfPoint(List<PointD> pointsList, double thresold, int mininum_amount_of_points = 5)
         {
             /// ABD Stand for Adaptative breakpoint Detection
             List<ClusterObjects> listOfClusters = new List<ClusterObjects>();
@@ -27,9 +27,9 @@ namespace LidarProcessNS
             int i;
             for (i = 1; i < pointsList.Count - 1; i++)
             {
-                PolarPointRssiExtended point_n_minus_1 = pointsList[i - 1];
-                PolarPointRssiExtended point_n_plus_1 = pointsList[i + 1];
-                PolarPointRssiExtended point_n = pointsList[i];
+                PointD point_n_minus_1 = pointsList[i - 1];
+                PointD point_n_plus_1 = pointsList[i + 1];
+                PointD point_n = pointsList[i];
 
                 
 
@@ -42,7 +42,7 @@ namespace LidarProcessNS
                 if (distance_between_point < ABD_Thresold)
                 {
 
-                    cluster.points.Add(point_n);
+                    cluster.points.Add( new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(point_n), 1, Color.White));
                 }
                 else
                 {
