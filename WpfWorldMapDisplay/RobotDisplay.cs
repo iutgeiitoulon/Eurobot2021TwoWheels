@@ -351,7 +351,7 @@ namespace WpfWorldMapDisplay
             return this.LidarObjectList;
         }
 
-        public List<PolygonExtended> GetDeadZonesPolygon()
+        public List<PolygonExtended> GetFieldsPolygon()
         {
             if (Fields == null)
                 return new List<PolygonExtended>();

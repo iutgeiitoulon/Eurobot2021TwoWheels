@@ -88,15 +88,13 @@ namespace LidarProcessNS
             List<PolarPointRssi> validPoint = polarPointRssi.Where(x => x.Distance >= ConstVar.LIDAR_MIN_POINT_DISTANCE && x.Distance <= ConstVar.LIDAR_MAX_POINT_DISTANCE).ToList();
             List<PointD> validPointXY = validPoint.Select(x => Toolbox.ConvertPolarToPointD(x)).ToList();
 
-            validPointXY = ClustersDetection.DetectClusterOfPoint(validPointXY, 0.005, 10).SelectMany(x => x.points).ToList().Select(x => Toolbox.ConvertPolarToPointD(x)).ToList().Select(x => x.Pt).ToList();
-
             List<ClusterObjects> list_of_all_clusters = ClustersDetection.ExtractClusterByDBScan(validPointXY, 0.05, 3);
             List<PointD> allPointXY = list_of_all_clusters.SelectMany(x => x.points).ToList().Select(x => Toolbox.ConvertPolarToPointD(x)).ToList().Select(x => x.Pt).ToList();
 
 
             RectangleOriented best_rectangle = FindRectangle.FindMbrBoxByOverlap(allPointXY);
 
-            List<PolarPointRssiExtended> processedPoints = validPoint.Select(x => new PolarPointRssiExtended(x, 2, Color.White)).ToList();
+            List<PolarPointRssiExtended> processedPoints = allPointXY.Select(x => new PolarPointRssiExtended(Toolbox.ConvertPointDToPolar(x), 2, Color.White)).ToList();
 
             if (best_rectangle.Lenght <= ConstVar.WIDTH_BOXSIZE + thresold && best_rectangle.Width <= ConstVar.WIDTH_BOXSIZE + thresold)
             {

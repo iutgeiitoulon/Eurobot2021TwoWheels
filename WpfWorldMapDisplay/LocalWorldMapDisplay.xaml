@@ -30,21 +30,10 @@
                 </local:PolygonRenderableSeries>
                 <local:PolygonRenderableSeries x:Name="PolygonSeries" Opacity="0.5">
                 </local:PolygonRenderableSeries>
-                <s:FastUniformHeatmapRenderableSeries x:Name="heatmapSeries" Opacity="0.6">
-                    <s:FastUniformHeatmapRenderableSeries.ColorMap>
-                        <s:HeatmapColorPalette Minimum="-1" Maximum="1">
-                            <s:HeatmapColorPalette.GradientStops>
-                                <GradientStop Offset="0" Color="#DD061d04" />
-                                <GradientStop Offset="0.2" Color="#AA5588FF" />
-                                <GradientStop Offset="0.4" Color="#9977AAFF" />
-                                <GradientStop Offset="0.5" Color="#11FFFFFF" />
-                                <GradientStop Offset="0.6" Color="#99FFCC00" />
-                                <GradientStop Offset="0.8" Color="#BBFF6600" />
-                                <GradientStop Offset="1" Color="#DDFF0000" />
-                            </s:HeatmapColorPalette.GradientStops>
-                        </s:HeatmapColorPalette>
-                    </s:FastUniformHeatmapRenderableSeries.ColorMap>
-                </s:FastUniformHeatmapRenderableSeries>
+                <local:SegmentRenderableSeries x:Name="SegmentSeries" Opacity="0.5">
+                </local:SegmentRenderableSeries>
+                <local:PointListRenderableSeries x:Name="LidarPtExtendedSeries" Opacity="1">
+                </local:PointListRenderableSeries>
                 <s:XyScatterRenderableSeries x:Name="LidarPoints" Opacity="0.5">
                     <s:XyScatterRenderableSeries.PointMarker>
                         <s:EllipsePointMarker Width="2" Height="2" Fill="SteelBlue" Stroke="LightSteelBlue" StrokeThickness="1"/>
@@ -57,7 +46,7 @@
                 </s:XyScatterRenderableSeries>
                 <local:PolygonRenderableSeries x:Name="ObjectsPolygonSeries" Opacity="0.8" >
                 </local:PolygonRenderableSeries>
-                <local:PolygonRenderableSeries x:Name="DeadZoneSeries" Opacity="0.4" >
+                <local:PolygonRenderableSeries x:Name="FieldsSeries" Opacity="0.4" >
                 </local:PolygonRenderableSeries>
                 <s:XyScatterRenderableSeries x:Name="ObstaclePoints" Opacity="0.5">
                     <s:XyScatterRenderableSeries.PointMarker>
