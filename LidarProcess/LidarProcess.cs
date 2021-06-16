@@ -80,7 +80,7 @@ namespace LidarProcessNS
         #region Main
         public void ProcessLidarData(List<PolarPointRssi> polarPointRssi)
         {
-            double thresold = 0.09;
+            double thresold = 0.1;
             List<PointDExtended> absolutePoints = new List<PointDExtended>();
             List<SegmentExtended> Lines = new List<SegmentExtended>();
 
@@ -88,7 +88,7 @@ namespace LidarProcessNS
             List<PolarPointRssi> validPoint = polarPointRssi.Where(x => x.Distance >= ConstVar.LIDAR_MIN_POINT_DISTANCE && x.Distance <= ConstVar.LIDAR_MAX_POINT_DISTANCE).ToList();
             List<PointD> validPointXY = validPoint.Select(x => Toolbox.ConvertPolarToPointD(x)).ToList();
 
-            List<ClusterObjects> list_of_all_clusters = ClustersDetection.ExtractClusterByDBScan(validPointXY, 0.05, 3);
+            List<ClusterObjects> list_of_all_clusters = ClustersDetection.DetectClusterOfPoint(validPointXY, 0.05, 3);
             List<PointD> allPointXY = list_of_all_clusters.SelectMany(x => x.points).ToList().Select(x => Toolbox.ConvertPolarToPointD(x)).ToList().Select(x => x.Pt).ToList();
 
 
