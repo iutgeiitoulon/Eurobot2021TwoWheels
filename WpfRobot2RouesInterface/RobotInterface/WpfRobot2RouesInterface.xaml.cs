@@ -459,18 +459,34 @@ namespace RobotInterface
             {
                 switch(currentAsservissementMode)
                 {
+                    case AsservissementMode.Off2Wheels:
+                        LabelAsservMode.Content = "Asserv Mode : Off2Wheels";
+                        asservSpeedDisplay.SetAsservissementMode(currentAsservissementMode);
+                        break;
                     case AsservissementMode.Off4Wheels:
                         LabelAsservMode.Content = "Asserv Mode :  Off4Wheels";
+                        asservSpeedDisplay.SetAsservissementMode(currentAsservissementMode);
+                        break;
+                    case AsservissementMode.Independant2Wheels:
+                        LabelAsservMode.Content = "Asserv Mode : Independant2Wheels";
                         asservSpeedDisplay.SetAsservissementMode(currentAsservissementMode);
                         break;
                     case AsservissementMode.Independant4Wheels:
                         LabelAsservMode.Content = "Asserv Mode : Independant4Wheels";
                         asservSpeedDisplay.SetAsservissementMode(currentAsservissementMode);
                         break;
+                    case AsservissementMode.Polar2Wheels:
+                        LabelAsservMode.Content = "Asserv Mode : Polar2Wheels";
+                        asservSpeedDisplay.SetAsservissementMode(currentAsservissementMode);
+                        break;
                     case AsservissementMode.Polar4Wheels:
                         LabelAsservMode.Content = "Asserv Mode : Polar4Wheels";
                         asservSpeedDisplay.SetAsservissementMode(currentAsservissementMode);
                         break;
+                    
+                    
+
+
                 }
             }));
         }
