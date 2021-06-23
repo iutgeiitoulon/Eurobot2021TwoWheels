@@ -31,7 +31,7 @@ namespace Protocol
                 case (ushort)Commands.R2PC_SpeedPolarPidDebugErrorCorrectionConsigne:
                     return 40;
                 case (ushort)Commands.R2PC_SpeedIndependantPidDebugErrorCorrectionConsigne:
-                    return 52;
+                    return 28;
                 case (ushort)Commands.R2PC_SpeedPolarPidDebugInternal:
                     return 40;
                 case (ushort)Commands.R2PC_SpeedIndependantPidDebugInternal:
@@ -40,6 +40,14 @@ namespace Protocol
                     return 36;
                 case (ushort)Commands.R2PC_MotorCurrentsMonitoring:
                     return 36;
+                case (ushort)Commands.R2PC_2WheelsSpeedPolarPidCommandErrorCorrectionConsigne:
+                    return 28;
+                case (ushort)Commands.R2PC_2WheelsSpeedIndependantPidCommandErrorCorrectionConsigne:
+                    return 28;
+                case (ushort)Commands.R2PC_2WheelsSpeedPolarPidCorrections:
+                    return 28;
+                case (ushort)Commands.R2PC_2WheelsSpeedIndependantPidCorrections:
+                    return 28;
                 case (ushort)Commands.R2PC_IOPollingEnableStatus:
                     return 1;
                 case (ushort)Commands.R2PC_PowerMonitoringEnableStatus:

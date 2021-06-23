@@ -64,6 +64,8 @@ namespace StrategyManagerProjetEtudiantNS
                 ConstVar.EUROBOT_MATRIX_THETA_COEFF
             );
 
+            
+
             //On envoie périodiquement les réglages du PID de vitesse embarqué
             On2WheelsIndependantSpeedPIDSetup( 
                 ConstVar.PID_SPEED_MOTOR1_KP, ConstVar.PID_SPEED_MOTOR1_KI, ConstVar.PID_SPEED_MOTOR1_KD,
@@ -72,7 +74,9 @@ namespace StrategyManagerProjetEtudiantNS
                 ConstVar.PID_SPEED_MOTOR2_KP_MAX, ConstVar.PID_SPEED_MOTOR2_KI_MAX, ConstVar.PID_SPEED_MOTOR2_KD_MAX
                 );
 
-            OnSetAsservissementMode((byte) AsservissementMode.Independant2Wheels);
+            OnSetAsservissementMode((byte)AsservissementMode.Independant2Wheels);
+            OnEnableDisableMotorCurrentData(true);
+
         }
         private void IOValues(bool jack, bool team)
         {

@@ -605,19 +605,19 @@ namespace RobotInterface
 
        
 
-        AsservissementMode currentAsservissementMode = AsservissementMode.Off4Wheels;
+        AsservissementMode currentAsservissementMode = AsservissementMode.Off2Wheels;
         private void ButtonEnableAsservissement_Click(object sender, RoutedEventArgs e)
         {
             switch(currentAsservissementMode)
             {
-                case AsservissementMode.Off4Wheels:
-                    OnSetAsservissementModeFromInterface((byte)AsservissementMode.Polar4Wheels);
+                case AsservissementMode.Off2Wheels:
+                    OnSetAsservissementModeFromInterface((byte)AsservissementMode.Independant2Wheels);
                     break;
-                case AsservissementMode.Polar4Wheels:
-                    OnSetAsservissementModeFromInterface((byte)AsservissementMode.Independant4Wheels);
+                case AsservissementMode.Independant2Wheels:
+                    OnSetAsservissementModeFromInterface((byte)AsservissementMode.Polar2Wheels);
                     break;
-                case AsservissementMode.Independant4Wheels:
-                    OnSetAsservissementModeFromInterface((byte)AsservissementMode.Off4Wheels);
+                case AsservissementMode.Polar2Wheels:
+                    OnSetAsservissementModeFromInterface((byte)AsservissementMode.Off2Wheels);
                     break;
             }
         }

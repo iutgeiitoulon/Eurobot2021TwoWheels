@@ -39,6 +39,11 @@ namespace Constants
         R2PC_SpeedAuxiliaryMotorsConsignes = 0x0156,                    //Timestamp(4L) - Consigne Motor 5(4F) - Consigne Motor 6(4F) - Consigne Motor 7(4F) )
         
         R2PC_MotorCurrentsMonitoring = 0x0160,                          //Timestamp(4L) - Motor Current 1 (4F) - ... - Motor Current 7 (4F)
+        R2PC_2WheelsSpeedPolarPidCommandErrorCorrectionConsigne = 0x0162,          //Timestamp(4L) - ErrX(4F) - ErrTh(4F) - CorrX(4F) - CorrTh(4F) - ConsX(4F) - ConsTh(4F)
+        R2PC_2WheelsSpeedIndependantPidCommandErrorCorrectionConsigne = 0x0163,    //Timestamp(4L) - ErrM1(4F) - ErrM2(4F) - CorrM1(4F) - CorrM2(4F) - ConsM1(4F) - ConsM2(4F)
+        R2PC_2WheelsSpeedPolarPidCorrections = 0x0164,                       //Timestamp(4L) - CorrPx(4F) - CorrIx(4F) - CorrDx(4F) - CorrPTh(4F) - CorrITh(4F) - CorrDTh(4F)  
+        R2PC_2WheelsSpeedIndependantPidCorrections = 0x0165,                 //Timestamp(4L) - CorrPM1(4F) - CorrIM1(4F) - CorrDM1(4F) - CorrPM2(4F) - CorrIM2(4F) - CorrDM2(4F)
+
 
         //Retour des commandes d'enable du PC
         R2PC_IOPollingEnableStatus = 0x0180,                               //Enable-Disable (1 Byte)
