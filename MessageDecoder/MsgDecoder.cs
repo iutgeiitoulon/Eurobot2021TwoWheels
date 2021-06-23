@@ -75,11 +75,15 @@ namespace MessageDecoder
 
         #region Input Callback
 
+        object lockDecode = new object();
         public void BuffReceived(object sender, DataReceivedArgs e)
         {
-            foreach (var b in e.Data)
+            lock (lockDecode)
             {
-                ByteReceived(b);
+                foreach (var b in e.Data)
+                {
+                    ByteReceived(b);
+                }
             }
         }
         #endregion

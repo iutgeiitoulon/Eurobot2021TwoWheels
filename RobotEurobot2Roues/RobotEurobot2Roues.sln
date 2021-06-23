@@ -57,8 +57,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Positioning2Wheels", "..\Po
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldMapManager", "..\WorldMapManager\WorldMapManager.csproj", "{01E89552-13A5-4A24-80B2-9246700F72FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBDriver", "..\WinUSB\USBDriver.csproj", "{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectTrackers", "..\ObjectTrackers\ObjectTrackers.csproj", "{2C73E647-7A13-4446-A4E2-1B81FC422A1A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PositionManager", "..\PositionManager\PositionManager.csproj", "{61ABD00A-740D-43AA-B377-91DA1D0AAEA0}"
@@ -66,6 +64,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrajectoryOptimization", "..\TracjectoryOptimization\TrajectoryOptimization.csproj", "{6580AB12-750A-49BA-ACDC-39DA5605DCBE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FieldSetter", "..\FieldSetter\FieldSetter.csproj", "{5429F063-489D-47BD-9A74-29A844AB386C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBDriver", "..\WinUSB\USBDriver.csproj", "{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -291,14 +291,6 @@ Global
 		{01E89552-13A5-4A24-80B2-9246700F72FD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{01E89552-13A5-4A24-80B2-9246700F72FD}.Release|x64.ActiveCfg = Release|x64
 		{01E89552-13A5-4A24-80B2-9246700F72FD}.Release|x64.Build.0 = Release|x64
-		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Debug|x64.Build.0 = Debug|Any CPU
-		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Release|x64.ActiveCfg = Release|Any CPU
-		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Release|x64.Build.0 = Release|Any CPU
 		{2C73E647-7A13-4446-A4E2-1B81FC422A1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C73E647-7A13-4446-A4E2-1B81FC422A1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C73E647-7A13-4446-A4E2-1B81FC422A1A}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -331,6 +323,14 @@ Global
 		{5429F063-489D-47BD-9A74-29A844AB386C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5429F063-489D-47BD-9A74-29A844AB386C}.Release|x64.ActiveCfg = Release|Any CPU
 		{5429F063-489D-47BD-9A74-29A844AB386C}.Release|x64.Build.0 = Release|Any CPU
+		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Debug|x64.Build.0 = Debug|Any CPU
+		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Release|x64.ActiveCfg = Release|Any CPU
+		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

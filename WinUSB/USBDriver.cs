@@ -1,4 +1,5 @@
 ﻿using EventArgsLibrary;
+using MadWizard.WinUSBNet;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +10,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using MadWizard.WinUSBNet;
 
 namespace USBDriverNS
 {
@@ -30,6 +30,7 @@ namespace USBDriverNS
         private ManagementEventWatcher _deviceArrivedWatcher;
         private ManagementEventWatcher _deviceRemovedWatcher;
 
+
         public USBDriver()
         {
             AddDeviceArrivedHandler();
@@ -39,8 +40,20 @@ namespace USBDriverNS
             Timer timerReconnectionIn = new Timer(100);
             timerReconnectionIn.Elapsed += TimerReconnectionIn_Elapsed;
             timerReconnectionIn.Start();
+
+            Timer timerUsbReceptionWatchdog = new Timer(1000);
+            timerUsbReceptionWatchdog.Elapsed += TimerUsbReceptionWatchdog_Elapsed;
+            timerUsbReceptionWatchdog.Start();
         }
 
+        int nbUsbPacketReceived = 0;
+        private void TimerUsbReceptionWatchdog_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            //Console.WriteLine("Nombre de paquets USB reçus durant la dernière seconde : " + nbUsbPacketReceived);
+            if (nbUsbPacketReceived == 0)
+                UpdateUsbConnection();
+            nbUsbPacketReceived = 0;
+        }
 
         bool isListening = false;
         private void UpdateUsbConnection()
@@ -64,8 +77,16 @@ namespace USBDriverNS
                     usbInterfaceMicrochip = usbList[0].InPipe.Interface;
                     if (usbInterfaceMicrochip != null)
                     {
-                        usbInterfaceMicrochip.InPipe.BeginRead(rcvBuffer, 0, 256, new AsyncCallback(ReceiveUsbDataCallback), null);
-                        isListening = true;
+                        try
+                        {
+                            //usbInterfaceMicrochip.InPipe.Abort();
+                            usbInterfaceMicrochip.InPipe.BeginRead(rcvBuffer, 0, 256, new AsyncCallback(ReceiveUsbDataCallback), null);
+                            isListening = true;
+                        }
+                        catch(Exception e)
+                        {
+                            Console.WriteLine("USB problem : " + e.ToString());
+                        }
                     }
                 }
             }
@@ -81,13 +102,16 @@ namespace USBDriverNS
                 byte[] usbReceivedBuffer = new byte[nbBytesTransfered];
                 Buffer.BlockCopy(rcvBuffer, 0, usbReceivedBuffer, 0, nbBytesTransfered);
 
+                nbUsbPacketReceived++;
+
                 OnUSBDataReceived(usbReceivedBuffer);
 
                 usbInterfaceMicrochip.InPipe.BeginRead(rcvBuffer, 0, 256, new AsyncCallback(ReceiveUsbDataCallback), null);
             }
-            catch
+            catch(Exception e)
             {
                 /// On a une erreur, potentiellement due au débranchement de l'USB, du coup on n'écoute plus
+                Console.WriteLine("Exception USB ReceiveUsbDataCallback :\n" + e.ToString());
                 isListening = false;
             }
         }
@@ -137,8 +161,16 @@ namespace USBDriverNS
         /// 
         private void DeviceRemoved(object sender, EventArgs e)
         {
-            OnDeviceRemovedEvent?.Invoke(this, new EventArgs());
-            UpdateUsbConnection();
+            //try
+            {
+                Console.WriteLine("A USB device has been removed");
+                UpdateUsbConnection();
+            }
+            //catch (Exception ex)
+            //{
+            //    //DisplayException(Name, ex);
+            //    throw;
+            //}
         }
 
         ///  <summary>
@@ -171,8 +203,19 @@ namespace USBDriverNS
 
         private void DeviceAdded(object sender, EventArrivedEventArgs e)
         {
-            OnDeviceAddedEvent?.Invoke(this, new EventArgs());
-            UpdateUsbConnection();
+            //try
+            {
+                Console.WriteLine("A USB device has been inserted");
+                UpdateUsbConnection();
+
+                //FindMyDevice();
+                //_deviceDetected = FindDeviceUsingWmi();
+            }
+            //catch (Exception ex)
+            //{
+            //    //DisplayException(Name, ex);
+            //    throw;
+            //}
         }
 
         private void AddDeviceArrivedHandler()
@@ -199,8 +242,5 @@ namespace USBDriverNS
                     _deviceArrivedWatcher.Stop();
             }
         }
-
-        public event EventHandler<EventArgs> OnDeviceAddedEvent;
-        public event EventHandler<EventArgs> OnDeviceRemovedEvent;
     }
 }
