@@ -79,6 +79,14 @@ namespace MessageProcessorNS
                     OnPowerMonitoringValuesFromRobot(payload);
                     break;
 
+                case (short)Commands.R2PC_2WheelsSpeedIndependantPidCommandErrorCorrectionConsigne:
+                    OnTwoWheelsIndependantPIDCommandErrorCorrectionConsigne(payload);
+                    break;
+
+                case (short)Commands.R2PC_2WheelsSpeedIndependantPidCorrections:
+                    OnTwoWheelsIndependantPIDCorrectionsValues(payload);
+                    break;
+
                 case (short)Commands.R2PC_SpeedPolarPidDebugErrorCorrectionConsigne:
                     OnPolarPidErrorCorrectionConsigneDataFromRobot(payload);
                     break;
@@ -153,6 +161,8 @@ namespace MessageProcessorNS
         public event EventHandler<EncodersRawDataEventArgs>                         OnEncoderRawDataFromRobotGeneratedEvent;
         public event EventHandler<IOValuesEventArgs>                                OnIOValuesFromRobotGeneratedEvent;
         public event EventHandler<PowerMonitoringValuesEventArgs>                   OnPowerMonitoringValuesFromRobotGeneratedEvent;
+        public event EventHandler<IndependantPidErrorCorrectionConsigneDataArgs>    OnTwoWheelsIndependantPIDErrorCorrectionConsigneEvent;
+        public event EventHandler<IndependantPidCorrectionArgs>                     OnTwoWheelsIndependantPIDCorrectionArgsEvent;
         public event EventHandler<AuxiliaryMotorsVitesseDataEventArgs>              OnAuxiliarySpeedConsigneDataFromRobotGeneratedEvent;
         public event EventHandler<PolarPidErrorCorrectionConsigneDataArgs>          OnSpeedPolarPidErrorCorrectionConsigneDataFromRobotGeneratedEvent;
         public event EventHandler<IndependantPidErrorCorrectionConsigneDataArgs>    OnSpeedIndependantPidErrorCorrectionConsigneDataFromRobotGeneratedEvent;
@@ -347,7 +357,7 @@ namespace MessageProcessorNS
             {
                 timeStampMS = (uint)(payload[3] | payload[2] << 8 | payload[1] << 16 | payload[0] << 24),
                 ioValues = payload[4]
-        });
+            });
         }
 
 
@@ -363,6 +373,32 @@ namespace MessageProcessorNS
             });
         }
 
+        public virtual void OnTwoWheelsIndependantPIDCorrectionsValues(byte[] payload)
+        {
+            OnTwoWheelsIndependantPIDCorrectionArgsEvent?.Invoke(this, new IndependantPidCorrectionArgs
+            {
+                CorrPM1 = BitConverter.ToSingle(payload, 4 * 1),
+                CorrIM1 = BitConverter.ToSingle(payload, 4 * 2),
+                CorrDM1 = BitConverter.ToSingle(payload, 4 * 3),
+                CorrPM2 = BitConverter.ToSingle(payload, 4 * 4),
+                CorrIM2 = BitConverter.ToSingle(payload, 4 * 5),
+                CorrDM2 = BitConverter.ToSingle(payload, 4 * 6)
+            });
+        }
+        
+        public virtual void OnTwoWheelsIndependantPIDCommandErrorCorrectionConsigne(byte[] payload)
+        {
+            OnTwoWheelsIndependantPIDErrorCorrectionConsigneEvent?.Invoke(this, new IndependantPidErrorCorrectionConsigneDataArgs
+            {
+                timeStampMS = (uint)(payload[3] | payload[2] << 8 | payload[1] << 16 | payload[0] << 24),
+                M1Erreur = BitConverter.ToSingle(payload, 4 * 1),
+                M2Erreur = BitConverter.ToSingle(payload, 4 * 2),
+                M1Correction = BitConverter.ToSingle(payload, 4 * 3),
+                M2Correction = BitConverter.ToSingle(payload, 4 * 4),
+                M1ConsigneFromRobot = BitConverter.ToSingle(payload, 4 * 5),
+                M2ConsigneFromRobot = BitConverter.ToSingle(payload, 4 * 6)
+            });
+        }
 
         public virtual void OnAuxiliarySpeedConsigneDataFromRobot(byte[] payload)
         {

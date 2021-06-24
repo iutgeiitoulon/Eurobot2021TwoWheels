@@ -50,12 +50,12 @@ namespace Constants
         public const double PID_SPEED_MOTOR2_KI = 50.0d;
         public const double PID_SPEED_MOTOR2_KD = 0.0d;
 
-        public const double PID_SPEED_MOTOR1_KP_MAX = 4.0d;
-        public const double PID_SPEED_MOTOR1_KI_MAX = 4.0d;
+        public const double PID_SPEED_MOTOR1_KP_MAX = 10.0d;
+        public const double PID_SPEED_MOTOR1_KI_MAX = 20.0d;
         public const double PID_SPEED_MOTOR1_KD_MAX = 0.0d;
 
-        public const double PID_SPEED_MOTOR2_KP_MAX = 4.0d;
-        public const double PID_SPEED_MOTOR2_KI_MAX = 4.0d;
+        public const double PID_SPEED_MOTOR2_KP_MAX = 10.0d;
+        public const double PID_SPEED_MOTOR2_KI_MAX = 20.0d;
         public const double PID_SPEED_MOTOR2_KD_MAX = 0.0d;
 
 
@@ -79,18 +79,18 @@ namespace Constants
         public const double PLANNER_ANGULAR_GHOST_DEAD_ZONE = 0.075d;
         public const double PLANNER_LINEAR_SPEED_MIN = 0.02d;
 
-        public const double PLANNER_PID_POSITION_LINEAR_KP = 15d;
+        public const double PLANNER_PID_POSITION_LINEAR_KP = 55d;
         public const double PLANNER_PID_POSITION_LINEAR_KI = 0d;
-        public const double PLANNER_PID_POSITION_LINEAR_KD = 2d;
+        public const double PLANNER_PID_POSITION_LINEAR_KD = 0.0375d;
         public const double PLANNER_PID_POSITION_LINEAR_MAX_KP = 100d;
         public const double PLANNER_PID_POSITION_LINEAR_MAX_KI = 100d;
-        public const double PLANNER_PID_POSITION_LINEAR_MAX_KD = 1d;
+        public const double PLANNER_PID_POSITION_LINEAR_MAX_KD = 100d;
 
-        public const double PLANNER_PID_POSITION_ANGULAR_KP = 80d;
+        public const double PLANNER_PID_POSITION_ANGULAR_KP = 52.5d;
         public const double PLANNER_PID_POSITION_ANGULAR_KI = 0d;
-        public const double PLANNER_PID_POSITION_ANGULAR_KD = 7d;
-        public const double PLANNER_PID_POSITION_ANGULAR_MAX_KP = 5d * Math.PI;
-        public const double PLANNER_PID_POSITION_ANGULAR_MAX_KI = 5d * Math.PI;
-        public const double PLANNER_PID_POSITION_ANGULAR_MAX_KD = Math.PI;
+        public const double PLANNER_PID_POSITION_ANGULAR_KD = 0.024d;
+        public const double PLANNER_PID_POSITION_ANGULAR_MAX_KP = 10d * Math.PI;
+        public const double PLANNER_PID_POSITION_ANGULAR_MAX_KI = 0d * Math.PI;
+        public const double PLANNER_PID_POSITION_ANGULAR_MAX_KD = 5d * Math.PI;
     }
 }

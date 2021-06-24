@@ -148,6 +148,7 @@ namespace StrategyManagerProjetEtudiantNS
         public event EventHandler<bool> OnEnableDisableMotorsEvent;
         public event EventHandler<bool> OnEnableDisableEndRotationEvent;
         public event EventHandler<EventArgs> OnCalibrationAskedEvent;
+        public event EventHandler<BoolEventArgs> OnEnableDisableIndependant2WheelsPIDGainDebugEvent;
 
 
 
@@ -364,5 +365,12 @@ namespace StrategyManagerProjetEtudiantNS
         {
             OnCalibrationAskedEvent?.Invoke(this, new EventArgs());
         }
+       
+
+        public void OnEnableDisableIndependant2WheelsPIDGainDebug(bool e)
+        {
+            OnEnableDisableIndependant2WheelsPIDGainDebugEvent?.Invoke(this, new BoolEventArgs { value = e });
+        }
+        
     }    
 }

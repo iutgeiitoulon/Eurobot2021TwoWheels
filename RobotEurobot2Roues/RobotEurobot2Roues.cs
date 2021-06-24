@@ -241,6 +241,7 @@ namespace RobotEurobot2Roues
             strategyManager.OnOdometryPointToMeterSetupEvent += msgGenerator.GenerateMessageOdometryPointToMeter;      //Transmission des messages de set-up du coeff pointToMeter en embarqué
             strategyManager.OnSetAsservissementModeEvent += msgGenerator.GenerateMessageSetAsservissementMode;
             strategyManager.On2WheelsIndependantSpeedPIDSetupEvent += msgGenerator.GenerateMessage2WheelsIndependantSpeedPIDSetup;
+            strategyManager.OnEnableDisableIndependant2WheelsPIDGainDebugEvent += msgGenerator.GenerateMessageSpeedPIDEnableDebugErrorCorrectionConsigne;
 
             strategyManager.OnDestinationReachedEvent += localWorldMapManager.OnDestinationReached;
             strategyManager.OnWaypointsReachedEvent += localWorldMapManager.OnWaypointReached;
@@ -330,8 +331,10 @@ namespace RobotEurobot2Roues
             msgProcessor.OnIndependantOdometrySpeedFromRobotEvent += interfaceRobot.UpdateSpeedIndependantOdometryOnInterface;
             msgProcessor.OnSpeedPolarPidErrorCorrectionConsigneDataFromRobotGeneratedEvent += interfaceRobot.UpdateSpeedPolarPidErrorCorrectionConsigneDataOnGraph;
             msgProcessor.OnSpeedIndependantPidErrorCorrectionConsigneDataFromRobotGeneratedEvent += interfaceRobot.UpdateSpeedIndependantPidErrorCorrectionConsigneDataOnGraph;
+            msgProcessor.OnTwoWheelsIndependantPIDErrorCorrectionConsigneEvent += interfaceRobot.UpdateSpeedIndependantPidErrorCorrectionConsigneDataOnGraph;
             msgProcessor.OnSpeedPolarPidCorrectionDataFromRobotEvent += interfaceRobot.UpdateSpeedPolarPidCorrectionData;
             msgProcessor.OnSpeedIndependantPidCorrectionDataFromRobotEvent += interfaceRobot.UpdateSpeedIndependantPidCorrectionData;
+            msgProcessor.OnTwoWheelsIndependantPIDCorrectionArgsEvent += interfaceRobot.UpdateSpeedIndependantPidCorrectionData;
 
             msgProcessor.OnErrorTextFromRobotGeneratedEvent += interfaceRobot.AppendConsole;
             msgProcessor.OnPowerMonitoringValuesFromRobotGeneratedEvent += interfaceRobot.UpdatePowerMonitoringValues;

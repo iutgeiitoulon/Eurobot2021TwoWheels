@@ -75,7 +75,8 @@ namespace StrategyManagerProjetEtudiantNS
                 );
 
             OnSetAsservissementMode((byte)AsservissementMode.Independant2Wheels);
-            OnEnableDisableMotorCurrentData(true);
+            //OnEnableDisableIndependant2WheelsPIDGainDebug(true);
+            //OnEnableDisableMotorCurrentData(true);
 
         }
         private void IOValues(bool jack, bool team)

@@ -162,7 +162,10 @@ namespace MessageDecoder
                 {
                     if (allowedLenght == -1 || allowedLenght == msgPayloadLenght)
                     {
-                        actualState = State.Payload;
+                        if (allowedLenght > 0)
+                            actualState = State.Payload;
+                        else
+                            actualState = State.CheckSum;
                         msgPayloadIndex = 0;
                         msgPayload = new byte[msgPayloadLenght];
                     }
