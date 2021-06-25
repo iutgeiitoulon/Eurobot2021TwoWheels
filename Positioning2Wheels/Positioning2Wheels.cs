@@ -12,6 +12,8 @@ namespace Positioning2WheelsNs
     public class Positioning2Wheels
     {
         int robotId;
+
+        
         public Positioning2Wheels(int id)
         {
             robotId = id;
@@ -23,10 +25,27 @@ namespace Positioning2WheelsNs
         public void OnOdometryRobotSpeedReceived(object sender, PolarSpeedArgs e)
         {
 
-            locationRefTerrain.X = (double) (locationRefTerrain.X + (e.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Cos(locationRefTerrain.Theta));
-            locationRefTerrain.Y = (double) (locationRefTerrain.Y + (e.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Sin(locationRefTerrain.Theta));
-            locationRefTerrain.Theta = (double) (locationRefTerrain.Theta + e.Vtheta / ConstVar.ODOMETRY_FREQ_IN_HZ);
+            
+            //OnCalculatedLocation(robotId, locationRefTerrain);
+        }
 
+        public void OnExternalOdometryRobotSpeedReceived(object sender, IndependantSpeedEventArgs e)
+        {
+            double right_motor_speed = - e.VitesseMoteur3 * (ConstVar.ROBOT_ENCODER_POINT_TO_METER / ConstVar.EUROBOT_ODOMETRY_POINT_TO_METER);
+            double left_motor_speed = e.VitesseMoteur4 * (ConstVar.ROBOT_ENCODER_POINT_TO_METER / ConstVar.EUROBOT_ODOMETRY_POINT_TO_METER);
+
+            double Vlin = (right_motor_speed + left_motor_speed) / 2;
+            double Vang = (right_motor_speed - left_motor_speed) / ConstVar.ROBOT_ENCODER_DIST_WHEELS;
+
+
+            locationRefTerrain.X = (double) (locationRefTerrain.X + (Vlin / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Cos(locationRefTerrain.Theta));
+            locationRefTerrain.Y = (double) (locationRefTerrain.Y + (Vlin / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Sin(locationRefTerrain.Theta));
+            locationRefTerrain.Theta = (double) (locationRefTerrain.Theta + Vang / ConstVar.ODOMETRY_FREQ_IN_HZ);
+            locationRefTerrain.Vx = Vlin;
+            locationRefTerrain.Vy = 0;
+            locationRefTerrain.Vtheta = Vang;
+
+            OnExternalEncoderPolarSpeedEvent?.Invoke(this, new PolarSpeedEventArgs { RobotId = robotId, timeStampMs = e.timeStampMs, Vx = Vlin, Vy = 0, Vtheta = Vang });
             OnCalculatedLocation(robotId, locationRefTerrain);
         }
 
@@ -40,6 +59,8 @@ namespace Positioning2WheelsNs
 
         //Output events
         public event EventHandler<LocationArgs> OnCalculatedLocationEvent;
+        public event EventHandler<PolarSpeedEventArgs> OnExternalEncoderPolarSpeedEvent;
+
         public virtual void OnCalculatedLocation(int id, Location locationRefTerrain)
         {
             OnCalculatedLocationEvent?.Invoke(this, new LocationArgs

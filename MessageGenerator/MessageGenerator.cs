@@ -13,9 +13,9 @@ namespace MessageGeneratorNS
         public void GenerateMessageSetSpeedConsigneToRobot(object sender, PolarSpeedArgs e)
         {
             byte[] payload = new byte[12];
-            payload.SetValueRange(((float)e.Vx).GetBytes(), 0);
-            payload.SetValueRange(((float)e.Vy).GetBytes(), 4);
-            payload.SetValueRange(((float)e.Vtheta).GetBytes(), 8);
+            payload.SetValueRange(((float) e.Vx).GetBytes(), 0);
+            payload.SetValueRange(((float) e.Vy).GetBytes(), 4);
+            payload.SetValueRange(((float) e.Vtheta).GetBytes(), 8);
             OnMessageToRobot((Int16)Commands.PC2R_SpeedPolarSetConsigne, 12, payload);
             OnSetSpeedConsigneToRobotReceived(e); //Pour affichage graphique supervision
         }

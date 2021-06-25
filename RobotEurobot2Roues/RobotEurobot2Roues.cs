@@ -122,6 +122,7 @@ namespace RobotEurobot2Roues
             #region MsgProcessor
             msgProcessor.OnSpeedPolarOdometryFromRobotEvent += logRecorder.OnPolarSpeedDataReceived;
             msgProcessor.OnSpeedPolarOdometryFromRobotEvent += positioning2Wheels.OnOdometryRobotSpeedReceived;
+            msgProcessor.OnIndependantOdometrySpeedFromRobotEvent += positioning2Wheels.OnExternalOdometryRobotSpeedReceived;
             msgProcessor.OnIOValuesFromRobotGeneratedEvent += strategyManager.OnIOValuesReceived;
             #endregion
 
@@ -326,7 +327,9 @@ namespace RobotEurobot2Roues
             msgProcessor.OnEnableDisableMotorsACKFromRobotGeneratedEvent += interfaceRobot.ActualizeEnableDisableMotorsButton;
 
             msgProcessor.OnAsservissementModeStatusFromRobotGeneratedEvent += interfaceRobot.UpdateAsservissementMode;
-            msgProcessor.OnSpeedPolarOdometryFromRobotEvent += interfaceRobot.UpdateSpeedPolarOdometryOnInterface;
+            //msgProcessor.OnSpeedPolarOdometryFromRobotEvent += interfaceRobot.UpdateSpeedPolarOdometryOnInterface;
+
+            positioning2Wheels.OnExternalEncoderPolarSpeedEvent += interfaceRobot.UpdateSpeedPolarOdometryOnInterface;
 
             msgProcessor.OnIndependantOdometrySpeedFromRobotEvent += interfaceRobot.UpdateSpeedIndependantOdometryOnInterface;
             msgProcessor.OnSpeedPolarPidErrorCorrectionConsigneDataFromRobotGeneratedEvent += interfaceRobot.UpdateSpeedPolarPidErrorCorrectionConsigneDataOnGraph;
