@@ -251,18 +251,27 @@ namespace WpfWorldMapDisplay
         public PolygonExtended GetRobotWaypointArrow()
         {
             PolygonExtended polygonToDisplay = new PolygonExtended();
+
+            bool isImpossible = false;
             double angleTeteFleche = Math.PI / 6;
             double longueurTeteFleche = 0.10;
             polygonToDisplay.borderWidth = 2;
-            polygonToDisplay.borderColor = System.Drawing.Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF);
+            
+            polygonToDisplay.backgroundColor = System.Drawing.Color.FromArgb(0x00, 0x00, 0x00, 0x00);
             polygonToDisplay.borderDashPattern = new double[] { 5, 5 };
             polygonToDisplay.borderOpacity = 0.8;
-            polygonToDisplay.backgroundColor = System.Drawing.Color.FromArgb(0x00, 0x00, 0x00, 0x00);
+            
 
             if (waypointLocation.Count == 0)
             {
                 return polygonToDisplay;
             }
+
+            Segment waypoint_segment = new Segment(robotLocation.X, robotLocation.Y, waypointLocation[0].X, waypointLocation[0].Y);
+
+            if (Fields != null)
+                isImpossible = Fields.Where(x => Toolbox.testIfSegmentIntersectRectangle(waypoint_segment, x.Shape) && x.Type == FieldType.DeadZone).ToList().Count() != 0;
+
 
             Location lastLocation = waypointLocation[0];
             Location bfLastLocation = robotLocation;
@@ -275,11 +284,20 @@ namespace WpfWorldMapDisplay
                 lastLocation = waypointLocation[waypointLocation.Count - 1];
                 bfLastLocation = waypointLocation[waypointLocation.Count - 2];
 
+                
+
+                
 
                 int i;
                 for (i = 1; i < waypointLocation.Count; i++)
                 {
                     polygonToDisplay.polygon.Points.Add(new Point(waypointLocation[i].X, waypointLocation[i].Y));
+
+                    waypoint_segment = new Segment(waypointLocation[i].X, waypointLocation[i].Y, waypointLocation[i - 1].X, waypointLocation[i - 1].Y);
+
+                    if (Fields != null)
+                        if (Fields.Where(x => Toolbox.testIfSegmentIntersectRectangle(waypoint_segment, x.Shape) && x.Type == FieldType.DeadZone).ToList().Count() != 0)
+                            isImpossible = true;
                 }
             }
 
@@ -292,6 +310,11 @@ namespace WpfWorldMapDisplay
             polygonToDisplay.polygon.Points.Add(new Point(lastLocation.X, lastLocation.Y));
             polygonToDisplay.polygon.Points.Add(new Point(lastLocation.X - longueurTeteFleche * Math.Cos(angleTeteFleche2), lastLocation.Y - longueurTeteFleche * Math.Sin(angleTeteFleche2)));
             polygonToDisplay.polygon.Points.Add(new Point(lastLocation.X, lastLocation.Y));
+
+            if (isImpossible)
+                polygonToDisplay.borderColor = System.Drawing.Color.FromArgb(0xFF, 0xFF, 0x00, 0x00);
+            else
+                polygonToDisplay.borderColor = System.Drawing.Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF);
 
             return polygonToDisplay;
         }
