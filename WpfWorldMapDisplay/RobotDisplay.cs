@@ -207,9 +207,20 @@ namespace WpfWorldMapDisplay
 
         public PolygonExtended GetRobotDestinationArrow()
         {
+            
+
             PolygonExtended polygonToDisplay = new PolygonExtended();
+            
             if (destinationLocation == null)
                 return polygonToDisplay;
+
+            Segment destination_segment = new Segment(robotLocation.X, robotLocation.Y, destinationLocation.X, destinationLocation.Y);
+
+            bool isImpossible = false;
+
+            if (Fields != null)
+                isImpossible = Fields.Where(x => Toolbox.testIfSegmentIntersectRectangle(destination_segment, x.Shape) && x.Type == FieldType.DeadZone).ToList().Count() != 0;
+
             double angleTeteFleche = Math.PI / 6;
             double longueurTeteFleche = 0.10;
             double headingAngle = Math.Atan2(destinationLocation.Y - robotLocation.Y, destinationLocation.X - robotLocation.X);
@@ -225,7 +236,12 @@ namespace WpfWorldMapDisplay
                 polygonToDisplay.polygon.Points.Add(new Point(destinationLocation.X - longueurTeteFleche * Math.Cos(angleTeteFleche2), destinationLocation.Y - longueurTeteFleche * Math.Sin(angleTeteFleche2)));
                 polygonToDisplay.polygon.Points.Add(new Point(destinationLocation.X, destinationLocation.Y));
                 polygonToDisplay.borderWidth = 3;
-                polygonToDisplay.borderColor = System.Drawing.Color.FromArgb(0xFF, 0x00, 0x00, 0xFF);
+
+                if (isImpossible)
+                    polygonToDisplay.borderColor = System.Drawing.Color.FromArgb(0xFF, 0xFF, 0x00, 0x00);
+                else
+                    polygonToDisplay.borderColor = System.Drawing.Color.FromArgb(0xFF, 0x00, 0x00, 0xFF);
+
                 polygonToDisplay.borderOpacity = 0.8;
                 polygonToDisplay.backgroundColor = System.Drawing.Color.FromArgb(0x00, 0x00, 0x00, 0x00);
             }

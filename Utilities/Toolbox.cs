@@ -400,7 +400,11 @@ namespace Utilities
         {
             return Math.Sqrt(Math.Pow(segment.Segment.X2 - segment.Segment.X1, 2) + Math.Pow(segment.Segment.Y2 - segment.Segment.Y1, 2));
         }
-
+        
+        public static double Angle(Segment segment)
+        {
+            return Math.Atan2(segment.Y2 - segment.Y1, segment.X2 - segment.X1);
+        }
         public static double Angle(SegmentExtended segment)
         {
             return Math.Atan2(segment.Segment.Y2 - segment.Segment.Y1, segment.Segment.X2 - segment.Segment.X1);
@@ -512,6 +516,104 @@ namespace Utilities
             double s = (a_b + a_c + b_c) / 2;
 
             return Math.Sqrt(s * ((s - a_b) * (s - a_c) * (s - b_c)));
+        }
+        public static int TestOrientationOfOrderedPoint(PointD p, PointD q, PointD r)
+        {
+            double val = (q.Y - p.Y) * (r.X - q.X) - (q.X - p.X) * (r.Y - q.Y);
+
+            if (val == 0)
+                return 0;
+            else if (val > 0)
+                return 1;
+            else
+                return 2;
+
+        }
+
+        public static bool testIfOnSegment(PointD p, PointD q, PointD r)
+        {
+            if (q.X <= Math.Max(p.X, r.X) && q.X >= Math.Min(p.X, r.X) &&
+                q.Y <= Math.Max(p.Y, r.Y) && q.Y >= Math.Min(p.Y, r.Y))
+                return true;
+
+            return false;
+        }
+
+        public static bool testIfTwoSegmentsIntersect(Segment s1, Segment s2)
+        {
+            //double slope_1 = Angle(s1);
+            //double slope_2 = Angle(s2);
+
+            //double y_intercept_1 = s1.Y1 - slope_1 * s1.X1;
+            //double y_intercept_2 = s2.Y1 - slope_2 * s2.X1;
+
+
+            //if (slope_1 == slope_2) /// Parrallel
+            //    return false;
+
+            //double Xa = (y_intercept_2 - y_intercept_1) / (slope_1 - slope_2);
+            //double Ya = slope_1 * Xa + y_intercept_1;
+
+            //if (Xa < Math.Max(Math.Min(s1.X1, s1.X2), Math.Min(s2.X1, s2.X2)) ||
+            //    Xa > Math.Min(Math.Max(s1.X1, s1.X2), Math.Max(s2.X1, s2.X2)))
+            //    return false;
+
+            //if (Ya < Math.Max(Math.Min(s1.Y1, s1.Y2), Math.Min(s2.Y1, s2.Y2)) ||
+            //    Ya > Math.Min(Math.Max(s1.Y1, s1.Y2), Math.Max(s2.Y1, s2.Y2)))
+            //    return false;
+
+            //return true;
+            int o1 = TestOrientationOfOrderedPoint(new PointD(s1.X1, s1.Y1), new PointD(s1.X2, s1.Y2), new PointD(s2.X1, s2.Y1));
+            int o2 = TestOrientationOfOrderedPoint(new PointD(s1.X1, s1.Y1), new PointD(s1.X2, s1.Y2), new PointD(s2.X2, s2.Y2));
+            int o3 = TestOrientationOfOrderedPoint(new PointD(s2.X1, s2.Y1), new PointD(s2.X2, s2.Y2), new PointD(s1.X1, s1.Y1));
+            int o4 = TestOrientationOfOrderedPoint(new PointD(s2.X1, s2.Y1), new PointD(s2.X2, s2.Y2), new PointD(s1.X2, s1.Y2));
+
+            if (o1 != o2 && o3 != o4)
+                return true;
+
+            if (o1 == 0 && testIfOnSegment(new PointD(s1.X1, s1.Y1), new PointD(s2.X1, s2.Y1), new PointD(s1.X2, s1.Y2)))
+                return true;
+
+            if (o2 == 0 && testIfOnSegment(new PointD(s1.X1, s1.Y1), new PointD(s2.X2, s2.Y2), new PointD(s1.X2, s1.Y2)))
+                return true;
+
+            if (o3 == 0 && testIfOnSegment(new PointD(s2.X1, s2.Y1), new PointD(s1.X1, s1.Y1), new PointD(s2.X2, s2.Y2)))
+                return true;
+
+            if (o4 == 0 && testIfOnSegment(new PointD(s2.X1, s2.Y1), new PointD(s1.X2, s1.Y2), new PointD(s2.X2, s2.Y2)))
+                return true;
+
+            return false;
+
+        }
+
+        
+
+        public static bool testIfSegmentIntersectRectangle(Segment s1, RectangleOriented r1)
+        {
+            if (TestIfPointInsideAnOrientedRectangle(r1, new PointD(s1.X1, s1.Y1)) || TestIfPointInsideAnOrientedRectangle(r1, new PointD(s1.X2, s1.Y2)))
+                return true;
+
+            Tuple<PointD, PointD, PointD, PointD> corners = GetCornerOfAnOrientedRectangle(r1);
+            Segment s_1_2 = new Segment(corners.Item1, corners.Item2);
+            Segment s_1_3 = new Segment(corners.Item1, corners.Item3);
+            Segment s_2_4 = new Segment(corners.Item2, corners.Item4);
+            Segment s_3_4 = new Segment(corners.Item3, corners.Item4);
+
+            if (testIfTwoSegmentsIntersect(s1, s_1_2))
+                return true;
+
+            if (testIfTwoSegmentsIntersect(s1, s_1_3))
+                return true;
+
+            if (testIfTwoSegmentsIntersect(s1, s_2_4))
+                return true;
+
+            if (testIfTwoSegmentsIntersect(s1, s_3_4))
+                return true;
+
+            return false;
+            
         }
 
     }
