@@ -82,9 +82,9 @@ namespace Constants
         public const double PLANNER_PID_POSITION_LINEAR_KP = 4.5d;
         public const double PLANNER_PID_POSITION_LINEAR_KI = 0d;
         public const double PLANNER_PID_POSITION_LINEAR_KD = 0.6d;
-        public const double PLANNER_PID_POSITION_LINEAR_MAX_KP = 100d;
-        public const double PLANNER_PID_POSITION_LINEAR_MAX_KI = 100d;
-        public const double PLANNER_PID_POSITION_LINEAR_MAX_KD = 100d;
+        public const double PLANNER_PID_POSITION_LINEAR_MAX_KP = 5d;
+        public const double PLANNER_PID_POSITION_LINEAR_MAX_KI = 0d;
+        public const double PLANNER_PID_POSITION_LINEAR_MAX_KD = 5d;
 
         public const double PLANNER_PID_POSITION_ANGULAR_KP = 15.75d;
         public const double PLANNER_PID_POSITION_ANGULAR_KI = 0d;
