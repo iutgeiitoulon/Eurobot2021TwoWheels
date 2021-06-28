@@ -26,6 +26,7 @@ using WorldMapManager;
 using ObjectTrackersNs;
 using PositionManagerNs;
 using FieldSetterNs;
+using TrajectoryAvoidanceNs;
 
 namespace RobotEurobot2Roues
 {
@@ -48,6 +49,7 @@ namespace RobotEurobot2Roues
         static FieldSetter fieldSetter;
 
         static TrajectoryPlanner trajectoryPlanner;
+        static TrajectoryAvoidance trajectoryAvoidance;
 
         static WpfRobot2RouesInterface interfaceRobot;
         static WpfMatchInterfaceClass interfaceMatch;
@@ -106,6 +108,7 @@ namespace RobotEurobot2Roues
             positionManager = new PositionManager(robotId);
 
             trajectoryPlanner = new TrajectoryPlanner(robotId);
+            trajectoryAvoidance = new TrajectoryAvoidance(robotId);
 
             strategyManager = new StrategyEurobot(robotId, teamId, "224.16.32.79");
 
@@ -212,6 +215,7 @@ namespace RobotEurobot2Roues
             localWorldMapManager.OnUpdateRobotLocationEvent += trajectoryPlanner.OnPhysicalPositionReceived;
             localWorldMapManager.OnUpdateRobotLocationEvent += positionManager.OnPositionReceived;
             localWorldMapManager.OnLocalWorldMapEvent += strategyManager.OnLocalWorldMapReceived;
+            localWorldMapManager.OnLocalWorldMapEvent += trajectoryAvoidance.OnLocalWorldMapUpdate;
             localWorldMapManager.OnTeamColorChangeEvent += fieldSetter.OnTeamChangeReceived;
             #endregion
 
@@ -228,7 +232,10 @@ namespace RobotEurobot2Roues
             trajectoryPlanner.OnDestinationSetEvent += localWorldMapManager.OnDestinationReceived;
             trajectoryPlanner.OnRobotDestinationReachedEvent += strategyManager.OnRobotLocationReached;
             trajectoryPlanner.OnSpeedConsigneEvent += msgGenerator.GenerateMessageSetSpeedConsigneToRobot;
-            
+            #endregion
+
+            #region TrajectoryAvoidance
+            trajectoryAvoidance.OnCollisionDetectedEvent += trajectoryPlanner.OnCollisionDetect;
             #endregion
 
             #region Position Manager

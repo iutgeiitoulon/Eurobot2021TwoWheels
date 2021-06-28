@@ -106,6 +106,11 @@ namespace TrajectoryPlannerNs
                 state = GhostState.Angular;
             }
 
+            if (state != GhostState.Wait && state != GhostState.Arret && WantedDestination != null )
+            {
+                OnDestinationSet(robotId, WantedDestination);
+            }
+
             switch (state)
             {
                 case GhostState.Wait:
@@ -124,10 +129,12 @@ namespace TrajectoryPlannerNs
 
                 case GhostState.Arret:
                     if (Math.Abs(GhostLocation.Vx) >= ConstVar.PLANNER_LINEAR_SPEED_MIN)
+                    {
                         if (isReversed)
                             GhostLocation.Vx += ConstVar.PLANNER_MAX_LINEAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
                         else
                             GhostLocation.Vx -= ConstVar.PLANNER_MAX_LINEAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
+                    }
                     else
                     {
                         ResetGhost();
@@ -344,6 +351,19 @@ namespace TrajectoryPlannerNs
         public void OnEndRotateEnableDisableReceived(object sender, bool e)
         {
             isEndRotating = e;
+        }
+
+        public void OnCollisionDetect(object sender, bool e)
+        {
+            if (e)
+            {
+                isUrgence = true;
+                state = GhostState.Arret;
+            }
+            else 
+            {
+                isUrgence = false;
+            }
         }
         #endregion
 

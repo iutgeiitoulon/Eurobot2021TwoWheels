@@ -148,6 +148,10 @@
       <Project>{45B66B72-B07F-4BBD-85F5-DB8A5C438B69}</Project>
       <Name>StrategyManagerProjetEtudiant</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TrajectoryAvoidance\TrajectoryAvoidance.csproj">
+      <Project>{a6b6d1fc-cb51-4492-9499-3eca9278b113}</Project>
+      <Name>TrajectoryAvoidance</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TrajectoryPlanner\TrajectoryPlanner.csproj">
       <Project>{90b7311a-eace-44fe-aa3b-b4fdd13cc3d0}</Project>
       <Name>TrajectoryPlanner</Name>

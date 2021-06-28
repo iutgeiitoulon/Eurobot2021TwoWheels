@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FieldSetter", "..\FieldSett
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBDriver", "..\WinUSB\USBDriver.csproj", "{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrajectoryAvoidance", "..\TrajectoryAvoidance\TrajectoryAvoidance.csproj", "{A6B6D1FC-CB51-4492-9499-3ECA9278B113}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -331,6 +333,14 @@ Global
 		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Release|x64.ActiveCfg = Release|Any CPU
 		{2FD3217A-7528-4B55-BE0B-005E6FDD9CA4}.Release|x64.Build.0 = Release|Any CPU
+		{A6B6D1FC-CB51-4492-9499-3ECA9278B113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6B6D1FC-CB51-4492-9499-3ECA9278B113}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6B6D1FC-CB51-4492-9499-3ECA9278B113}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A6B6D1FC-CB51-4492-9499-3ECA9278B113}.Debug|x64.Build.0 = Debug|Any CPU
+		{A6B6D1FC-CB51-4492-9499-3ECA9278B113}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6B6D1FC-CB51-4492-9499-3ECA9278B113}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6B6D1FC-CB51-4492-9499-3ECA9278B113}.Release|x64.ActiveCfg = Release|Any CPU
+		{A6B6D1FC-CB51-4492-9499-3ECA9278B113}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
