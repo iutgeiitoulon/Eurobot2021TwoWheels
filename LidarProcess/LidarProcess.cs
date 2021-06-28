@@ -164,13 +164,17 @@ namespace LidarProcessNS
                         list_of_objects.Add(cup);
                     }
                     else
-                        Lines.AddRange(FindRectangle.DrawRectangle(cluster_rectangle, c.points[0].Color, 3));
+                    {
+                        LidarObject lidarObject = DetectRobot(c);
 
+                        if (lidarObject.Type == LidarObjectType.Null)
+                            Lines.AddRange(FindRectangle.DrawRectangle(cluster_rectangle, c.points[0].Color, 3));
+                        else
+                            list_of_objects.Add(lidarObject);
+                    }
+                        
                 }
-
-                
-                
-
+                           
                 OnProcessLidarObjectsDataEvent?.Invoke(this, list_of_objects);
                 
                 
@@ -345,6 +349,19 @@ namespace LidarProcessNS
             }
 
         }
+        #endregion
+
+        #region Robot
+        public LidarObject DetectRobot(ClusterObjects cluster)
+        {
+            RectangleOriented box_of_cluster = FindRectangle.FindMbrBoxByOverlap(cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList());
+
+            if (box_of_cluster.Width >= 0.20 || box_of_cluster.Lenght >= 0.20)
+                return new LidarObject(new RectangleOriented(box_of_cluster.Center, 0.3, 0.3, box_of_cluster.Angle), Color.Red, LidarObjectType.Robot);
+            else
+                return new LidarObject();
+        }
+
         #endregion
 
         #region Spatial SubSampling

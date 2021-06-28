@@ -80,19 +80,19 @@ namespace PositionManagerNs
             else
                 errorCount = 0;
 
-            //if (errorCount >= 10)
-                //askForCalibration = true;
+            if (errorCount >= 10)
+                askForCalibration = true;
         }
 
-        
+
 
         public void OnOdometryPositionReceived(object sender, LocationArgs e)
         {
             if (e.RobotId == robotId)
             {
                 OnPositionMerged(e.Location);
-                //if (Math.Abs(e.Location.X) > (ConstVar.WIDTH_BOXSIZE / 2) || Math.Abs(e.Location.Y) > (ConstVar.HEIGHT_BOXSIZE / 2))
-                //    askForCalibration = true;
+                if (Math.Abs(e.Location.X) > (ConstVar.WIDTH_BOXSIZE / 2) || Math.Abs(e.Location.Y) > (ConstVar.HEIGHT_BOXSIZE / 2))
+                    askForCalibration = true;
             }
         }
 

@@ -158,7 +158,23 @@ namespace WpfWorldMapDisplay
             }
             return polygonToDisplay;
         }
-        
+
+        public PolygonExtended GetOpponentPolygon(Location opponent)
+        {
+            PolygonExtended polygonToDisplay = new PolygonExtended();
+            foreach (var pt in robotShape.polygon.Points)
+            {
+                Point polyPt = new Point(pt.X * Math.Cos(opponent.Theta) - pt.Y * Math.Sin(opponent.Theta), pt.X * Math.Sin(opponent.Theta) + pt.Y * Math.Cos(opponent.Theta));
+                polyPt.X += opponent.X;
+                polyPt.Y += opponent.Y;
+                polygonToDisplay.polygon.Points.Add(polyPt);
+                polygonToDisplay.backgroundColor = System.Drawing.Color.Red;
+                polygonToDisplay.borderColor = System.Drawing.Color.Black;
+                polygonToDisplay.borderWidth = robotShape.borderWidth;
+            }
+            return polygonToDisplay;
+        }
+
         public PolygonExtended GetRobotGhostPolygon()
         {
             PolygonExtended polygonToDisplay = new PolygonExtended();

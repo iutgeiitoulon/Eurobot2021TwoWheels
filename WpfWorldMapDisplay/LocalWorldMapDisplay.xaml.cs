@@ -69,7 +69,8 @@ namespace WpfWorldMapDisplay
         //Liste des robots à afficher
         Dictionary<int, RobotDisplay> TeamMatesDisplayDictionary = new Dictionary<int, RobotDisplay>();
 
-        ConcurrentDictionary<int, RobotDisplay> OpponentDisplayDictionary = new ConcurrentDictionary<int, RobotDisplay>();
+        Dictionary<int, RobotDisplay> OpponentDisplayDictionary = new Dictionary<int, RobotDisplay>();
+
         //Dictionary<int, RobotDisplay> OpponentDisplayDictionary = new Dictionary<int, RobotDisplay>();
         List<PolygonExtended> ObjectDisplayList = new List<PolygonExtended>();
 
@@ -318,6 +319,42 @@ namespace WpfWorldMapDisplay
             LocalWorldMapTitle.Text = playerName.ToString();
         }
 
+        public void InitOpponent(int robotId, GameMode gMode, string playerName)
+        {
+            switch (gMode)
+            {
+                case GameMode.Eurobot:
+                    {
+                        PolygonExtended robotShape = new PolygonExtended();
+                        robotShape.polygon.Points.Add(new System.Windows.Point(-0.12, -0.12));
+                        robotShape.polygon.Points.Add(new System.Windows.Point(0.12, -0.12));
+                        robotShape.polygon.Points.Add(new System.Windows.Point(0.02, 0));
+                        robotShape.polygon.Points.Add(new System.Windows.Point(0.12, 0.12));
+                        robotShape.polygon.Points.Add(new System.Windows.Point(-0.12, 0.12));
+                        robotShape.polygon.Points.Add(new System.Windows.Point(-0.12, -0.12));
+                        robotShape.borderColor = System.Drawing.Color.Black;
+                        robotShape.backgroundColor = System.Drawing.Color.Red;
+
+                        PolygonExtended ghostShape = new PolygonExtended();
+                        ghostShape.polygon.Points.Add(new Point(-0.14, -0.14));
+                        ghostShape.polygon.Points.Add(new Point(0.14, -0.14));
+                        ghostShape.polygon.Points.Add(new Point(0.14, 0.02));
+                        ghostShape.polygon.Points.Add(new Point(0.14, 0.14));
+                        ghostShape.polygon.Points.Add(new Point(-0.14, 0.14));
+                        ghostShape.polygon.Points.Add(new Point(-0.14, -0.14));
+                        ghostShape.backgroundColor = System.Drawing.Color.FromArgb(0x00, 0xFF, 0xFF, 0);
+                        ghostShape.borderColor = System.Drawing.Color.Black;
+
+                        RobotDisplay rd = new RobotDisplay(robotShape, ghostShape, playerName);
+                        rd.SetLocation(new Location(0, 0, 0, 0, 0, 0));
+                        OpponentDisplayDictionary.Add(robotId, rd);
+                    }
+                    break;
+            }
+
+            LocalWorldMapTitle.Text = playerName.ToString();
+        }
+
         public void AddOrUpdateTextAnnotation(string annotationName, string annotationText, double posX, double posY)
         {
             var textAnnotationList = sciChartSurface.Annotations.Where(annotation => annotation.GetType().Name == "TextAnnotation").ToList();
@@ -463,6 +500,8 @@ namespace WpfWorldMapDisplay
             SegmentSeries.Clear();
             LidarPtExtendedSeries.Clear();
 
+            int robotId = 0;
+
             foreach (var r in TeamMatesDisplayDictionary)
             {
                 /// Rendering des points Lidar
@@ -471,10 +510,19 @@ namespace WpfWorldMapDisplay
                 lidarPts.Append(lidarData.XValues, lidarData.YValues);
                 LidarPoints.DataSeries = lidarPts;
 
-                foreach (LidarObject cup in TeamMatesDisplayDictionary[r.Key].GetRobotLidarObjects())
+                
+
+                foreach (LidarObject lidar_object in TeamMatesDisplayDictionary[r.Key].GetRobotLidarObjects())
                 {
-                    if (cup.Type == LidarObjectType.Cup)
-                        LidarPtExtendedSeries.AddPtExtended(new PointDExtended(cup.Shape.Center, cup.color, 10));
+                    if (lidar_object.Type == LidarObjectType.Cup)
+                        LidarPtExtendedSeries.AddPtExtended(new PointDExtended(lidar_object.Shape.Center, lidar_object.color, 10));
+
+                    if (lidar_object.Type == LidarObjectType.Robot)
+                    {
+                        ObjectsPolygonSeries.AddOrUpdatePolygonExtended((int)TeamId.Opponents + robotId++,
+                            TeamMatesDisplayDictionary[r.Key].GetOpponentPolygon(new Location(lidar_object.Shape.Center.X, lidar_object.Shape.Center.Y, lidar_object.Shape.Angle, 0, 0, 0)));
+                        
+                    }
                 }
 
 
