@@ -24,8 +24,14 @@ namespace Positioning2WheelsNs
 
         public void OnOdometryRobotSpeedReceived(object sender, PolarSpeedArgs e)
         {
+            //locationRefTerrain.X = (double)(locationRefTerrain.X + (e.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Cos(locationRefTerrain.Theta));
+            //locationRefTerrain.Y = (double)(locationRefTerrain.Y + (e.Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Sin(locationRefTerrain.Theta));
+            //locationRefTerrain.Theta = (double)(locationRefTerrain.Theta + e.Vtheta / ConstVar.ODOMETRY_FREQ_IN_HZ);
+            //locationRefTerrain.Vx = e.Vx;
+            //locationRefTerrain.Vy = 0;
+            //locationRefTerrain.Vtheta = e.Vtheta;
 
-            
+
             //OnCalculatedLocation(robotId, locationRefTerrain);
         }
 
