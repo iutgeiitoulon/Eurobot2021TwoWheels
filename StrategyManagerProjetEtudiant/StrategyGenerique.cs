@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Timers;
 using Utilities;
 using WorldMap;
+using HerkulexManagerNS;
+
 
 namespace StrategyManagerProjetEtudiantNS
 {
@@ -147,6 +149,27 @@ namespace StrategyManagerProjetEtudiantNS
         public event EventHandler<Location> OnSetNewDestinationEvent;
         public event EventHandler<List<Field>> OnNewFieldsEvent;
 
+        //Herkulex
+        public event EventHandler<HerkulexEventArgs.AddServoArgs> AddServoEvent;
+        public event EventHandler<HerkulexEventArgs.TorqueModeArgs> SetTorqueModeEvent;
+
+        public virtual void OnSetTorqueMode(ServoId id, HerkulexDescription.TorqueControl mode)
+        {
+            SetTorqueModeEvent?.Invoke(this, new HerkulexEventArgs.TorqueModeArgs
+            {
+                ID = id,
+                Mode = mode
+            });
+        }
+
+        public virtual void OnAddServo(ServoId id, HerkulexDescription.JOG_MODE mode)
+        {
+            AddServoEvent?.Invoke(this, new HerkulexEventArgs.AddServoArgs
+            {
+                ID = id,
+                Mode = mode
+            });
+        }
 
 
         public virtual void OnDestination(int id, Location location)

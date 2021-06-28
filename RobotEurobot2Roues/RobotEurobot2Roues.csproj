@@ -96,6 +96,10 @@
       <Project>{9C46A7C0-4675-41BE-B282-E6F0825AD73E}</Project>
       <Name>EventArgsLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HerkulexManager\HerkulexManager.csproj">
+      <Project>{835b8b5a-c248-4443-99ca-ff11ac77481a}</Project>
+      <Name>HerkulexManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LidarProcess\LidarProcess.csproj">
       <Project>{c3c168d3-37fc-4bb3-ab65-4701c7f2e7a5}</Project>
       <Name>LidarProcess</Name>

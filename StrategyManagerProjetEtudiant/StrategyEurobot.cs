@@ -25,6 +25,7 @@ namespace StrategyManagerProjetEtudiantNS
         TaskDestination taskDestination;
         TaskUpdateCupWaypoints taskSetupWaypoints;
         TaskSetupFieldZone taskSetupDeadZone;
+        TaskHerkulexTest taskHerkulexTest;
 
         int robotId, teamId;
 
@@ -33,11 +34,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         public StrategyEurobot(int robotId, int teamId, string multicastIpAddress) : base(robotId, teamId, multicastIpAddress)
         {
-            taskDemoMove = new TaskDemoMove(this);
-            taskDemoMessage = new TaskDemoMessage(this);
-            taskDestination = new TaskDestination(this);
-            taskSetupWaypoints = new TaskUpdateCupWaypoints(this);
-            taskSetupDeadZone = new TaskSetupFieldZone(this);
+
 
             this.robotId = robotId;
             this.teamId = teamId;
@@ -46,6 +43,13 @@ namespace StrategyManagerProjetEtudiantNS
 
         public override void InitStrategy()
         {
+            taskDemoMove = new TaskDemoMove(this);
+            taskDemoMessage = new TaskDemoMessage(this);
+            taskDestination = new TaskDestination(this);
+            taskSetupWaypoints = new TaskUpdateCupWaypoints(this);
+            taskSetupDeadZone = new TaskSetupFieldZone(this);
+            taskHerkulexTest = new TaskHerkulexTest(this);
+
             configTimer = new System.Timers.Timer(1000);
             configTimer.Elapsed += ConfigTimer_Elapsed;
             configTimer.Start();

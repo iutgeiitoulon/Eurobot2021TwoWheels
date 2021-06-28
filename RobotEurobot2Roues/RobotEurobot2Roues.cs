@@ -25,6 +25,7 @@ using Positioning2WheelsNs;
 using WorldMapManager;
 using ObjectTrackersNs;
 using PositionManagerNs;
+using HerkulexManagerNS;
 
 namespace RobotEurobot2Roues
 {
@@ -54,6 +55,10 @@ namespace RobotEurobot2Roues
 
         static Positioning2Wheels positioning2Wheels;
         static PositionManager positionManager;
+
+        //Herkulex
+        static HerkulexManager HerkulexMan;
+        static HerkulexDecoder HerkulexDecode;
 
         static ObjectTrackers objectTrackers;
 
@@ -104,7 +109,15 @@ namespace RobotEurobot2Roues
 
             strategyManager = new StrategyEurobot(robotId, teamId, "224.16.32.79");
 
+            HerkulexMan = new HerkulexManager();;
 
+
+            #region Herkulex
+            HerkulexMan.SendHerkulexDataEvent += msgGenerator.GenerateMessageForwardHerkulex;
+            strategyManager.AddServoEvent += HerkulexMan.AddServo;
+            strategyManager.SetTorqueModeEvent += HerkulexMan.OnSetTorqueMode;
+
+            #endregion
 
             #region Communication to Low Lvl
             /// Création des liens entre module, sauf depuis et vers l'interface graphique           

@@ -66,6 +66,7 @@
     <Compile Include="StrategyEurobot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Taches\TaskDemoMessage.cs" />
+    <Compile Include="Taches\TaskHerkulexTest.cs" />
     <Compile Include="Taches\TaskManager.cs" />
     <Compile Include="Taches\TaskDemoMove.cs" />
     <Compile Include="Taches\TaskSetupFieldZone.cs" />
@@ -79,6 +80,10 @@
     <ProjectReference Include="..\EventArgsLibrary\EventArgsLibrary.csproj">
       <Project>{9C46A7C0-4675-41BE-B282-E6F0825AD73E}</Project>
       <Name>EventArgsLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HerkulexManager\HerkulexManager.csproj">
+      <Project>{835b8b5a-c248-4443-99ca-ff11ac77481a}</Project>
+      <Name>HerkulexManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj">
       <Project>{8e7d0da4-9a13-4b18-a90e-0243bbcce40a}</Project>
