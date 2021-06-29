@@ -40,18 +40,18 @@ namespace Positioning2WheelsNs
             double right_motor_speed = - e.VitesseMoteur3 * (ConstVar.ROBOT_ENCODER_POINT_TO_METER / ConstVar.EUROBOT_ODOMETRY_POINT_TO_METER);
             double left_motor_speed = e.VitesseMoteur4 * (ConstVar.ROBOT_ENCODER_POINT_TO_METER / ConstVar.EUROBOT_ODOMETRY_POINT_TO_METER);
 
-            double Vlin = (right_motor_speed + left_motor_speed) / 2;
-            double Vang = (right_motor_speed - left_motor_speed) / ConstVar.ROBOT_ENCODER_DIST_WHEELS;
+            double Vx =     (right_motor_speed + left_motor_speed) / 2;
+            double Vtheta = (right_motor_speed - left_motor_speed) / ConstVar.ROBOT_ENCODER_DIST_WHEELS;
 
 
-            locationRefTerrain.X = (double) (locationRefTerrain.X + (Vlin / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Cos(locationRefTerrain.Theta));
-            locationRefTerrain.Y = (double) (locationRefTerrain.Y + (Vlin / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Sin(locationRefTerrain.Theta));
-            locationRefTerrain.Theta = (double) (locationRefTerrain.Theta + Vang / ConstVar.ODOMETRY_FREQ_IN_HZ);
-            locationRefTerrain.Vx = Vlin;
+            locationRefTerrain.X = (double) (locationRefTerrain.X + (Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Cos(locationRefTerrain.Theta));
+            locationRefTerrain.Y = (double) (locationRefTerrain.Y + (Vx / ConstVar.ODOMETRY_FREQ_IN_HZ) * Math.Sin(locationRefTerrain.Theta));
+            locationRefTerrain.Theta = (double) (locationRefTerrain.Theta + Vtheta / ConstVar.ODOMETRY_FREQ_IN_HZ);
+            locationRefTerrain.Vx = Vx;
             locationRefTerrain.Vy = 0;
-            locationRefTerrain.Vtheta = Vang;
+            locationRefTerrain.Vtheta = Vtheta;
 
-            OnExternalEncoderPolarSpeedEvent?.Invoke(this, new PolarSpeedEventArgs { RobotId = robotId, timeStampMs = e.timeStampMs, Vx = Vlin, Vy = 0, Vtheta = Vang });
+            OnExternalEncoderPolarSpeedEvent?.Invoke(this, new PolarSpeedEventArgs { RobotId = robotId, timeStampMs = e.timeStampMs, Vx = Vx, Vy = 0, Vtheta = Vtheta });
             OnCalculatedLocation(robotId, locationRefTerrain);
         }
 

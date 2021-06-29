@@ -93,7 +93,8 @@ namespace Constants
         public const double PLANNER_PID_POSITION_ANGULAR_MAX_KI = 0d * Math.PI;
         public const double PLANNER_PID_POSITION_ANGULAR_MAX_KD = 5d * Math.PI;
 
-        public const double ROBOT_ENCODER_DIST_WHEELS = 0.297d; /// 14.85cm
-        public const double ROBOT_ENCODER_POINT_TO_METER = 0.000016336895391d; /// (0.0426 * Math.PI / 8192.0)
+        public const double ROBOT_ENCODER_DIST_WHEELS = 0.297d; 
+        public const double ROBOT_ENCODER_WHEELS_DIAMETER = 0.0426d;
+        public const double ROBOT_ENCODER_POINT_TO_METER = ROBOT_ENCODER_WHEELS_DIAMETER * Math.PI / 8192.0d;
     }
 }

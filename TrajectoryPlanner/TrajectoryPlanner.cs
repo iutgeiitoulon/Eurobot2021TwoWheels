@@ -77,6 +77,12 @@ namespace TrajectoryPlannerNs
 
         public void Start(Location e)
         {
+            if (Math.Abs(e.X) >= (ConstVar.WIDTH_BOXSIZE / 2) || Math.Abs(e.Y) >= (ConstVar.HEIGHT_BOXSIZE / 2))
+            {
+                state = GhostState.Wait;
+                return;
+            }
+
             WantedDestination = e;
 
             ResetGhost();
