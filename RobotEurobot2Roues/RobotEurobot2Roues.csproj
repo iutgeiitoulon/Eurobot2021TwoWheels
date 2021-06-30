@@ -100,6 +100,10 @@
       <Project>{5429f063-489d-47bd-9a74-29a844ab386c}</Project>
       <Name>FieldSetter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HerkulexManager\HerkulexManager.csproj">
+      <Project>{835b8b5a-c248-4443-99ca-ff11ac77481a}</Project>
+      <Name>HerkulexManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LidarProcess\LidarProcess.csproj">
       <Project>{c3c168d3-37fc-4bb3-ab65-4701c7f2e7a5}</Project>
       <Name>LidarProcess</Name>

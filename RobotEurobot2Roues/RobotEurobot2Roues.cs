@@ -27,6 +27,8 @@ using ObjectTrackersNs;
 using PositionManagerNs;
 using FieldSetterNs;
 using TrajectoryAvoidanceNs;
+using HerkulexManagerNs; 
+
 
 namespace RobotEurobot2Roues
 {
@@ -43,6 +45,8 @@ namespace RobotEurobot2Roues
 
         static LidarDevice lidar;
         static LidarProcess lidarProcess;
+
+        static HerkulexManager herkulexManager;
 
         static LocalWorldMapManager localWorldMapManager;
 
@@ -81,7 +85,7 @@ namespace RobotEurobot2Roues
 
             /// Initialisation des modules utilisés dans le robot
             int robotId = (int)RobotId.Robot1;
-            int teamId = (int)TeamId.Team1;
+            int teamId =  (int)TeamId.Team1;
 
             usbDriver = new USBDriver();
             msgDecoder = new MsgDecoder();
@@ -95,6 +99,8 @@ namespace RobotEurobot2Roues
 
             logRecorder = new LogRecorder();
             logReplay = new LogReplay();
+
+            herkulexManager = new HerkulexManager();
 
             localWorldMapManager = new LocalWorldMapManager(robotId, teamId);
 
@@ -111,6 +117,7 @@ namespace RobotEurobot2Roues
             trajectoryAvoidance = new TrajectoryAvoidance(robotId);
 
             strategyManager = new StrategyEurobot(robotId, teamId, "224.16.32.79");
+
 
 
 
@@ -205,6 +212,10 @@ namespace RobotEurobot2Roues
             lidarProcess.OnLidarMultiplePositionEvent += positionManager.OnLidarMultiplePostionReceived;
             #endregion
 
+            #region Herkulex Manager
+            herkulexManager.SendHerkulexDataEvent += msgGenerator.GenerateMessageForwardHerkulex;
+            #endregion
+
             #region Object Trackers
             objectTrackers.OnObjectListUpdateEvent += localWorldMapManager.OnLidarObjectReceived;
             #endregion
@@ -265,6 +276,8 @@ namespace RobotEurobot2Roues
             strategyManager.OnEnableDisableMotorsEvent += trajectoryPlanner.OnEnableDisableAsservReceived;
             strategyManager.OnEnableDisableEndRotationEvent += trajectoryPlanner.OnEndRotateEnableDisableReceived;
 
+            strategyManager.AddServoEvent += herkulexManager.AddServo;
+            strategyManager.SetTorqueModeEvent += herkulexManager.OnSetTorqueMode;
             
             
 

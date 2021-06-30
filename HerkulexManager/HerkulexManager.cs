@@ -9,9 +9,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
-using static HerkulexManagerNS.HerkulexEventArgs;
 
-namespace HerkulexManagerNS
+namespace HerkulexManagerNs
 {
     public class HerkulexManager
     {
@@ -79,7 +78,7 @@ namespace HerkulexManagerNS
 
 
 
-        public virtual void OnSetTorqueMode(object sender, TorqueModeArgs e)
+        public void OnSetTorqueMode(object sender, TorqueModeArgs e)
         {
             SetTorqueMode(e.ID, e.Mode);
         }
@@ -101,7 +100,7 @@ namespace HerkulexManagerNS
         }
 
         
-        public virtual void AddServo(object sender, AddServoArgs e)
+        public void AddServo(object sender, AddServoArgs e)
         {
             _AddServo(e.ID, e.Mode);
         }
@@ -123,7 +122,7 @@ namespace HerkulexManagerNS
 
 
 
-        public void OnHerkulexPositionRequestEvent(object sender, HerkulexEventArgs.HerkulexPositionsArgs e)
+        public void OnHerkulexPositionRequestEvent(object sender, HerkulexPositionsArgs e)
         {
             foreach (var positionCommand in e.servoPositions)
             {
@@ -185,7 +184,7 @@ namespace HerkulexManagerNS
         public virtual void OnHerkulexError(Servo servo)
         {
             //Ne doit être appelé que si il y a une erreur
-            HerkulexErrorEvent?.Invoke(this, new HerkulexManagerNS.HerkulexEventArgs.HerkulexErrorArgs
+            HerkulexErrorEvent?.Invoke(this, new HerkulexErrorArgs
             {
                 Servo = servo
             });

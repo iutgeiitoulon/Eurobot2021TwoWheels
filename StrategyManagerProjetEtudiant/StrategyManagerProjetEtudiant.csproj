@@ -68,6 +68,7 @@
     <Compile Include="Task\TaskActivateBeacon.cs" />
     <Compile Include="Task\TaskCalibrate.cs" />
     <Compile Include="Task\TaskGetReefCup.cs" />
+    <Compile Include="Task\TaskHerkulexTest.cs" />
     <Compile Include="Task\TaskReturnHarbor.cs" />
     <Compile Include="Task\TaskStrategy.cs" />
     <Compile Include="Task\TaskWindFlag.cs" />
@@ -80,6 +81,10 @@
     <ProjectReference Include="..\EventArgsLibrary\EventArgsLibrary.csproj">
       <Project>{9C46A7C0-4675-41BE-B282-E6F0825AD73E}</Project>
       <Name>EventArgsLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HerkulexManager\HerkulexManager.csproj">
+      <Project>{835B8B5A-C248-4443-99CA-FF11AC77481A}</Project>
+      <Name>HerkulexManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj">
       <Project>{8e7d0da4-9a13-4b18-a90e-0243bbcce40a}</Project>

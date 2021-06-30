@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HerkulexManagerNS
+namespace HerkulexManagerNs
 {
-    public class HerkulexEventArgs
-    {
         #region LowLevelEventArgs
         /// <summary>
         /// Herkulex : packetDecoded args
@@ -178,5 +176,4 @@ namespace HerkulexManagerNS
         }
 
         #endregion OutputEventArgs
-    }
 }

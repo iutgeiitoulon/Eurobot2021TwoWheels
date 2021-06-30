@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 //using static HerkulexManagerNS.HerkulexEventArgs;
 
-namespace HerkulexManagerNS
+namespace HerkulexManagerNs
 {
     public class HerkulexDecoder
     {
@@ -139,13 +139,13 @@ namespace HerkulexManagerNS
 
         #region eventGeneration
 
-        public event EventHandler<HerkulexEventArgs.Hklx_AnyAck_Args> OnAnyAckEvent;
-        public event EventHandler<HerkulexEventArgs.Hklx_RAM_READ_Ack_Args> OnRamReadAckEvent;
-        public event EventHandler<HerkulexEventArgs.Hklx_STAT_Ack_Args> OnStatAckEvent;
+        public event EventHandler<Hklx_AnyAck_Args> OnAnyAckEvent;
+        public event EventHandler<Hklx_RAM_READ_Ack_Args> OnRamReadAckEvent;
+        public event EventHandler<Hklx_STAT_Ack_Args> OnStatAckEvent;
 
         public void OnAnyAckReveived(ServoId Pid, byte statusError, byte statusDetail)
         {
-            OnAnyAckEvent?.Invoke(this, new HerkulexEventArgs.Hklx_AnyAck_Args
+            OnAnyAckEvent?.Invoke(this, new Hklx_AnyAck_Args
             {
                 PID = Pid,
                 StatusErrors = CommonMethods.GetErrorStatusFromByte(statusError),
@@ -155,7 +155,7 @@ namespace HerkulexManagerNS
 
         public void OnRamReadAck(ServoId pID, byte statusError, byte statusDetail, byte address, byte length, byte[] data)
         {
-            OnRamReadAckEvent?.Invoke(this, new HerkulexManagerNS.HerkulexEventArgs.Hklx_RAM_READ_Ack_Args
+            OnRamReadAckEvent?.Invoke(this, new Hklx_RAM_READ_Ack_Args
             {
                 StatusErrors = CommonMethods.GetErrorStatusFromByte(statusError),
                 StatusDetails = CommonMethods.GetErrorStatusDetailFromByte(statusDetail),
@@ -169,7 +169,7 @@ namespace HerkulexManagerNS
         public void OnStatAck(ServoId pID, byte statusError, byte statusDetail)
         {
 
-            OnStatAckEvent?.Invoke(this, new HerkulexManagerNS.HerkulexEventArgs.Hklx_STAT_Ack_Args
+            OnStatAckEvent?.Invoke(this, new Hklx_STAT_Ack_Args
             {
                 StatusErrors = CommonMethods.GetErrorStatusFromByte(statusError),
                 StatusDetails = CommonMethods.GetErrorStatusDetailFromByte(statusDetail),

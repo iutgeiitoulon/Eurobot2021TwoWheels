@@ -25,6 +25,7 @@ namespace StrategyManagerProjetEtudiantNS
         public TaskWindFlag taskWindFlag;
         public TaskReturnHarbor taskReturnHarbor;
         public TaskActivateBeacon taskActivateBeacon;
+        public TaskHerkulexTest taskHerkulexTest;
 
 
         public StrategyEurobot(int robotId, int teamId, string multicastIpAddress) : base(robotId, teamId, multicastIpAddress)
@@ -33,15 +34,18 @@ namespace StrategyManagerProjetEtudiantNS
             this.teamId = teamId;
             localWorldMap = new LocalWorldMap(robotId, teamId);
 
+            
+        }
+
+        public override void InitStrategy()
+        {
+            taskHerkulexTest = new TaskHerkulexTest(this);
             taskWindFlag = new TaskWindFlag(this);
             taskReturnHarbor = new TaskReturnHarbor(this);
             taskActivateBeacon = new TaskActivateBeacon(this);
             taskCalibrate = new TaskCalibrate(this);
             taskStrategy = new TaskStrategy(this);
-        }
 
-        public override void InitStrategy()
-        {
             configTimer = new Timer(1000);
             configTimer.Elapsed += ConfigTimer_Elapsed;
             configTimer.Start();          

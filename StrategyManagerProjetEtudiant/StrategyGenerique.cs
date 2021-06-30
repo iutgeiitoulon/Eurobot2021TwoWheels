@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Utilities;
 using WorldMap;
-using HerkulexManagerNS;
-
+using HerkulexManagerNs;
 
 namespace StrategyManagerProjetEtudiantNS
 {
@@ -153,11 +152,11 @@ namespace StrategyManagerProjetEtudiantNS
         public event EventHandler<BoolEventArgs> OnEnableDisableIndependant2WheelsPIDGainDebugEvent;
 
         //Herkulex
-        public event EventHandler<HerkulexEventArgs.AddServoArgs> AddServoEvent;
-        public event EventHandler<HerkulexEventArgs.TorqueModeArgs> SetTorqueModeEvent;
-        public event EventHandler<HerkulexEventArgs.TargetPositionEventArgs> SetPositionEvent;
+        public event EventHandler<AddServoArgs> AddServoEvent;
+        public event EventHandler<TorqueModeArgs> SetTorqueModeEvent;
+        public event EventHandler<TargetPositionEventArgs> SetPositionEvent;
 
-        //pololu
+        //Polulu
         public event EventHandler<PololuServoArgs> PololuSetUsEvent;
 
         public virtual void OnPololuSetUs(byte channel, ushort us)
@@ -171,7 +170,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         public virtual void OnSetPosition(ServoId id, ushort targetPosition, byte playTime)
         {
-            SetPositionEvent?.Invoke(this, new HerkulexEventArgs.TargetPositionEventArgs
+            SetPositionEvent?.Invoke(this, new TargetPositionEventArgs
             {
                 ID = id,
                 TargetPosition = targetPosition,
@@ -181,7 +180,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         public virtual void OnSetTorqueMode(ServoId id, HerkulexDescription.TorqueControl mode)
         {
-            SetTorqueModeEvent?.Invoke(this, new HerkulexEventArgs.TorqueModeArgs
+            SetTorqueModeEvent?.Invoke(this, new TorqueModeArgs
             {
                 ID = id,
                 Mode = mode
@@ -190,7 +189,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         public virtual void OnAddServo(ServoId id, HerkulexDescription.JOG_MODE mode)
         {
-            AddServoEvent?.Invoke(this, new HerkulexEventArgs.AddServoArgs
+            AddServoEvent?.Invoke(this, new AddServoArgs
             {
                 ID = id,
                 Mode = mode
