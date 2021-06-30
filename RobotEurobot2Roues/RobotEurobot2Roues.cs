@@ -109,14 +109,20 @@ namespace RobotEurobot2Roues
 
             strategyManager = new StrategyEurobot(robotId, teamId, "224.16.32.79");
 
-            HerkulexMan = new HerkulexManager();;
+            HerkulexMan = new HerkulexManager();
 
 
             #region Herkulex
             HerkulexMan.SendHerkulexDataEvent += msgGenerator.GenerateMessageForwardHerkulex;
             strategyManager.AddServoEvent += HerkulexMan.AddServo;
             strategyManager.SetTorqueModeEvent += HerkulexMan.OnSetTorqueMode;
+            strategyManager.SetPositionEvent += HerkulexMan.OnSetPosition;
 
+
+            #endregion
+
+            #region Pololu
+            strategyManager.PololuSetUsEvent += msgGenerator.GenerateMessagePololuSetServoUs;
             #endregion
 
             #region Communication to Low Lvl

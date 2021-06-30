@@ -141,6 +141,14 @@ namespace HerkulexManagerNS
 
         #region OutputEventArgs
 
+        //ServoId id, ushort targetPosition, byte playTime
+        public class TargetPositionEventArgs : EventArgs
+        {
+            public ServoId ID { get; set; }
+            public ushort TargetPosition { get; set; }
+            public byte PlayTime { get; set; }
+        }
+
         public class AddServoArgs : EventArgs
         {
             public ServoId ID { get; set; }

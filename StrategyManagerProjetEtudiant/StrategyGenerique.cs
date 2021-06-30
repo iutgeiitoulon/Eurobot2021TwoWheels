@@ -152,6 +152,29 @@ namespace StrategyManagerProjetEtudiantNS
         //Herkulex
         public event EventHandler<HerkulexEventArgs.AddServoArgs> AddServoEvent;
         public event EventHandler<HerkulexEventArgs.TorqueModeArgs> SetTorqueModeEvent;
+        public event EventHandler<HerkulexEventArgs.TargetPositionEventArgs> SetPositionEvent;
+
+        //pololu
+        public event EventHandler<PololuServoArgs> PololuSetUsEvent;
+
+        public virtual void OnPololuSetUs(byte channel, ushort us)
+        {
+            PololuSetUsEvent?.Invoke(this, new PololuServoArgs
+            {
+                ServoChannel = channel,
+                ServoUs = us
+            });
+        }
+
+        public virtual void OnSetPosition(ServoId id, ushort targetPosition, byte playTime)
+        {
+            SetPositionEvent?.Invoke(this, new HerkulexEventArgs.TargetPositionEventArgs
+            {
+                ID = id,
+                TargetPosition = targetPosition,
+                PlayTime = playTime
+            });
+        }
 
         public virtual void OnSetTorqueMode(ServoId id, HerkulexDescription.TorqueControl mode)
         {

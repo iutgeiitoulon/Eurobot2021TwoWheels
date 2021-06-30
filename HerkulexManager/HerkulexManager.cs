@@ -53,7 +53,7 @@ namespace HerkulexManagerNS
                             //    if (serialPort.IsOpen)
                             //    {
                             //Ajouter l'event de forward au lieu de l'envoi direct
-                            OnHerkulexSendToSerial(message);
+                           // OnHerkulexSendToSerial(message);
                             //serialPort.Write(message, 0, message.Length);
                             Thread.Sleep(50);
                             //}
@@ -215,6 +215,11 @@ namespace HerkulexManagerNS
             }
         }
 
+        public void OnSetPosition(object sender, TargetPositionEventArgs e)
+        {
+            SetPosition(e.ID, e.TargetPosition, e.PlayTime);
+        }
+
         /// <summary>
         /// Clears all of the servo error statuses
         /// </summary>
@@ -288,7 +293,6 @@ namespace HerkulexManagerNS
 
             SendHerkulexData(packet);
 
-            //messageQueue.Enqueue(packet);
         }
         #endregion LowLevelMethods
     }

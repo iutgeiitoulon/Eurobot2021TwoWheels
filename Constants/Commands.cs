@@ -91,7 +91,7 @@ namespace Constants
         PC2R_TirMoveDown = 0x0273,                                      //Pas de payload
 
         PC2R_HerkulexForward = 0x0290,                                  //Payload variable
-        PC2R_PololuServoSetPosition = 0x0300,                           //A définir
+        PC2R_PololuServoSetPosition = 0x0280,                           //A définir
 
 
 #pragma warning restore CS1591
