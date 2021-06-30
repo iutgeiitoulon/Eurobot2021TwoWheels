@@ -541,28 +541,6 @@ namespace Utilities
 
         public static bool testIfTwoSegmentsIntersect(Segment s1, Segment s2)
         {
-            //double slope_1 = Angle(s1);
-            //double slope_2 = Angle(s2);
-
-            //double y_intercept_1 = s1.Y1 - slope_1 * s1.X1;
-            //double y_intercept_2 = s2.Y1 - slope_2 * s2.X1;
-
-
-            //if (slope_1 == slope_2) /// Parrallel
-            //    return false;
-
-            //double Xa = (y_intercept_2 - y_intercept_1) / (slope_1 - slope_2);
-            //double Ya = slope_1 * Xa + y_intercept_1;
-
-            //if (Xa < Math.Max(Math.Min(s1.X1, s1.X2), Math.Min(s2.X1, s2.X2)) ||
-            //    Xa > Math.Min(Math.Max(s1.X1, s1.X2), Math.Max(s2.X1, s2.X2)))
-            //    return false;
-
-            //if (Ya < Math.Max(Math.Min(s1.Y1, s1.Y2), Math.Min(s2.Y1, s2.Y2)) ||
-            //    Ya > Math.Min(Math.Max(s1.Y1, s1.Y2), Math.Max(s2.Y1, s2.Y2)))
-            //    return false;
-
-            //return true;
             int o1 = TestOrientationOfOrderedPoint(new PointD(s1.X1, s1.Y1), new PointD(s1.X2, s1.Y2), new PointD(s2.X1, s2.Y1));
             int o2 = TestOrientationOfOrderedPoint(new PointD(s1.X1, s1.Y1), new PointD(s1.X2, s1.Y2), new PointD(s2.X2, s2.Y2));
             int o3 = TestOrientationOfOrderedPoint(new PointD(s2.X1, s2.Y1), new PointD(s2.X2, s2.Y2), new PointD(s1.X1, s1.Y1));
