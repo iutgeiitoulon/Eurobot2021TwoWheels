@@ -10,6 +10,13 @@ using System.Drawing;
 
 namespace EventArgsLibrary
 {
+
+    public class PololuServoArgs : EventArgs
+    {
+        public byte ServoChannel { get; set; }
+        public ushort ServoUs { get; set; }
+    }
+
     public class DataReceivedArgs : EventArgs
     {
         public byte[] Data { get; set; }
@@ -593,4 +600,6 @@ namespace EventArgsLibrary
     //    public int RobotId { get; set; }
     //    public GameState gameState { get; set; }
     //}
+
+
 }

@@ -9,6 +9,18 @@ namespace MessageGeneratorNS
 {
     public class MsgGenerator
     {
+
+        public void GenerateMessagePololuSetServoUs(object sender, PololuServoArgs e)
+        {
+            byte[] payload = new byte[4];
+            payload[0] = 0x84;
+            payload[1] = e.ServoChannel;
+            payload[2] = (byte)(e.ServoUs*4 & 0x7F);
+            payload[3] = (byte)((e.ServoUs * 4 >> 7) & 0x7F);
+            OnMessageToRobot((Int16)Commands.PC2R_PololuServoSetPosition, 4, payload);
+        }
+
+
         //Input events
         public void GenerateMessageSetSpeedConsigneToRobot(object sender, PolarSpeedArgs e)
         {
