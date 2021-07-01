@@ -92,7 +92,7 @@ namespace StrategyManagerProjetEtudiantNS
                             if (!Jack)
                             {
                                 parentManager.OnEnableDisableMotors(true);
-                                //state = TaskStrategyState.PushFlags;
+                                state = TaskStrategyState.PushFlags;
                                 StartSw();
                             }
                             break;

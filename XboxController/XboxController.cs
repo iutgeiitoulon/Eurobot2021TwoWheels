@@ -147,7 +147,7 @@ namespace XBoxControllerNS
                     VthetaRampe = Vtheta;
                 }
 
-                OnSpeedConsigneToRobot(robotId, VxRampe, VyRampe, VthetaRampe);
+                OnSpeedConsigneToRobot(robotId, VxRampe, 0/*VyRampe*/, VthetaRampe);
                 //OnPriseBalleToRobot(2, (float)(Vx*33.3));
                 OnPriseBalleToRobot(5, vitessePriseBalle);
                 OnPriseBalleToRobot(6, -vitessePriseBalle);
@@ -166,43 +166,27 @@ namespace XBoxControllerNS
         public event EventHandler<TirEventArgs> OnTirEvent;
         public virtual void OnTirToRobot(int id, float puissance)
         {
-            var handler = OnTirEvent;
-            if (handler != null)
-            {
-                handler(this, new TirEventArgs { RobotId = id, Puissance = puissance });
-            }
+            OnTirEvent?.Invoke(this, new TirEventArgs { RobotId = id, Puissance = puissance });
         }
         public delegate void OnStopEventHandler(object sender, BoolEventArgs e);
         public event EventHandler<BoolEventArgs> OnStopEvent;
         public virtual void OnStopToRobot(bool stop)
         {
-            var handler = OnStopEvent;
-            if (handler != null)
-            {
-                handler(this, new BoolEventArgs());
-            }
+            OnStopEvent?.Invoke(this, new BoolEventArgs());
         }
 
         public delegate void OnMoveTirUpEventHandler(object sender, EventArgs e);
         public event EventHandler<EventArgs> OnMoveTirUpEvent;
         public virtual void OnMoveTirUpToRobot()
         {
-            var handler = OnMoveTirUpEvent;
-            if (handler != null)
-            {
-                handler(this, new EventArgs());
-            }
+            OnMoveTirUpEvent?.Invoke(this, new EventArgs());
         }
 
         public delegate void OnMoveTirDownEventHandler(object sender, EventArgs e);
         public event EventHandler<EventArgs> OnMoveTirDownEvent;
         public virtual void OnMoveTirDownToRobot()
         {
-            var handler = OnMoveTirDownEvent;
-            if (handler != null)
-            {
-                handler(this, new EventArgs());
-            }
+            OnMoveTirDownEvent?.Invoke(this, new EventArgs());
         }
 
         public event EventHandler<SpeedConsigneToMotorArgs> OnPriseBalleEvent;

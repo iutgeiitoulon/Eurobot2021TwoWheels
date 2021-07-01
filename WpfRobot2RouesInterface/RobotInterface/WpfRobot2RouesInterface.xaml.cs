@@ -26,7 +26,7 @@ namespace RobotInterface
     public partial class WpfRobot2RouesInterface : Window
     {
         GameMode gameMode;
-        DispatcherTimer timerAffichage = new DispatcherTimer();
+        System.Timers.Timer timerAffichage = new System.Timers.Timer(100);
 
         int nbMsgSent = 0;
 
@@ -71,8 +71,7 @@ namespace RobotInterface
                 PreviewKeyDown += new KeyEventHandler(MainWindow_PreviewKeyDown);
             }
 
-            timerAffichage.Interval = new TimeSpan(0, 0, 0, 0, 50);
-            timerAffichage.Tick += TimerAffichage_Tick;
+            timerAffichage.Elapsed += TimerAffichage_Tick;
             timerAffichage.Start();
             #endregion
 

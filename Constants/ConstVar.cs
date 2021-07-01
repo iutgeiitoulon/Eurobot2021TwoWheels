@@ -79,19 +79,19 @@ namespace Constants
         public const double PLANNER_ANGULAR_GHOST_DEAD_ZONE = 0.075d;
         public const double PLANNER_LINEAR_SPEED_MIN = 0.02d;
 
-        public const double PLANNER_PID_POSITION_LINEAR_KP = 4.5d;
+        public const double PLANNER_PID_POSITION_LINEAR_KP = 0d;
         public const double PLANNER_PID_POSITION_LINEAR_KI = 0d;
-        public const double PLANNER_PID_POSITION_LINEAR_KD = 0.6d;
+        public const double PLANNER_PID_POSITION_LINEAR_KD = 0d;
         public const double PLANNER_PID_POSITION_LINEAR_MAX_KP = 5d;
         public const double PLANNER_PID_POSITION_LINEAR_MAX_KI = 0d;
         public const double PLANNER_PID_POSITION_LINEAR_MAX_KD = 5d;
 
-        public const double PLANNER_PID_POSITION_ANGULAR_KP = 15.75d;
+        public const double PLANNER_PID_POSITION_ANGULAR_KP = 0d;
         public const double PLANNER_PID_POSITION_ANGULAR_KI = 0d;
-        public const double PLANNER_PID_POSITION_ANGULAR_KD = 1.1d;  
-        public const double PLANNER_PID_POSITION_ANGULAR_MAX_KP = 10d * Math.PI;
-        public const double PLANNER_PID_POSITION_ANGULAR_MAX_KI = 0d * Math.PI;
-        public const double PLANNER_PID_POSITION_ANGULAR_MAX_KD = 5d * Math.PI;
+        public const double PLANNER_PID_POSITION_ANGULAR_KD = 1d;  
+        public const double PLANNER_PID_POSITION_ANGULAR_MAX_KP = 20d * Math.PI;
+        public const double PLANNER_PID_POSITION_ANGULAR_MAX_KI = 20d * Math.PI;
+        public const double PLANNER_PID_POSITION_ANGULAR_MAX_KD = 20d * Math.PI;
 
         public const double ROBOT_ENCODER_DIST_WHEELS = 0.297d; 
         public const double ROBOT_ENCODER_WHEELS_DIAMETER = 0.0426d;

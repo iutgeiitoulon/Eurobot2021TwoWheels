@@ -85,6 +85,8 @@ namespace StrategyManagerProjetEtudiantNS
         }
         private void IOValues(bool jack, bool team)
         {
+            if (taskStrategy == null)
+                return;
             taskStrategy.Jack = jack;
             OnSetupTeamColor(team ? TeamColor.Yellow : TeamColor.Blue);
         }
