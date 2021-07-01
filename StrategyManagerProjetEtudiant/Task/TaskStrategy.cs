@@ -99,6 +99,7 @@ namespace StrategyManagerProjetEtudiantNS
                             }
                             else
                             {
+                                state = TaskStrategyState.InitialPositioning;
                                 if (parentManager.localWorldMap == null)
                                     break;
                                 if (parentManager.localWorldMap.Fields == null)

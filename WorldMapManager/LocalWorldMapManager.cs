@@ -37,23 +37,22 @@ namespace WorldMapManager
 
         public void OnUpdateHistoricalLocation(Location location)
         {
-            if (localWorldMap.RobotHistorical.Count != 0)
-            {
-                Location lastHistorical = localWorldMap.RobotHistorical[localWorldMap.RobotHistorical.Count - 1];
+            //if (localWorldMap.RobotHistorical.Count != 0)
+            //{
+            //    Location lastHistorical = localWorldMap.RobotHistorical[localWorldMap.RobotHistorical.Count - 1];
 
-                PointD p1 = new PointD(location.X, location.Y);
-                PointD p2 = new PointD(lastHistorical.X, lastHistorical.Y);
+            //    PointD p1 = new PointD(location.X, location.Y);
+            //    PointD p2 = new PointD(lastHistorical.X, lastHistorical.Y);
 
-                double distance = Toolbox.Distance(p1, p2);
-                if (distance >= ConstVar.MINIMAL_WORLD_HISTORICAL_DIST)
-                {
-                    localWorldMap.RobotHistorical.Add(location);
-                    OnNewHistoricalPositionEvent?.Invoke(this, new LocationArgs() { RobotId = localWorldMap.RobotId, Location = location });
-                }
+            //    double distance = Toolbox.Distance(p1, p2);
+            //    if (distance >= ConstVar.MINIMAL_WORLD_HISTORICAL_DIST)
+            //    {
+            //        localWorldMap.RobotHistorical.Add(location);
+            //        OnNewHistoricalPositionEvent?.Invoke(this, new LocationArgs() { RobotId = localWorldMap.RobotId, Location = location });
+            //    }
 
-            }
-            OnLocalWorldMapChange();
-            OnLocalWorldMapChange();
+            //}
+            //OnLocalWorldMapChange();
         }
 
         public void AddNewWaypoints(Location location)

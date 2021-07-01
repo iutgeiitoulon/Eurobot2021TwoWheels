@@ -135,12 +135,10 @@ namespace TrajectoryPlannerNs
 
                 case GhostState.Arret:
                     if (Math.Abs(GhostLocation.Vx) >= ConstVar.PLANNER_LINEAR_SPEED_MIN)
-                    {
                         if (isReversed)
                             GhostLocation.Vx += ConstVar.PLANNER_MAX_LINEAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
                         else
                             GhostLocation.Vx -= ConstVar.PLANNER_MAX_LINEAR_ACCELERATION / ConstVar.ODOMETRY_FREQ_IN_HZ;
-                    }
                     else
                     {
                         ResetGhost();
