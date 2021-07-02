@@ -66,7 +66,9 @@ namespace StrategyManagerProjetEtudiantNS
             parentManager.taskReturnHarbor.Init();
             parentManager.taskActivateBeacon.Init();
             parentManager.taskCalibrate.Init();
-            state = TaskStrategyState.InitialPositioning;
+
+            if (state != TaskStrategyState.InitialPositioning && state != TaskStrategyState.InitialPositioningWaiting)
+                state = TaskStrategyState.InitialPositioning;
         }
 
         void TaskThreadProcess()
@@ -94,6 +96,22 @@ namespace StrategyManagerProjetEtudiantNS
                                 parentManager.OnEnableDisableMotors(true);
                                 state = TaskStrategyState.PushFlags;
                                 StartSw();
+                            }
+                            else
+                            {
+                                if (parentManager.localWorldMap == null)
+                                    break;
+                                if (parentManager.localWorldMap.Fields == null)
+                                    break;
+
+                                RectangleOriented spawn = parentManager.localWorldMap.Fields.Where(x => x.Type == FieldType.StartZone).FirstOrDefault().Shape;
+
+                                if (spawn != null)
+                                {
+                                    PointD home_point = new PointD(spawn.Center.X, spawn.Center.Y);
+                                    Location pos = new Location(home_point.X, home_point.Y, Toolbox.Angle(home_point, new PointD(0, 0)), 0, 0, 0);
+                                    parentManager.OnSetActualLocation(pos);
+                                }
                             }
                             break;
                         case TaskStrategyState.Calibrate1:

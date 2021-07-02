@@ -262,6 +262,7 @@ namespace RobotEurobot2Roues
             strategyManager.On2WheelsIndependantSpeedPIDSetupEvent += msgGenerator.GenerateMessage2WheelsIndependantSpeedPIDSetup;
             strategyManager.OnEnableDisableIndependant2WheelsPIDGainDebugEvent += msgGenerator.GenerateMessageSpeedPIDEnableDebugErrorCorrectionConsigne;
 
+            strategyManager.OnSetActualLocationEvent += localWorldMapManager.OnRobotLocationArgs;
             strategyManager.OnDestinationReachedEvent += localWorldMapManager.OnDestinationReached;
             strategyManager.OnWaypointsReachedEvent += localWorldMapManager.OnWaypointReached;
             strategyManager.OnNewFieldsEvent += localWorldMapManager.OnNewFieldsReceived;

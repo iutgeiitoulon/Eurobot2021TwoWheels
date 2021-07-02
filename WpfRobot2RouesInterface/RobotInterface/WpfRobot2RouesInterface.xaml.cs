@@ -26,7 +26,7 @@ namespace RobotInterface
     public partial class WpfRobot2RouesInterface : Window
     {
         GameMode gameMode;
-        System.Timers.Timer timerAffichage = new System.Timers.Timer(100);
+        System.Timers.Timer timerAffichage = new System.Timers.Timer(50);
 
         int nbMsgSent = 0;
 
