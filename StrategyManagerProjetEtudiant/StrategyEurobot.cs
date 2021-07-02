@@ -39,12 +39,12 @@ namespace StrategyManagerProjetEtudiantNS
 
         public override void InitStrategy()
         {
-            taskHerkulexTest = new TaskHerkulexTest(this);
+            /*taskHerkulexTest = new TaskHerkulexTest(this);
             taskWindFlag = new TaskWindFlag(this);
             taskReturnHarbor = new TaskReturnHarbor(this);
             taskActivateBeacon = new TaskActivateBeacon(this);
             taskCalibrate = new TaskCalibrate(this);
-            taskStrategy = new TaskStrategy(this);
+            taskStrategy = new TaskStrategy(this);*/
 
             configTimer = new Timer(1000);
             configTimer.Elapsed += ConfigTimer_Elapsed;

@@ -62,9 +62,23 @@ namespace WorldMapManager
             OnLocalWorldMapChange();
         }
 
+        public void AddNewWaypoints(List<Location> waypoints)
+        {
+            foreach (Location waypoint in waypoints)
+                localWorldMap.WaypointLocations.Add(waypoint);
+            OnLocalWorldMapChange();
+        }
+
         public void SetDestinationLocation(Location location)
         {
             localWorldMap.DestinationLocation = location;
+            OnDestinationChange();
+            OnLocalWorldMapChange();
+        }
+
+        public void SetRobotLocation(Location location)
+        {
+            localWorldMap.RobotLocation = location;
             OnLocalWorldMapChange();
         }
 
@@ -138,6 +152,11 @@ namespace WorldMapManager
             AddNewWaypoints(new Location(point.X, point.Y, 0, 0, 0, 0));
         }
 
+        public void AddNewWaypointsEvent(object sender, LocationListArgs waypoints)
+        {
+            AddNewWaypoints(waypoints.LocationList);
+        }
+
         public void SetDestinationLocationEvent(object sender, Location location)
         {
             SetDestinationLocation(location);
@@ -146,6 +165,11 @@ namespace WorldMapManager
         public void SetDestinationLocationEvent(object sender, PointD point)
         {
             SetDestinationLocation(new Location(point.X, point.Y, 0, 0, 0, 0));
+        }
+
+        public void SetRobotLocationEvent(object sender, PointD point)
+        {
+            SetRobotLocation(new Location(point.X, point.Y, 0, 0, 0, 0));
         }
 
         public void ResetWaypointDestinationEvent(object sender, PointD point)
@@ -331,6 +355,7 @@ namespace WorldMapManager
         public event EventHandler<LocationArgs> OnNewWaypointLocationEvent;
         public event EventHandler<LocationArgs> OnResetRobotEvent;
         public event EventHandler<LocalWorldMap> OnLocalWorldMapEvent;
+        public event EventHandler<LocalWorldMap> OnDestinationChangeEvent;
         public event EventHandler<DataReceivedArgs> OnMulticastSendLocalWorldMapEvent;
         public event EventHandler<LocalWorldMap> OnLocalWorldMapToGlobalWorldMapGeneratorEvent;
         public event EventHandler<LocalWorldMap> OnLocalWorldMapForDisplayOnlyEvent;
@@ -338,6 +363,11 @@ namespace WorldMapManager
         public virtual void OnLocalWorldMapChange()
         {
             OnLocalWorldMapEvent?.Invoke(this, localWorldMap);
+        }
+
+        public virtual void OnDestinationChange()
+        {
+            OnDestinationChangeEvent?.Invoke(this, localWorldMap);
         }
 
         public virtual void OnMulticastSendLocalWorldMapCommand(byte[] data)

@@ -295,6 +295,8 @@ namespace Utilities
         public virtual double Vy { get; set; }
         [Index(5)]
         public virtual double Vtheta { get; set; }
+        [Index(6)]
+        public virtual PointD PointD { get; set; }
 
         public Location()
         {
@@ -308,6 +310,7 @@ namespace Utilities
             Vx = vx;
             Vy = vy;
             Vtheta = vtheta;
+            PointD = new PointD(X, Y);
         }
     }
 

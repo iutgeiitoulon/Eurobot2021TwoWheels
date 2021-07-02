@@ -17,6 +17,7 @@ using WorldMap;
 using Utilities;
 using Lidar;
 using LidarProcessNS;
+using TrajectoryGeneratorNs;
 using TrajectoryPlannerNs;
 using WpfMatchInterface;
 using LogRecorderNs;
@@ -52,6 +53,7 @@ namespace RobotEurobot2Roues
 
         static FieldSetter fieldSetter;
 
+        static TrajectoryGenerator trajectoryGenerator;
         static TrajectoryPlanner trajectoryPlanner;
         static TrajectoryAvoidance trajectoryAvoidance;
 
@@ -113,6 +115,7 @@ namespace RobotEurobot2Roues
             positioning2Wheels = new Positioning2Wheels(robotId);
             positionManager = new PositionManager(robotId);
 
+            trajectoryGenerator = new TrajectoryGenerator();
             trajectoryPlanner = new TrajectoryPlanner(robotId);
             trajectoryAvoidance = new TrajectoryAvoidance(robotId);
 
@@ -235,7 +238,12 @@ namespace RobotEurobot2Roues
             #endregion
 
             #region Position2Wheels
-            positioning2Wheels.OnCalculatedLocationEvent += positionManager.OnOdometryPositionReceived;          
+            positioning2Wheels.OnCalculatedLocationEvent += positionManager.OnOdometryPositionReceived;
+            #endregion
+
+            #region TrajectoryGenerator
+            trajectoryGenerator.OnTrajectoryGenerated += localWorldMapManager.AddNewWaypointsEvent;
+            localWorldMapManager.OnDestinationChangeEvent += trajectoryGenerator.GenerateTrajectory; // For graphic visualization
             #endregion
 
             #region TrajectoryPlanner
@@ -381,7 +389,7 @@ namespace RobotEurobot2Roues
             interfaceRobot.OnEnableSpeedPIDEnableDebugErrorCorrectionConsigneFromInterfaceEvent += msgGenerator.GenerateMessageSpeedPIDEnableDebugErrorCorrectionConsigne;
             interfaceRobot.OnEnablePowerMonitoringDataFromInterfaceGeneratedEvent += msgGenerator.GenerateMessageEnablePowerMonitoring;
 
-            interfaceRobot.OnWaypointLeftDoubleClick += localWorldMapManager.AddNewWaypointsEvent;
+            interfaceRobot.OnWaypointLeftDoubleClick += localWorldMapManager.SetRobotLocationEvent;
             interfaceRobot.OnWaypointRightClick += localWorldMapManager.SetDestinationLocationEvent;
             interfaceRobot.OnWaypointWheelClick += localWorldMapManager.ResetWaypointDestinationEvent;
             #endregion
@@ -399,7 +407,6 @@ namespace RobotEurobot2Roues
             /// Affichage des infos en provenance du strategyManager
             strategyManager.OnTextMessageEvent += interfaceRobot.AppendConsole;
 
-            
             localWorldMapManager.OnLocalWorldMapEvent += interfaceRobot.OnLocalWorldMapWayPointEvent;
             localWorldMapManager.OnLocalWorldMapEvent += interfaceRobot.OnLocalWorldMapStrategyEvent;
 
