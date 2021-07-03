@@ -113,13 +113,13 @@ namespace StrategyManagerProjetEtudiantNS.Task
                                     int comp = 0;
                                     if (actuator == PololuActuators.Turbine1)
                                         comp = _CompTrb1;
-                                    if (actuator == PololuActuators.Turbine1)
+                                    if (actuator == PololuActuators.Turbine2)
                                         comp = _CompTrb2;
-                                    if (actuator == PololuActuators.Turbine1)
+                                    if (actuator == PololuActuators.Turbine3)
                                         comp = _CompTrb3;
-                                    if (actuator == PololuActuators.Turbine1)
+                                    if (actuator == PololuActuators.Turbine4)
                                         comp = _CompTrb4;
-                                    if (actuator == PololuActuators.Turbine1)
+                                    if (actuator == PololuActuators.Turbine5)
                                         comp = _CompTrb5;
 
                                     parent.OnPololuSetUs((byte)kvPair.Key, (ushort)(kvPair.Value + comp));
