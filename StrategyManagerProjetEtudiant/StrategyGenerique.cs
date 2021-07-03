@@ -140,6 +140,7 @@ namespace StrategyManagerProjetEtudiantNS
         public event EventHandler<Location> OnWaypointsReachedEvent;
         public event EventHandler<Location> OnDestinationReachedEvent;
         public event EventHandler<LocationArgs> OnSetActualLocationEvent;
+        public event EventHandler<EventArgs> OnResetGhostLocationEvent;
         public event EventHandler<PositionArgs> OnSetWantedLocationEvent;
         public event EventHandler<List<Location>> OnSetWaypointsListEvent;
         public event EventHandler<Location> OnSetNewWaypointEvent;
@@ -361,6 +362,11 @@ namespace StrategyManagerProjetEtudiantNS
         public void OnSetActualLocation(Location location)
         {
             OnSetActualLocationEvent?.Invoke(this, new LocationArgs { RobotId = robotId , Location = location });
+        }
+
+        public void OnResetGhostPosition()
+        {
+            OnResetGhostLocationEvent?.Invoke(this, new EventArgs());
         }
 
         public void OnSetWantedLocation(Location location, bool isRotating = false)

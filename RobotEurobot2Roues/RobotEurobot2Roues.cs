@@ -273,6 +273,7 @@ namespace RobotEurobot2Roues
 
             strategyManager.OnCalibrationAskedEvent += positionManager.OnCalibatrionAsked;
 
+            strategyManager.OnResetGhostLocationEvent += trajectoryPlanner.OnResetOrder;
             strategyManager.OnSetWantedLocationEvent += trajectoryPlanner.SetDestination;
             strategyManager.OnEnableDisableMotorsEvent += trajectoryPlanner.OnEnableDisableAsservReceived;
             strategyManager.OnEnableDisableEndRotationEvent += trajectoryPlanner.OnEndRotateEnableDisableReceived;
