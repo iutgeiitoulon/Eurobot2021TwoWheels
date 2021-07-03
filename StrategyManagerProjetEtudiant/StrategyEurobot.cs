@@ -45,6 +45,7 @@ namespace StrategyManagerProjetEtudiantNS
             taskActivateBeacon = new TaskActivateBeacon(this);
             taskCalibrate = new TaskCalibrate(this);
             taskStrategy = new TaskStrategy(this);
+            
 
             configTimer = new Timer(1000);
             configTimer.Elapsed += ConfigTimer_Elapsed;

@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 
 namespace Constants
 {
+    public enum PololuActuators
+    {
+        ServoAscenseur = 0,
+        Turbine1 = 1,
+        Turbine2 = 2,
+        Turbine3 = 3,
+        Turbine4 = 4,
+        Turbine5 = 5
+    }
     public enum TeamId
     {
         Team1 = 10,
