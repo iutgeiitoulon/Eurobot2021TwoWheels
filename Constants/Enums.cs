@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace Constants
 {
+    public enum TurbineState
+    {
+        Off = 1000,
+        PrehensionHigh = 1300,
+        PreshensionLow = 1200
+    }
+
     public enum TeamColor
     {
         Yellow,

@@ -123,7 +123,7 @@ namespace Protocol
                 case (ushort)Commands.PC2R_HerkulexForward:
                     return -1;
                 case (ushort)Commands.PC2R_PololuServoSetPosition:
-                    return -2;
+                    return -1;
                 default:
                     return -2;
             }

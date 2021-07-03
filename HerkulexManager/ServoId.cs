@@ -20,7 +20,7 @@ namespace HerkulexManagerNs
 
     public enum Positions
     {
-        RackVertical = 790,
+        RackVertical = 770,
         RackHorizontal = 510,
         DapeauLeve = 280,
         DrapeauManche = 560

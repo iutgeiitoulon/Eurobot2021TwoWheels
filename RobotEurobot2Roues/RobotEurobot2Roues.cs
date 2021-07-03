@@ -280,7 +280,8 @@ namespace RobotEurobot2Roues
 
             strategyManager.AddServoEvent += herkulexManager.AddServo;
             strategyManager.SetTorqueModeEvent += herkulexManager.OnSetTorqueMode;
-            
+            strategyManager.SetPositionEvent += herkulexManager.OnSetPosition;
+            strategyManager.PololuSetUsEvent += msgGenerator.GenerateMessagePololuSetServoUs;
             
 
             ConsoleFormat.PrintStrategyBoot();

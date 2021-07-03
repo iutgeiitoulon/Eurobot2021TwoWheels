@@ -255,7 +255,7 @@ namespace ConsoleFormatNS
                 Console.WriteLine();
             }
             Console.BackgroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("/!\\ WARNING AN UNKNOW FUNCTION HAD BEEN SENT /!\\");
+            Console.WriteLine("/!\\ WARNING AN UNKNOWN FUNCTION HAD BEEN SENT /!\\");
             Console.ResetColor();
         }
 
