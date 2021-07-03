@@ -361,8 +361,8 @@ namespace TrajectoryPlannerNs
         {
             if (e)
             {
-                isUrgence = true;
-                state = GhostState.Arret;
+                //isUrgence = true;
+                //state = GhostState.Arret;
             }
             else 
             {

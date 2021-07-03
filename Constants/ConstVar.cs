@@ -70,7 +70,7 @@ namespace Constants
         public const double PLANNER_MAJORATION_LINEAR_MAX = 1.70d;
         public const double PLANNER_MAJORATION_LINEAR_COEFF = 0.45d;
 
-        public const double PLANNER_MAX_SPACING = 0.3d;
+        public const double PLANNER_MAX_SPACING = 0.4d;
 
         public const double PLANNER_LINEAR_ROBOT_DEAD_ZONE = 0.05d;
         public const double PLANNER_ANGULAR_ROBOT_DEAD_ZONE = 0.075d;
@@ -79,9 +79,9 @@ namespace Constants
         public const double PLANNER_ANGULAR_GHOST_DEAD_ZONE = 0.075d;
         public const double PLANNER_LINEAR_SPEED_MIN = 0.02d;
 
-        public const double PLANNER_PID_POSITION_LINEAR_KP = 0d;
+        public const double PLANNER_PID_POSITION_LINEAR_KP = 15d;
         public const double PLANNER_PID_POSITION_LINEAR_KI = 0d;
-        public const double PLANNER_PID_POSITION_LINEAR_KD = 0d;
+        public const double PLANNER_PID_POSITION_LINEAR_KD = 2.1d;
         public const double PLANNER_PID_POSITION_LINEAR_MAX_KP = 5d;
         public const double PLANNER_PID_POSITION_LINEAR_MAX_KI = 0d;
         public const double PLANNER_PID_POSITION_LINEAR_MAX_KD = 5d;
