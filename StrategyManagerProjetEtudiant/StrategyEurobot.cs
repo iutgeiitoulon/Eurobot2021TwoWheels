@@ -20,13 +20,10 @@ namespace StrategyManagerProjetEtudiantNS
         
         Timer configTimer;
 
-        public TaskStrategy taskStrategy;
-        public TaskCalibrate taskCalibrate;
-        public TaskWindFlag taskWindFlag;
-        public TaskReturnHarbor taskReturnHarbor;
-        public TaskActivateBeacon taskActivateBeacon;
-        public TaskHerkulexTest taskHerkulexTest;
+       
+        public TaskTurbine taskTurbine;
 
+        
 
         public StrategyEurobot(int robotId, int teamId, string multicastIpAddress) : base(robotId, teamId, multicastIpAddress)
         {
@@ -39,15 +36,10 @@ namespace StrategyManagerProjetEtudiantNS
 
         public override void InitStrategy()
         {
-            taskHerkulexTest = new TaskHerkulexTest(this);
-            taskWindFlag = new TaskWindFlag(this);
-            taskReturnHarbor = new TaskReturnHarbor(this);
-            taskActivateBeacon = new TaskActivateBeacon(this);
-            taskCalibrate = new TaskCalibrate(this);
-            taskStrategy = new TaskStrategy(this);
-            
+            taskTurbine = new TaskTurbine(this);
 
-            configTimer = new Timer(1000);
+
+           configTimer = new Timer(1000);
             configTimer.Elapsed += ConfigTimer_Elapsed;
             configTimer.Start();          
         }
@@ -86,9 +78,9 @@ namespace StrategyManagerProjetEtudiantNS
         }
         private void IOValues(bool jack, bool team)
         {
-            if (taskStrategy == null)
-                return;
-            taskStrategy.Jack = jack;
+            //    if (taskStrategy == null)
+            //        return;
+            //    taskStrategy.Jack = jack;
             OnSetupTeamColor(team ? TeamColor.Yellow : TeamColor.Blue);
         }
 

@@ -80,8 +80,8 @@ namespace PositionManagerNs
             else
                 errorCount = 0;
 
-            if (errorCount >= 10)
-                askForCalibration = true;
+            //if (errorCount >= 10)
+            //    askForCalibration = true;
         }
 
 

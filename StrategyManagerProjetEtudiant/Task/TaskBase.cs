@@ -21,13 +21,13 @@ namespace StrategyManagerProjetEtudiantNS
         public bool isRunning = false;
         int taskPeriod = 20;
         bool exitRequested = false;
-        public StrategyGenerique parent;
+        public StrategyEurobot parent;
 
         public TaskBase()
         {
             InitTaskThread();
         }
-        public TaskBase(StrategyGenerique p)
+        public TaskBase(StrategyEurobot p)
         {
             parent = p;
             InitTaskThread();
