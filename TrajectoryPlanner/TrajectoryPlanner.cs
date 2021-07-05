@@ -61,6 +61,15 @@ namespace TrajectoryPlannerNs
             PIDPositionReset();
         }
 
+        public void InitRobotPosition(object sender, Location location)
+        {
+            RobotLocation = new Location(location.X, location.Y, location.Theta, 0, 0, 0);
+            WantedDestination = new Location(location.X, location.Y, location.Theta, 0, 0, 0);
+            GhostLocation = new Location(location.X, location.Y, location.Theta, 0, 0, 0);
+            state = GhostState.Angular;
+            PIDPositionReset();
+        }
+
 
 
         public void SelectMajoration(double min, double max, double coef)
@@ -320,7 +329,7 @@ namespace TrajectoryPlannerNs
                 PID_Position_Angulaire.ResetPID(0);
             }
         }
-
+        
         #endregion
 
         #region Inputs Callback
@@ -382,6 +391,7 @@ namespace TrajectoryPlannerNs
         {
             OnGhostLocationEvent?.Invoke(this, new LocationArgs { RobotId = id, Location = loc });
         }
+
 
         public virtual void OnSpeedConsigneToRobot(int id, double Vxeaire, double vAngulaire)
         {

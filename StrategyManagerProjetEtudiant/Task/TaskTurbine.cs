@@ -30,7 +30,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         public TaskTurbine(StrategyEurobot parent) : base(parent)
         {
-
+            Init();
         }
 
         public override void Init()
@@ -41,47 +41,56 @@ namespace StrategyManagerProjetEtudiantNS
             _CompTrb3 = 0;
             _CompTrb4 = 0;
             _CompTrb5 = 0;
-
-            //init du dico
-            Turbines.Add(PololuActuators.Turbine1, TurbineState.Off);
-            Turbines.Add(PololuActuators.Turbine2, TurbineState.Off);
-            Turbines.Add(PololuActuators.Turbine3, TurbineState.Off);
-            Turbines.Add(PololuActuators.Turbine4, TurbineState.Off);
-            Turbines.Add(PololuActuators.Turbine5, TurbineState.Off);
+            lock (Turbines)
+            {
+                //init du dico
+                Turbines.Add(PololuActuators.Turbine1, TurbineState.Off);
+                Turbines.Add(PololuActuators.Turbine2, TurbineState.Off);
+                Turbines.Add(PololuActuators.Turbine3, TurbineState.Off);
+                Turbines.Add(PololuActuators.Turbine4, TurbineState.Off);
+                Turbines.Add(PololuActuators.Turbine5, TurbineState.Off);
+            }
 
             //init des turbines
-            parent.OnPololuSetUs((byte)PololuActuators.Turbine1, (ushort)TurbineState.Off);
-            parent.OnPololuSetUs((byte)PololuActuators.Turbine2, (ushort)TurbineState.Off);
-            parent.OnPololuSetUs((byte)PololuActuators.Turbine3, (ushort)TurbineState.Off);
-            parent.OnPololuSetUs((byte)PololuActuators.Turbine4, (ushort)TurbineState.Off);
-            parent.OnPololuSetUs((byte)PololuActuators.Turbine5, (ushort)TurbineState.Off);
+            parent.OnPololuSetUs(PololuActuators.Turbine1, (ushort)TurbineState.Off);
+            parent.OnPololuSetUs(PololuActuators.Turbine2, (ushort)TurbineState.Off);
+            parent.OnPololuSetUs(PololuActuators.Turbine3, (ushort)TurbineState.Off);
+            parent.OnPololuSetUs(PololuActuators.Turbine4, (ushort)TurbineState.Off);
+            parent.OnPololuSetUs(PololuActuators.Turbine5, (ushort)TurbineState.Off);
         }
 
         //TaskMethods
 
         public void SetTurbineState(PololuActuators id, TurbineState state)
         {
-            Turbines.AddOrUpdate(id, state);
+            lock(Turbines)
+                Turbines.AddOrUpdate(id, state);
             taskState = TaskState.EditState;
         }
 
         public void TurnAllOff()
         {
-            Turbines.AddOrUpdate(PololuActuators.Turbine1, TurbineState.Off);
-            Turbines.AddOrUpdate(PololuActuators.Turbine2, TurbineState.Off);
-            Turbines.AddOrUpdate(PololuActuators.Turbine3, TurbineState.Off);
-            Turbines.AddOrUpdate(PololuActuators.Turbine4, TurbineState.Off);
-            Turbines.AddOrUpdate(PololuActuators.Turbine5, TurbineState.Off);
+            lock (Turbines)
+            {
+                Turbines.AddOrUpdate(PololuActuators.Turbine1, TurbineState.Off);
+                Turbines.AddOrUpdate(PololuActuators.Turbine2, TurbineState.Off);
+                Turbines.AddOrUpdate(PololuActuators.Turbine3, TurbineState.Off);
+                Turbines.AddOrUpdate(PololuActuators.Turbine4, TurbineState.Off);
+                Turbines.AddOrUpdate(PololuActuators.Turbine5, TurbineState.Off);
+            }
             taskState = TaskState.EditState;
         }
 
         public void SetAllStatesTo(TurbineState state)
         {
-            Turbines.AddOrUpdate(PololuActuators.Turbine1, state);
-            Turbines.AddOrUpdate(PololuActuators.Turbine2, state);
-            Turbines.AddOrUpdate(PololuActuators.Turbine3, state);
-            Turbines.AddOrUpdate(PololuActuators.Turbine4, state);
-            Turbines.AddOrUpdate(PololuActuators.Turbine5, state);
+            lock (Turbines)
+            {
+                Turbines.AddOrUpdate(PololuActuators.Turbine1, state);
+                Turbines.AddOrUpdate(PololuActuators.Turbine2, state);
+                Turbines.AddOrUpdate(PololuActuators.Turbine3, state);
+                Turbines.AddOrUpdate(PololuActuators.Turbine4, state);
+                Turbines.AddOrUpdate(PololuActuators.Turbine5, state);
+            }
             taskState = TaskState.EditState;
         }
         //---
@@ -99,22 +108,25 @@ namespace StrategyManagerProjetEtudiantNS
                     switch (subState)
                     {
                         case SubTaskState.Entry:
-                            foreach (KeyValuePair<PololuActuators, TurbineState> kvPair in Turbines)
+                            lock (Turbines)
                             {
-                                PololuActuators actuator = kvPair.Key;
-                                int comp = 0;
-                                if (actuator == PololuActuators.Turbine1)
-                                    comp = _CompTrb1;
-                                if (actuator == PololuActuators.Turbine2)
-                                    comp = _CompTrb2;
-                                if (actuator == PololuActuators.Turbine3)
-                                    comp = _CompTrb3;
-                                if (actuator == PololuActuators.Turbine4)
-                                    comp = _CompTrb4;
-                                if (actuator == PololuActuators.Turbine5)
-                                    comp = _CompTrb5;
+                                foreach (KeyValuePair<PololuActuators, TurbineState> kvPair in Turbines)
+                                {
+                                    PololuActuators actuator = kvPair.Key;
+                                    int comp = 0;
+                                    if (actuator == PololuActuators.Turbine1)
+                                        comp = _CompTrb1;
+                                    if (actuator == PololuActuators.Turbine2)
+                                        comp = _CompTrb2;
+                                    if (actuator == PololuActuators.Turbine3)
+                                        comp = _CompTrb3;
+                                    if (actuator == PololuActuators.Turbine4)
+                                        comp = _CompTrb4;
+                                    if (actuator == PololuActuators.Turbine5)
+                                        comp = _CompTrb5;
 
-                                parent.OnPololuSetUs((byte)kvPair.Key, (ushort)(kvPair.Value + comp));
+                                    parent.OnPololuSetUs(kvPair.Key, (ushort)(kvPair.Value + comp));
+                                }
                             }
                             break;
 

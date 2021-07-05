@@ -17,13 +17,18 @@ namespace StrategyManagerProjetEtudiantNS
     {
         Stopwatch sw = new Stopwatch();
         int robotId, teamId;
-        
+        public bool isIOReceived { private set; get; } = false;
+
+
         Timer configTimer;
 
-       
+        public TaskArm taskArm;
+        public TaskRaiseFlag taskRaiseFlag;
         public TaskTurbine taskTurbine;
+        public TaskRackPrehension taskRackPrehension;
+        public TaskMainStrategy taskMainStrategy;
 
-        
+
 
         public StrategyEurobot(int robotId, int teamId, string multicastIpAddress) : base(robotId, teamId, multicastIpAddress)
         {
@@ -31,17 +36,24 @@ namespace StrategyManagerProjetEtudiantNS
             this.teamId = teamId;
             localWorldMap = new LocalWorldMap(robotId, teamId);
 
-            
+
         }
 
         public override void InitStrategy()
         {
+            taskArm = new TaskArm(this);
+            taskRaiseFlag = new TaskRaiseFlag(this);
+            taskRackPrehension = new TaskRackPrehension(this);
             taskTurbine = new TaskTurbine(this);
 
 
-           configTimer = new Timer(1000);
+
+            //en dernier
+            taskMainStrategy = new TaskMainStrategy(this);
+
+            configTimer = new Timer(1000);
             configTimer.Elapsed += ConfigTimer_Elapsed;
-            configTimer.Start();          
+            configTimer.Start();
         }
 
         private void ConfigTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -61,10 +73,10 @@ namespace StrategyManagerProjetEtudiantNS
                 ConstVar.EUROBOT_MATRIX_THETA_COEFF
             );
 
-            
+
 
             //On envoie périodiquement les réglages du PID de vitesse embarqué
-            On2WheelsIndependantSpeedPIDSetup( 
+            On2WheelsIndependantSpeedPIDSetup(
                 ConstVar.PID_SPEED_MOTOR1_KP, ConstVar.PID_SPEED_MOTOR1_KI, ConstVar.PID_SPEED_MOTOR1_KD,
                 ConstVar.PID_SPEED_MOTOR2_KP, ConstVar.PID_SPEED_MOTOR2_KI, ConstVar.PID_SPEED_MOTOR2_KD,
                 ConstVar.PID_SPEED_MOTOR1_KP_MAX, ConstVar.PID_SPEED_MOTOR1_KI_MAX, ConstVar.PID_SPEED_MOTOR1_KD_MAX,
@@ -78,9 +90,9 @@ namespace StrategyManagerProjetEtudiantNS
         }
         private void IOValues(bool jack, bool team)
         {
-            //    if (taskStrategy == null)
-            //        return;
-            //    taskStrategy.Jack = jack;
+            if (taskMainStrategy == null)
+                return;
+            taskMainStrategy.Jack = jack;
             OnSetupTeamColor(team ? TeamColor.Yellow : TeamColor.Blue);
         }
 
@@ -95,6 +107,7 @@ namespace StrategyManagerProjetEtudiantNS
             bool config4 = (configStatus & 16) != 0;
 
             IOValues(jack, config1);
+            isIOReceived = true;
         }
 
         /*********************************** Events de sortie **********************************************/

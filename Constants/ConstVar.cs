@@ -96,5 +96,9 @@ namespace Constants
         public const double ROBOT_ENCODER_DIST_WHEELS = 0.297d; 
         public const double ROBOT_ENCODER_WHEELS_DIAMETER = 0.0426d;
         public const double ROBOT_ENCODER_POINT_TO_METER = ROBOT_ENCODER_WHEELS_DIAMETER * Math.PI / 8192.0d;
+
+
+        public const byte HKLX_PLAYTIME = 50;
+
     }
 }

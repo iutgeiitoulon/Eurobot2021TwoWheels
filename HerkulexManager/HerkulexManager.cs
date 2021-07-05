@@ -91,12 +91,14 @@ namespace HerkulexManagerNs
         /// <param name="mode">JOG mode</param>
         public void _AddServo(ServoId ID, HerkulexDescription.JOG_MODE mode)
         {
-            Servo servo = new Servo(ID, mode);
-            while (!Servos.TryAdd(ID, servo)) ; //ON tente l'ajout tant qu'il n'est pas validé
-            //reply to all packets
-            RAM_WRITE(ID, HerkulexDescription.RAM_ADDR.ACK_Policy, 1, 0x02); //reply to I_JOG / S_JOG
-            RecoverErrors(ID);
-            
+            if (!Servos.ContainsKey(ID))
+            {
+                Servo servo = new Servo(ID, mode);
+                while (!Servos.TryAdd(ID, servo)) ; //ON tente l'ajout tant qu'il n'est pas validé
+                                                    //reply to all packets
+                RAM_WRITE(ID, HerkulexDescription.RAM_ADDR.ACK_Policy, 1, 0x02); //reply to I_JOG / S_JOG
+                RecoverErrors(ID);
+            }
         }
 
         

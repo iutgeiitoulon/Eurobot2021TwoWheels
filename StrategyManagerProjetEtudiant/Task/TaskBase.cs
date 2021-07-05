@@ -70,18 +70,21 @@ namespace StrategyManagerProjetEtudiantNS
 
         private void TaskSubStateManager()
         {
-            /***************** NE PAS MODIFIER *********************/
-
-            if (subState == SubTaskState.Entry) //Assure qu'on ne reste qu'une itération en Entry
-                subState = SubTaskState.EnCours;
-            else if (subState == SubTaskState.Exit) //Assure qu'on ne reste qu'une itération en Exit
-                subState = SubTaskState.Entry;
-            if (exitRequested) //A faire absolument après les lignes précédentes
+            if (parent.isIOReceived)
             {
-                exitRequested = false;
-                subState = SubTaskState.Exit;
+                /***************** NE PAS MODIFIER *********************/
+
+                if (subState == SubTaskState.Entry) //Assure qu'on ne reste qu'une itération en Entry
+                    subState = SubTaskState.EnCours;
+                else if (subState == SubTaskState.Exit) //Assure qu'on ne reste qu'une itération en Exit
+                    subState = SubTaskState.Entry;
+                if (exitRequested) //A faire absolument après les lignes précédentes
+                {
+                    exitRequested = false;
+                    subState = SubTaskState.Exit;
+                }
+                /***************** FIN DU NE PAS MODIFIER ***************/
             }
-            /***************** FIN DU NE PAS MODIFIER ***************/
         }
     }
 

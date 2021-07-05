@@ -144,6 +144,7 @@ namespace StrategyManagerProjetEtudiantNS
         public event EventHandler<PositionArgs> OnSetWantedLocationEvent;
         public event EventHandler<List<Location>> OnSetWaypointsListEvent;
         public event EventHandler<Location> OnSetNewWaypointEvent;
+        public event EventHandler<Location> OnSetInitLocationEvent;
         public event EventHandler<Location> OnSetNewDestinationEvent;
         public event EventHandler<List<Field>> OnNewFieldsEvent;
         public event EventHandler<TeamColor> OnSetupTeamColorEvent;
@@ -160,21 +161,21 @@ namespace StrategyManagerProjetEtudiantNS
         //Polulu
         public event EventHandler<PololuServoArgs> PololuSetUsEvent;
 
-        public virtual void OnPololuSetUs(byte channel, ushort us)
+        public virtual void OnPololuSetUs(PololuActuators channel, ushort us)
         {
             PololuSetUsEvent?.Invoke(this, new PololuServoArgs
             {
-                ServoChannel = channel,
+                ServoChannel = (byte)channel,
                 ServoUs = us
             });
         }
 
-        public virtual void OnSetPosition(ServoId id, ushort targetPosition, byte playTime)
+        public virtual void OnSetHerkulexPosition(ServoId id, Positions targetPosition, byte playTime = ConstVar.HKLX_PLAYTIME)
         {
             SetPositionEvent?.Invoke(this, new TargetPositionEventArgs
             {
                 ID = id,
-                TargetPosition = targetPosition,
+                TargetPosition = (ushort)targetPosition,
                 PlayTime = playTime
             });
         }
@@ -203,7 +204,12 @@ namespace StrategyManagerProjetEtudiantNS
             OnDestinationEvent?.Invoke(this, new LocationArgs { RobotId = id, Location = location });
         }
 
-        
+        public virtual void OnSetInitLocation(Location location)
+        {
+            OnSetInitLocationEvent?.Invoke(this, location);
+        }
+
+
         public virtual void OnUpdateWorldMapDisplay(int id)
         {
             OnUpdateWorldMapDisplayEvent?.Invoke(this, new EventArgs());
@@ -369,11 +375,12 @@ namespace StrategyManagerProjetEtudiantNS
             OnResetGhostLocationEvent?.Invoke(this, new EventArgs());
         }
 
-        public void OnSetWantedLocation(Location location, bool isRotating = false)
+        public void OnSetWantedLocation(double x, double y, double theta,  bool isRotating = false)
         {
+            var wantedLocation = new Location(x, y, theta, 0, 0, 0);
             isDeplacementFinished = false;
             OnEnableDisableRotation(isRotating);
-            OnSetWantedLocationEvent?.Invoke(this, new PositionArgs { RobotId = robotId, X = location.X, Y = location.Y, Theta = location.Theta, Reliability = 0 });
+            OnSetWantedLocationEvent?.Invoke(this, new PositionArgs { RobotId = robotId, X = wantedLocation.X, Y = wantedLocation.Y, Theta = wantedLocation.Theta, Reliability = 0 });
         }
 
         public void OnSetWaypointsList(List<Location> list_of_location)
