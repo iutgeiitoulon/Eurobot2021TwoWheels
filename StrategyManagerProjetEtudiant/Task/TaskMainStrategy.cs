@@ -18,6 +18,7 @@ namespace StrategyManagerProjetEtudiantNS
             Idle,
             Turbine,
             GetPrivateRack,
+            TakeDownWindFlag,
             EndMatch,
             ReturnToHarbor
         }
@@ -37,20 +38,25 @@ namespace StrategyManagerProjetEtudiantNS
             ResetSubState();
             parent.OnAddServo(ServoId.Rack1, HerkulexDescription.JOG_MODE.positionControlJOG);
             parent.OnAddServo(ServoId.Rack2, HerkulexDescription.JOG_MODE.positionControlJOG);
+            parent.OnAddServo(ServoId.Drapeau, HerkulexDescription.JOG_MODE.positionControlJOG);
             Init();
         }
         public override void Init()
         {
             timestamp = DateTime.Now;
-            
+
+            parent.missionWindFlags.Init();
+            parent.missionGetPrivateRack.Init();
+            parent.missionReturnToHarbor.Init();
+            parent.missionRaiseFlag.Init();
+            parent.taskTurbine.Init();
+            parent.taskArm.Init();
+
             parent.OnResetGhostPosition();
             parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.Low);
+            parent.taskArm.SetArmDown();
             parent.taskRackPrehension.SetRackPositionToVertical();
             parent.taskTurbine.TurnAllOff();
-
-            parent.missionGetPrivateRack.Init();
-            parent.missionRaiseFlag.Init();
-            
         }
 
         public override void TaskStateMachine()
@@ -106,7 +112,7 @@ namespace StrategyManagerProjetEtudiantNS
                             case SubTaskState.Exit:
                                 parent.OnSetActualLocation(new Location(RobotInitialX, RobotInitialY, RobotInitialTheta, 0, 0, 0));
                                 parent.OnSetWantedLocation(RobotInitialX, RobotInitialY);
-                                state = GameState.GetPrivateRack;
+                                state = GameState.TakeDownWindFlag;
                                 timestamp = DateTime.Now;
                                 break;
                         }
@@ -117,9 +123,9 @@ namespace StrategyManagerProjetEtudiantNS
                         switch (subState)
                         {
                             case SubTaskState.Entry:
-                                Console.WriteLine("GOTO RACK PRIV JAUNE");
-                                parent.OnCalibatrionAsked();
-                                parent.OnEnableDisableMotors(true); 
+                                Console.WriteLine("GetPrivateRack");
+                                //parent.OnCalibatrionAsked();
+                                //parent.OnEnableDisableMotors(true); 
                                 parent.missionGetPrivateRack.Start();
 
                                 break;
@@ -136,18 +142,41 @@ namespace StrategyManagerProjetEtudiantNS
                         break;
                     #endregion
 
+                    #region WindFlags
+                    case GameState.TakeDownWindFlag:
+                        switch (subState)
+                        {
+                            case SubTaskState.Entry:
+                                Console.WriteLine("WindFlags");
+
+                                /// TEMP:
+                                parent.OnCalibatrionAsked();
+                                parent.OnEnableDisableMotors(true);
+                                parent.missionWindFlags.Start();
+                                break;
+
+                            case SubTaskState.EnCours:
+                                if (parent.missionWindFlags.isFinished)
+                                    ExitState();
+                                break;
+
+                            case SubTaskState.Exit:
+                                state = GameState.GetPrivateRack;
+                                break;
+                        }
+                        break;
+                    #endregion
                     #region 
                     case GameState.ReturnToHarbor:
                         switch (subState)
                         {
                             case SubTaskState.Entry:
                                 Console.WriteLine("ReturnToHarbor");
-                                PointD harbor = parent.localWorldMap.Fields.Where(x => x.Type == FieldType.StartZone).FirstOrDefault().Shape.Center;
-                                parent.OnSetWantedLocation(harbor.X, harbor.Y, false, Math.PI);
+                                parent.missionReturnToHarbor.Start();
                                 break;
 
                             case SubTaskState.EnCours:
-                                if (parent.isDeplacementFinished)
+                                if (parent.missionReturnToHarbor.isFinished)
                                     ExitState();
                                 break;
 

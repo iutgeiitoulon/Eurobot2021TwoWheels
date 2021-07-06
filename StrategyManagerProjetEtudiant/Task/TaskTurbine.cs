@@ -30,11 +30,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         public TaskTurbine(StrategyEurobot parent) : base(parent)
         {
-            Init();
-        }
 
-        public override void Init()
-        {
             //definition des compensations pour trim indépendemment la vitesse des turbines
             _CompTrb1 = 0;
             _CompTrb2 = 0;
@@ -50,6 +46,12 @@ namespace StrategyManagerProjetEtudiantNS
                 Turbines.Add(PololuActuators.Turbine4, TurbineState.Off);
                 Turbines.Add(PololuActuators.Turbine5, TurbineState.Off);
             }
+            
+        }
+
+        public override void Init()
+        {
+
 
             //init des turbines
             parent.OnPololuSetUs(PololuActuators.Turbine1, (ushort)TurbineState.Off);

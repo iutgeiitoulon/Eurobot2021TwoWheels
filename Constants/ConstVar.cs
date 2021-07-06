@@ -72,7 +72,7 @@ namespace Constants
 
         public const double PLANNER_MAX_SPACING = 0.4d;
 
-        public const double PLANNER_LINEAR_ROBOT_DEAD_ZONE = 0.01d;
+        public const double PLANNER_LINEAR_ROBOT_DEAD_ZONE = 0.2d;
         public const double PLANNER_ANGULAR_ROBOT_DEAD_ZONE = 0.095d;
 
         public const double PLANNER_LINEAR_GHOST_DEAD_ZONE = 0.005d;

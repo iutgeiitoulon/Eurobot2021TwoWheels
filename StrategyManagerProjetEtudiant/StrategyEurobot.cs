@@ -22,6 +22,8 @@ namespace StrategyManagerProjetEtudiantNS
 
         Timer configTimer;
 
+        public MissionWindFlags missionWindFlags;
+        public MissionReturnToHarbor missionReturnToHarbor;
         public MissionGetRackPrivate missionGetPrivateRack;
         public TaskArm taskArm;
         public TaskRaiseFlag missionRaiseFlag;
@@ -43,6 +45,8 @@ namespace StrategyManagerProjetEtudiantNS
 
         public override void InitStrategy()
         {
+            missionWindFlags = new MissionWindFlags(this);
+            missionReturnToHarbor = new MissionReturnToHarbor(this);
             missionGetPrivateRack = new MissionGetRackPrivate(this);
             missionRaiseFlag = new TaskRaiseFlag(this);
             taskArm = new TaskArm(this);
@@ -51,7 +55,7 @@ namespace StrategyManagerProjetEtudiantNS
 
 
 
-            //en dernier
+            // Last
             taskMainStrategy = new TaskMainStrategy(this);
 
             configTimer = new Timer(1000);

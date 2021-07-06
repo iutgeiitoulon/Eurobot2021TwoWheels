@@ -29,11 +29,26 @@ namespace StrategyManagerProjetEtudiantNS
             state = TaskArmState.Waiting;
         }
 
-        public void SetArmUp()
+        public void SetState(TaskArmState state)
         {
             ResetSubState();
             isFinished = false;
-            this.state = TaskArmState.Up;
+            this.state = state;
+        }
+
+        public void SetArmPush()
+        {
+            SetState(TaskArmState.Side);
+        }
+
+        public void SetArmUp()
+        {
+            SetState(TaskArmState.Up);
+        }
+
+        public void SetArmDown()
+        {
+            SetState(TaskArmState.Down);
         }
 
         public override void TaskStateMachine()
@@ -41,21 +56,50 @@ namespace StrategyManagerProjetEtudiantNS
             switch (state)
             {
                 case TaskArmState.Waiting:
-                    switch (subState)
-                    {
-                        case SubTaskState.Entry:
-                            break;
-                        case SubTaskState.EnCours:
-                            break;
-                        case SubTaskState.Exit:
-                            break;
-                    }
                     break;
                 case TaskArmState.Up:
                     switch (subState)
                     {
                         case SubTaskState.Entry:
+                            parent.OnSetHerkulexPosition(ServoId.Drapeau, Positions.DrapeauLeve);
+                            timestamp = DateTime.Now;
+                            break;
+                        case SubTaskState.EnCours:
+                            if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 1000)
+                                ExitState();
+                            break;
+
+                        case SubTaskState.Exit:
+                            isFinished = true;
+                            state = TaskArmState.Waiting;
+                            break;
+                    }
+                    break;
+
+                case TaskArmState.Side:
+                    switch (subState)
+                    {
+                        case SubTaskState.Entry:
                             parent.OnSetHerkulexPosition(ServoId.Drapeau, Positions.DrapeauManche);
+                            timestamp = DateTime.Now;
+                            break;
+                        case SubTaskState.EnCours:
+                            if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 1000)
+                                ExitState();
+                            break;
+
+                        case SubTaskState.Exit:
+                            isFinished = true;
+                            state = TaskArmState.Waiting;
+                            break;
+                    }
+                    break;
+
+                case TaskArmState.Down:
+                    switch (subState)
+                    {
+                        case SubTaskState.Entry:
+                            parent.OnSetHerkulexPosition(ServoId.Drapeau, Positions.DrapeauRange);
                             timestamp = DateTime.Now;
                             break;
                         case SubTaskState.EnCours:

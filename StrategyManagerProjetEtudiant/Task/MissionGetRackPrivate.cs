@@ -10,7 +10,7 @@ namespace StrategyManagerProjetEtudiantNS
     public class MissionGetRackPrivate : TaskBase
     {
         DateTime timestamp;
-        public enum MissionRackPrivate
+        public enum MissionRackPrivateState
         {
             Waiting,
             GotoRackSafety,
@@ -24,7 +24,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         int timeout_PointA = 10000;
         int timeout_AvanceVersRack = 3000;
-        MissionRackPrivate state = MissionRackPrivate.Waiting;
+        MissionRackPrivateState state = MissionRackPrivateState.Waiting;
 
         public MissionGetRackPrivate(StrategyEurobot p) : base(p)
         {
@@ -35,13 +35,13 @@ namespace StrategyManagerProjetEtudiantNS
         public void Start()
         {
             ResetSubState();
-            state = MissionRackPrivate.GotoRackSafety;
+            state = MissionRackPrivateState.GotoRackSafety;
         }
 
         public override void Init()
         {
             isFinished = false;
-            state = MissionRackPrivate.Waiting;
+            state = MissionRackPrivateState.Waiting;
         }
 
         public override void TaskStateMachine()
@@ -49,54 +49,50 @@ namespace StrategyManagerProjetEtudiantNS
             switch (state)
             {
 
-                case MissionRackPrivate.Waiting:
+                case MissionRackPrivateState.Waiting:
                     break;
 
-                case MissionRackPrivate.GotoRackSafety:
+                case MissionRackPrivateState.GotoRackSafety:
                     switch(subState)
                     {
                         case SubTaskState.Entry:
                             timestamp = DateTime.Now;
-                            parent.OnSetWantedLocation(1.265, -0.600, false, 0);
+                            parent.OnSetWantedLocation(1.265, -0.590, false, 0);
                             parent.taskRackPrehension.SetRackPositionToVertical();
                             
                             break;
 
                         case SubTaskState.EnCours:
                             if(parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= timeout_PointA)
-                            {
                                 ExitState();
-                            }
                             break;
 
                         case SubTaskState.Exit:
-                            state = MissionRackPrivate.AvanceVersRack;
+                            state = MissionRackPrivateState.AvanceVersRack;
                             break;
                     }
                     break;
 
-                case MissionRackPrivate.AvanceVersRack:
+                case MissionRackPrivateState.AvanceVersRack:
                     switch (subState)
                     {
                         case SubTaskState.Entry:
-                            parent.OnSetWantedLocation(1.38, -0.600, false, 0);
+                            parent.OnSetWantedLocation(1.37, -0.590, false, 0);
                             parent.taskRackPrehension.SetRackPositionToPrehensionRack();
                             timestamp = DateTime.Now;
                             break;
 
                         case SubTaskState.EnCours:
                             if (parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= timeout_AvanceVersRack)
-                            {
                                 ExitState();
-                            }
                             break;
 
                         case SubTaskState.Exit:
-                            state = MissionRackPrivate.GetCups;
+                            state = MissionRackPrivateState.GetCups;
                             break;
                     }
                     break;
-                case MissionRackPrivate.GetCups:
+                case MissionRackPrivateState.GetCups:
                     switch (subState)
                     {
                         case SubTaskState.Entry:
@@ -104,15 +100,15 @@ namespace StrategyManagerProjetEtudiantNS
                             timestamp = DateTime.Now;
                             break;
                         case SubTaskState.EnCours:
-                            if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 1000)
+                            if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 2000)
                                 ExitState();
                             break;
                         case SubTaskState.Exit:
-                            state = MissionRackPrivate.UpperRack;
+                            state = MissionRackPrivateState.UpperRack;
                             break;
                     }
                     break;
-                case MissionRackPrivate.UpperRack:
+                case MissionRackPrivateState.UpperRack:
                     switch (subState)
                     {
                         case SubTaskState.Entry:
@@ -124,16 +120,16 @@ namespace StrategyManagerProjetEtudiantNS
                                 ExitState();
                             break;
                         case SubTaskState.Exit:
-                            state = MissionRackPrivate.GoingBack;
+                            state = MissionRackPrivateState.GoingBack;
                             break;
                     }
                     break;
 
-                case MissionRackPrivate.GoingBack:
+                case MissionRackPrivateState.GoingBack:
                     switch (subState)
                     {
                         case SubTaskState.Entry:
-                            parent.OnSetWantedLocation(1.265, -0.600, true);
+                            parent.OnSetWantedLocation(1.265, -0.590, true);
                             
                             timestamp = DateTime.Now;
                             break;
@@ -147,7 +143,7 @@ namespace StrategyManagerProjetEtudiantNS
 
                         case SubTaskState.Exit:
                             isFinished = true;
-                            state = MissionRackPrivate.Waiting;
+                            state = MissionRackPrivateState.Waiting;
                             break;
                     }
                     break;

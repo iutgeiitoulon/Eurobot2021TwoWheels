@@ -95,6 +95,7 @@ namespace TrajectoryPlannerNs
             
             WantedDestination = e;
             isUrgence = false;
+            isEventPositionReachSend = false;
 
             ResetGhost();
             OnDestinationSet(robotId, WantedDestination);
