@@ -17,9 +17,9 @@ namespace StrategyManagerProjetEtudiantNS
             WaitingForJack,
             Idle,
             Turbine,
-            MatchRunning,
+            GetPrivateRack,
             EndMatch,
-            MatchStopped
+            ReturnToHarbor
         }
 
 
@@ -33,23 +33,24 @@ namespace StrategyManagerProjetEtudiantNS
 
         public TaskMainStrategy(StrategyEurobot parent) : base(parent)
         {
+            timestamp = DateTime.Now;
+            ResetSubState();
+            parent.OnAddServo(ServoId.Rack1, HerkulexDescription.JOG_MODE.positionControlJOG);
+            parent.OnAddServo(ServoId.Rack2, HerkulexDescription.JOG_MODE.positionControlJOG);
             Init();
         }
         public override void Init()
         {
             timestamp = DateTime.Now;
-            ResetSubState();
-            parent.OnAddServo(ServoId.Rack1, HerkulexDescription.JOG_MODE.positionControlJOG);
-            parent.OnAddServo(ServoId.Rack2, HerkulexDescription.JOG_MODE.positionControlJOG);
-        }
-
-        public void Reset()
-        {
-            timestamp = DateTime.Now;
-
-
-            parent.OnEnableDisableMotors(false);
+            
             parent.OnResetGhostPosition();
+            parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.Low);
+            parent.taskRackPrehension.SetRackPositionToVertical();
+            parent.taskTurbine.TurnAllOff();
+
+            parent.missionGetPrivateRack.Init();
+            parent.missionRaiseFlag.Init();
+            
         }
 
         public override void TaskStateMachine()
@@ -57,7 +58,7 @@ namespace StrategyManagerProjetEtudiantNS
             if (parent.isIOReceived)
             {
 
-                if (Jack && (state != GameState.Idle))
+                if (Jack && !(state == GameState.Idle || state == GameState.WaitingForJack))
                 {
                     ResetSubState();
                     state = GameState.Idle;
@@ -71,15 +72,13 @@ namespace StrategyManagerProjetEtudiantNS
                         {
                             case SubTaskState.Entry:
                                 Console.WriteLine("Waiting For Jack");
+                                Init();
                                 parent.OnEnableDisableMotors(false);
-                                Reset();
                                 break;
 
                             case SubTaskState.EnCours:
                                 if (Jack)
-                                {
                                     ExitState();
-                                }
                                 break;
 
                             case SubTaskState.Exit:
@@ -95,42 +94,60 @@ namespace StrategyManagerProjetEtudiantNS
                         {
                             case SubTaskState.Entry:
                                 Console.WriteLine("Idle mode");
+                                Init();
                                 parent.OnEnableDisableMotors(false);
-                                parent.taskRackPrehension.SetRackPositionToVertical();
-                                parent.taskTurbine.TurnAllOff();
-                                parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.Low);
                                 break;
 
                             case SubTaskState.EnCours:
                                 if (!Jack)
-                                {
                                     ExitState();
-                                }
                                 break;
 
                             case SubTaskState.Exit:
-                                parent.OnEnableDisableMotors(true);
                                 parent.OnSetActualLocation(new Location(RobotInitialX, RobotInitialY, RobotInitialTheta, 0, 0, 0));
-                                parent.OnSetWantedLocation(RobotInitialX, RobotInitialY, RobotInitialTheta);
-                                // parent.OnCalibatrionAsked();
-                                state = GameState.MatchRunning;
+                                parent.OnSetWantedLocation(RobotInitialX, RobotInitialY);
+                                state = GameState.GetPrivateRack;
                                 timestamp = DateTime.Now;
                                 break;
                         }
                         break;
                     #endregion
                     #region MatchRunnig
-                    case GameState.MatchRunning:
+                    case GameState.GetPrivateRack:
                         switch (subState)
                         {
                             case SubTaskState.Entry:
                                 Console.WriteLine("GOTO RACK PRIV JAUNE");
-                                parent.taskPrivJaune.Start();
+                                parent.OnCalibatrionAsked();
+                                parent.OnEnableDisableMotors(true); 
+                                parent.missionGetPrivateRack.Start();
 
                                 break;
 
                             case SubTaskState.EnCours:
-                                if (parent.taskPrivJaune.isFinished)
+                                if (parent.missionGetPrivateRack.isFinished)
+                                    ExitState();
+                                break;
+
+                            case SubTaskState.Exit:
+                                state = GameState.ReturnToHarbor;
+                                break;
+                        }
+                        break;
+                    #endregion
+
+                    #region 
+                    case GameState.ReturnToHarbor:
+                        switch (subState)
+                        {
+                            case SubTaskState.Entry:
+                                Console.WriteLine("ReturnToHarbor");
+                                PointD harbor = parent.localWorldMap.Fields.Where(x => x.Type == FieldType.StartZone).FirstOrDefault().Shape.Center;
+                                parent.OnSetWantedLocation(harbor.X, harbor.Y, false, Math.PI);
+                                break;
+
+                            case SubTaskState.EnCours:
+                                if (parent.isDeplacementFinished)
                                     ExitState();
                                 break;
 
@@ -139,30 +156,26 @@ namespace StrategyManagerProjetEtudiantNS
                                 break;
                         }
                         break;
-                    #endregion
-
-                    #region EndMatch
-                    //case GameState.EndMatch:
-                    //    switch (subState)
-                    //    {
-                    //        case SubTaskState.Entry:
-                    //            Console.WriteLine("Match Ended !");
-                    //            parent.taskRaiseFlag.Start();
-                    //            break;
-                    //        case SubTaskState.EnCours:
-                    //            if (parent.taskRaiseFlag.isFinished)
-                    //                ExitState();
-                    //            break;
-
-                    //        case SubTaskState.Exit:
-                    //            isFinished = true;
-                    //            break;
-                    //    }
-                    //    break;
                         #endregion
+                        #region EndMatch
+                        //case GameState.EndMatch:
+                        //    switch (subState)
+                        //    {
+                        //        case SubTaskState.Entry:
+                        //            Console.WriteLine("Match Ended !");
+                        //            parent.taskRaiseFlag.Start();
+                        //            break;
+                        //        case SubTaskState.EnCours:
+                        //            if (parent.taskRaiseFlag.isFinished)
+                        //                ExitState();
+                        //            break;
 
-                        
-
+                        //        case SubTaskState.Exit:
+                        //            isFinished = true;
+                        //            break;
+                        //    }
+                        //    break;
+                        #endregion
                 }
             }
         }

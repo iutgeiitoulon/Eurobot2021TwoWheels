@@ -9,14 +9,14 @@ namespace StrategyManagerProjetEtudiantNS
     public class MissionWindFlags : TaskBase
     {
         DateTime timestamp;
-        public enum TaskState
+        public enum MissionWindFlagsState
         {
-            waiting,
+            Waiting,
             GoTo
 
         }
 
-        TaskState state = TaskState.waiting;
+        MissionWindFlagsState state = MissionWindFlagsState.Waiting;
 
         public MissionWindFlags(StrategyEurobot p) : base(p)
         {
@@ -32,21 +32,7 @@ namespace StrategyManagerProjetEtudiantNS
         {
             switch(state)
             {
-                case TaskState.waiting:
-                    switch(subState)
-                    {
-                        case SubTaskState.Entry:
-
-                            break;
-
-                        case SubTaskState.EnCours:
-
-                            break;
-
-                        case SubTaskState.Exit:
-                            isFinished = true;
-                            break;
-                    }
+                case MissionWindFlagsState.Waiting:
                     break;
             }
         }

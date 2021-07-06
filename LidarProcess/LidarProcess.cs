@@ -298,11 +298,11 @@ namespace LidarProcessNS
                 double moyenne = (b + e) / 2;
                 Color color = Color.White;
 
-                if (moyenne >= 9000 && moyenne <= 12000)
+                if (moyenne >= 9000 && moyenne <= 11000)
                 {
                     color = Color.LimeGreen;
                 }
-                else if (moyenne >= 12000 && moyenne <= 14000)
+                else if (moyenne >= 11000 && moyenne <= 14000)
                 {
                     color = Color.Red;
                 }
@@ -356,7 +356,7 @@ namespace LidarProcessNS
         {
             RectangleOriented box_of_cluster = FindRectangle.FindMbrBoxByOverlap(cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList());
 
-            if (box_of_cluster.Width >= 0.20 || box_of_cluster.Lenght >= 0.20)
+            if (box_of_cluster.Width >= 0.17 || box_of_cluster.Lenght >= 0.17)
                 return new LidarObject(new RectangleOriented(box_of_cluster.Center, 0.3, 0.3, box_of_cluster.Angle), Color.Red, LidarObjectType.Robot);
             else
                 return new LidarObject();

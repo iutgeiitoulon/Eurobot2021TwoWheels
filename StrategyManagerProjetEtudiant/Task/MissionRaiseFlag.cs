@@ -38,15 +38,6 @@ namespace StrategyManagerProjetEtudiantNS
             switch (state)
             {
                 case TaskRaiseFlagState.Waiting:
-                    switch (subState)
-                    {
-                        case SubTaskState.Entry:
-                            break;
-                        case SubTaskState.EnCours:
-                            break;
-                        case SubTaskState.Exit:
-                            break;
-                    }
                     break;
 
                 case TaskRaiseFlagState.RaiseFlag:

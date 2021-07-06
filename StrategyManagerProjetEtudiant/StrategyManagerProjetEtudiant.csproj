@@ -70,8 +70,8 @@
     <Compile Include="Task\TaskBase.cs" />
     <Compile Include="Task\TaskRackPrehension.cs" />
     <Compile Include="Task\TaskMainStrategy.cs" />
-    <Compile Include="Task\TaskRackPrivJaune.cs" />
-    <Compile Include="Task\TaskRaiseFlag.cs" />
+    <Compile Include="Task\MissionGetRackPrivate.cs" />
+    <Compile Include="Task\MissionRaiseFlag.cs" />
     <Compile Include="Task\TaskTurbine.cs" />
   </ItemGroup>
   <ItemGroup>

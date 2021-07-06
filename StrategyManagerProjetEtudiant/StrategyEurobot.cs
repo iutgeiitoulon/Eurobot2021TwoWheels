@@ -22,9 +22,9 @@ namespace StrategyManagerProjetEtudiantNS
 
         Timer configTimer;
 
-        public TaskPrivJaune taskPrivJaune;
+        public MissionGetRackPrivate missionGetPrivateRack;
         public TaskArm taskArm;
-        public TaskRaiseFlag taskRaiseFlag;
+        public TaskRaiseFlag missionRaiseFlag;
         public TaskTurbine taskTurbine;
         public TaskRackPrehension taskRackPrehension;
         public TaskMainStrategy taskMainStrategy;
@@ -43,9 +43,9 @@ namespace StrategyManagerProjetEtudiantNS
 
         public override void InitStrategy()
         {
-            taskPrivJaune = new TaskPrivJaune(this);
+            missionGetPrivateRack = new MissionGetRackPrivate(this);
+            missionRaiseFlag = new TaskRaiseFlag(this);
             taskArm = new TaskArm(this);
-            taskRaiseFlag = new TaskRaiseFlag(this);
             taskRackPrehension = new TaskRackPrehension(this);
             taskTurbine = new TaskTurbine(this);
 

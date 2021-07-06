@@ -94,6 +94,7 @@ namespace TrajectoryPlannerNs
             }
             
             WantedDestination = e;
+            isUrgence = false;
 
             ResetGhost();
             OnDestinationSet(robotId, WantedDestination);
@@ -303,7 +304,7 @@ namespace TrajectoryPlannerNs
 
             // calcul de l'erreur angulaire
             double Erreur_AnglualireReel = GhostLocation.Theta - RobotLocation.Theta;
-            vAngulaireRobot = PID_Position_Angulaire.CalculatePIDoutput(Erreur_AnglualireReel, 1 / ConstVar.ODOMETRY_FREQ_IN_HZ);
+            vAngulaireRobot = PID_Position_Angulaire.CalculatePIDoutput(Erreur_AnglualireReel, 1.0 / ConstVar.ODOMETRY_FREQ_IN_HZ);
 
             double thetaCible = Math.Atan2(GhostLocation.Y - RobotLocation.Y, GhostLocation.X - RobotLocation.X);
             double thetaRestant = thetaCible - Toolbox.ModuloByAngle(thetaCible, RobotLocation.Theta);
@@ -365,6 +366,11 @@ namespace TrajectoryPlannerNs
             Start(WantedDestination);
         }
 
+        public void OnEnableDisableReverseReceived(object sender, bool e)
+        {
+            isReversed = e;
+        }
+
         public void OnEnableDisableAsservReceived(object sender, bool e)
         {
             isEnslave = e;
@@ -378,14 +384,9 @@ namespace TrajectoryPlannerNs
         public void OnCollisionDetect(object sender, bool e)
         {
             if (e)
-            {
-                isUrgence = true;
-                state = GhostState.Arret;
-            }
-            else 
-            {
-                isUrgence = false;
-            }
+                Stop();
+            else if (isUrgence)
+                Start(WantedDestination);
         }
         #endregion
 

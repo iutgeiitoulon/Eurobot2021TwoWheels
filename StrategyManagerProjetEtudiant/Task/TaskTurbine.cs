@@ -65,6 +65,8 @@ namespace StrategyManagerProjetEtudiantNS
         {
             lock(Turbines)
                 Turbines.AddOrUpdate(id, state);
+
+            ResetSubState();
             taskState = TaskState.EditState;
         }
 
@@ -78,6 +80,7 @@ namespace StrategyManagerProjetEtudiantNS
                 Turbines.AddOrUpdate(PololuActuators.Turbine4, TurbineState.Off);
                 Turbines.AddOrUpdate(PololuActuators.Turbine5, TurbineState.Off);
             }
+            ResetSubState();
             taskState = TaskState.EditState;
         }
 
@@ -91,6 +94,7 @@ namespace StrategyManagerProjetEtudiantNS
                 Turbines.AddOrUpdate(PololuActuators.Turbine4, state);
                 Turbines.AddOrUpdate(PololuActuators.Turbine5, state);
             }
+            ResetSubState();
             taskState = TaskState.EditState;
         }
         //---
@@ -100,7 +104,7 @@ namespace StrategyManagerProjetEtudiantNS
             switch (taskState)
             {
                 case TaskState.Waiting:
-                    isFinished = true;
+                    
                     break;
 
                 #region TurnOn

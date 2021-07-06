@@ -38,9 +38,9 @@ namespace TrajectoryAvoidanceNs
 
                 foreach (RectangleOriented obstacle in list_of_obstacle)
                 {
-                    if (Toolbox.testIfSegmentIntersectRectangle(robot_to_destination, obstacle) && Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) >= 0.3)
+                    if (Toolbox.testIfSegmentIntersectRectangle(robot_to_destination, obstacle) && Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) <= 0.9)
                     {
-                        //TODO : OnCollisionDetected(true);
+                        OnCollisionDetected(true);
                         return;
                     }
                 }

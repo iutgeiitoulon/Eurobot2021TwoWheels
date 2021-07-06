@@ -10,7 +10,7 @@ namespace Constants
     {
         Low = 2000,
         High = 1720,
-        PreshensionRack = 1910
+        PreshensionRack = 1890
 
     }
 

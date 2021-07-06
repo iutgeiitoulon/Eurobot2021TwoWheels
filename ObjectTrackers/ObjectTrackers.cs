@@ -62,7 +62,7 @@ namespace ObjectTrackersNs
         {
             List<LidarObject> valid_Objects = list_of_objects;
 
-            if (sourceObject.Type != LidarObjectType.Unknow)
+            if (sourceObject.Type != LidarObjectType.Unknow && sourceObject.Type != LidarObjectType.Null)
                 valid_Objects = list_of_objects.Where(x => x.Type == sourceObject.Type).ToList();
 
             List<LidarObject> associated_objects = valid_Objects.Where(x => Toolbox.Distance(x.Shape.Center, sourceObject.Shape.Center) <= ConstVar.LIDAR_OBJECT_MAX_ASSOCIATION_DISTANCE).ToList();
@@ -119,6 +119,11 @@ namespace ObjectTrackersNs
             }
 
             Update(corrected_list);
+        }
+
+        public void OnResetObjectList(object sender, EventArgs e)
+        {
+            current_object_list = new List<LidarObject>();
         }
         #endregion
 

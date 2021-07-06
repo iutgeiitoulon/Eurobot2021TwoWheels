@@ -69,6 +69,7 @@ namespace PositionManagerNs
             if (list_of_possibles_locations == null)
                 return;
 
+
             if (list_of_possibles_locations.Count == 2)
                 OnNewSafeLidarLocation(list_of_possibles_locations);
             else if (list_of_possibles_locations.Count > 2)
@@ -91,8 +92,7 @@ namespace PositionManagerNs
             if (e.RobotId == robotId)
             {
                 OnPositionMerged(e.Location);
-
-                if (Math.Abs(e.Location.X) > (ConstVar.WIDTH_BOXSIZE / 2) || Math.Abs(e.Location.Y) > (ConstVar.HEIGHT_BOXSIZE / 2))
+                if (Math.Abs(e.Location.X) > (ConstVar.WIDTH_BOXSIZE / 2.0) || Math.Abs(e.Location.Y) > (ConstVar.HEIGHT_BOXSIZE / 2.0))
                     askForCalibration = true;
             }
         }

@@ -148,6 +148,7 @@ namespace StrategyManagerProjetEtudiantNS
         public event EventHandler<Location> OnSetNewDestinationEvent;
         public event EventHandler<List<Field>> OnNewFieldsEvent;
         public event EventHandler<TeamColor> OnSetupTeamColorEvent;
+        public event EventHandler<bool> OnEnableDisableReverseEvent;
         public event EventHandler<bool> OnEnableDisableMotorsEvent;
         public event EventHandler<bool> OnEnableDisableEndRotationEvent;
         public event EventHandler<EventArgs> OnCalibrationAskedEvent;
@@ -375,13 +376,15 @@ namespace StrategyManagerProjetEtudiantNS
             OnResetGhostLocationEvent?.Invoke(this, new EventArgs());
         }
 
-        public void OnSetWantedLocation(double x, double y, double theta,  bool isRotating = false)
+        public void OnSetWantedLocation(double x, double y, bool isReverse = false, double theta = 99)
         {
             var wantedLocation = new Location(x, y, theta, 0, 0, 0);
             isDeplacementFinished = false;
-            OnEnableDisableRotation(isRotating);
+            OnEnableDisableReverse(isReverse);
+            OnEnableDisableRotation(theta != 99);
             OnSetWantedLocationEvent?.Invoke(this, new PositionArgs { RobotId = robotId, X = wantedLocation.X, Y = wantedLocation.Y, Theta = wantedLocation.Theta, Reliability = 0 });
         }
+
 
         public void OnSetWaypointsList(List<Location> list_of_location)
         {
@@ -406,6 +409,11 @@ namespace StrategyManagerProjetEtudiantNS
         public void OnSetupTeamColor(TeamColor team)
         {
             OnSetupTeamColorEvent?.Invoke(this, team);
+        }
+
+        public void OnEnableDisableReverse(bool reverse)
+        {
+            OnEnableDisableReverseEvent?.Invoke(this, reverse);
         }
 
         public void OnEnableDisableMotors(bool asserv)

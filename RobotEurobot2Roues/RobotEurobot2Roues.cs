@@ -252,6 +252,7 @@ namespace RobotEurobot2Roues
             #region Position Manager
             positionManager.OnPositionMergedEvent += localWorldMapManager.OnRobotLocationArgs;
             positionManager.OnPositionCorrectedEvent += trajectoryPlanner.OnResetOrder;
+            positionManager.OnPositionCorrectedEvent += objectTrackers.OnResetObjectList;
             #endregion
 
             #region Strategy /!\ Need to be Last /!\
@@ -275,6 +276,7 @@ namespace RobotEurobot2Roues
 
             strategyManager.OnResetGhostLocationEvent += trajectoryPlanner.OnResetOrder;
             strategyManager.OnSetWantedLocationEvent += trajectoryPlanner.SetDestination;
+            strategyManager.OnEnableDisableReverseEvent += trajectoryPlanner.OnEnableDisableReverseReceived;
             strategyManager.OnEnableDisableMotorsEvent += trajectoryPlanner.OnEnableDisableAsservReceived;
             strategyManager.OnEnableDisableEndRotationEvent += trajectoryPlanner.OnEndRotateEnableDisableReceived;
 

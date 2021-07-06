@@ -16,7 +16,8 @@ namespace StrategyManagerProjetEtudiantNS
             Waiting,
             RackVertical,
             RackHorizontal,
-            RackPreshension
+            RackPrehension,
+            RackPrehensionUp,
         }
 
 
@@ -50,9 +51,13 @@ namespace StrategyManagerProjetEtudiantNS
 
         public void SetRackPositionToPrehensionRack()
         {
-            state = TaskRackPrehensionState.RackPreshension;
+             SetState(TaskRackPrehensionState.RackPrehension);
         }
-        
+
+        public void SetRackPositionToPrehensionRackUp()
+        {
+            SetState(TaskRackPrehensionState.RackPrehensionUp);
+        }
 
         public override void Init()
         {
@@ -134,11 +139,12 @@ namespace StrategyManagerProjetEtudiantNS
                     break;
                 #endregion
                 #region RackPrehension
-                case TaskRackPrehensionState.RackPreshension:
+                case TaskRackPrehensionState.RackPrehension:
                     switch(subState)
                     {
                         case SubTaskState.Entry:
                             parent.OnSetHerkulexPosition(ServoId.Rack1, Positions.RackPrehension);
+                            parent.OnSetHerkulexPosition(ServoId.Rack2, Positions.RackPrehension);
                             parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.PreshensionRack);
                             break;
 
@@ -154,7 +160,30 @@ namespace StrategyManagerProjetEtudiantNS
                             break;
                     }
                     break;
-                    #endregion
+                #endregion
+                #region RackUpper
+                case TaskRackPrehensionState.RackPrehensionUp:
+                    switch (subState)
+                    {
+                        case SubTaskState.Entry:
+                            parent.OnSetHerkulexPosition(ServoId.Rack1, Positions.RackVertical);
+                            parent.OnSetHerkulexPosition(ServoId.Rack2, Positions.RackVertical);
+                            parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.High);
+                            break;
+
+                        case SubTaskState.EnCours:
+                            if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 1000)
+                            {
+                                ExitState();
+                            }
+                            break;
+
+                        case SubTaskState.Exit:
+                            state = TaskRackPrehensionState.Waiting;
+                            break;
+                    }
+                    break;
+                #endregion
             }
 
         }
