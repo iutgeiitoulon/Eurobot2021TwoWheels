@@ -21,7 +21,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         private DateTime timestamp;
 
-        public TaskArm(StrategyEurobot p) : base(p) { }
+        public TaskArm(StrategyEurobot p) : base(p) { Init();  }
 
         public override void Init()
         {

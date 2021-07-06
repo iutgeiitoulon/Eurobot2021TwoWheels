@@ -15,7 +15,8 @@ namespace StrategyManagerProjetEtudiantNS
         {
             Waiting,
             RackVertical,
-            RackHorizontal
+            RackHorizontal,
+            RackPreshension
         }
 
 
@@ -27,7 +28,7 @@ namespace StrategyManagerProjetEtudiantNS
         
         public TaskRackPrehension(StrategyEurobot p) : base(p)
         {
-           
+            Init();  
         }
 
         public void SetState(TaskRackPrehensionState state)
@@ -45,6 +46,11 @@ namespace StrategyManagerProjetEtudiantNS
         public void SetRackPositionToHorizontal()
         {
             SetState(TaskRackPrehensionState.RackHorizontal);
+        }
+
+        public void SetRackPositionToPrehensionRack()
+        {
+            state = TaskRackPrehensionState.RackPreshension;
         }
         
 
@@ -102,7 +108,7 @@ namespace StrategyManagerProjetEtudiantNS
                     }
                     break;
                 #endregion
-                #region TaskHorizontal
+                #region RackHorizontal
                 case TaskRackPrehensionState.RackHorizontal:
                     switch (subState)
                     {
@@ -122,6 +128,28 @@ namespace StrategyManagerProjetEtudiantNS
 
                         case SubTaskState.Exit:
                             isFinished = true;
+                            state = TaskRackPrehensionState.Waiting;
+                            break;
+                    }
+                    break;
+                #endregion
+                #region RackPrehension
+                case TaskRackPrehensionState.RackPreshension:
+                    switch(subState)
+                    {
+                        case SubTaskState.Entry:
+                            parent.OnSetHerkulexPosition(ServoId.Rack1, Positions.RackPrehension);
+                            parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.PreshensionRack);
+                            break;
+
+                        case SubTaskState.EnCours:
+                            if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 1000)
+                            {
+                                ExitState();
+                            }
+                            break;
+
+                        case SubTaskState.Exit:
                             state = TaskRackPrehensionState.Waiting;
                             break;
                     }

@@ -23,6 +23,10 @@ namespace StrategyManagerProjetEtudiantNS
         }
 
 
+        double RobotInitialX = 1.287;
+        double RobotInitialY = 0.200;
+        double RobotInitialTheta = Math.PI;
+
         DateTime timestamp;
         GameState state = GameState.WaitingForJack;
         public bool Jack = false;
@@ -37,16 +41,12 @@ namespace StrategyManagerProjetEtudiantNS
             ResetSubState();
             parent.OnAddServo(ServoId.Rack1, HerkulexDescription.JOG_MODE.positionControlJOG);
             parent.OnAddServo(ServoId.Rack2, HerkulexDescription.JOG_MODE.positionControlJOG);
-            parent.OnSetActualLocation(new Location(1.200, 0.200, Math.PI, 0, 0, 0));
         }
 
         public void Reset()
         {
             timestamp = DateTime.Now;
-            parent.taskArm.Init();
-            parent.taskRackPrehension.Init();
-            parent.taskRaiseFlag.Init();
-            //parent.taskTurbine.Init(); // TODO : make reinit possible
+
 
             parent.OnEnableDisableMotors(false);
             parent.OnResetGhostPosition();
@@ -56,13 +56,7 @@ namespace StrategyManagerProjetEtudiantNS
         {
             if (parent.isIOReceived)
             {
-                if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 96999 && state != GameState.Idle && state != GameState.WaitingForJack && state != GameState.EndMatch)
-                {
-                    ResetSubState();
-                    state = GameState.EndMatch;
-                }
 
-                //checking jack state
                 if (Jack && (state != GameState.Idle))
                 {
                     ResetSubState();
@@ -77,6 +71,7 @@ namespace StrategyManagerProjetEtudiantNS
                         {
                             case SubTaskState.Entry:
                                 Console.WriteLine("Waiting For Jack");
+                                parent.OnEnableDisableMotors(false);
                                 Reset();
                                 break;
 
@@ -100,11 +95,10 @@ namespace StrategyManagerProjetEtudiantNS
                         {
                             case SubTaskState.Entry:
                                 Console.WriteLine("Idle mode");
-                                Reset();
+                                parent.OnEnableDisableMotors(false);
                                 parent.taskRackPrehension.SetRackPositionToVertical();
                                 parent.taskTurbine.TurnAllOff();
-
-
+                                parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.Low);
                                 break;
 
                             case SubTaskState.EnCours:
@@ -115,7 +109,10 @@ namespace StrategyManagerProjetEtudiantNS
                                 break;
 
                             case SubTaskState.Exit:
-                                parent.OnResetGhostPosition();
+                                parent.OnEnableDisableMotors(true);
+                                parent.OnSetActualLocation(new Location(RobotInitialX, RobotInitialY, RobotInitialTheta, 0, 0, 0));
+                                parent.OnSetWantedLocation(RobotInitialX, RobotInitialY, RobotInitialTheta);
+                                // parent.OnCalibatrionAsked();
                                 state = GameState.MatchRunning;
                                 timestamp = DateTime.Now;
                                 break;
@@ -127,46 +124,44 @@ namespace StrategyManagerProjetEtudiantNS
                         switch (subState)
                         {
                             case SubTaskState.Entry:
-                                Console.WriteLine("Match en cours");
-                                Console.WriteLine("timestamp = " + DateTime.Now.Subtract(timestamp).TotalSeconds);
-                                parent.taskRackPrehension.SetRackPositionToHorizontal();
-                                //parent.OnCalibatrionAsked();
-                                //parent.OnEnableDisableMotors(true);
+                                Console.WriteLine("GOTO RACK PRIV JAUNE");
+                                parent.taskPrivJaune.Start();
 
                                 break;
 
                             case SubTaskState.EnCours:
-                                if (parent.taskRackPrehension.isFinished)
+                                if (parent.taskPrivJaune.isFinished)
                                     ExitState();
                                 break;
 
                             case SubTaskState.Exit:
+                                state = GameState.WaitingForJack;
                                 break;
                         }
                         break;
                     #endregion
 
                     #region EndMatch
-                    case GameState.EndMatch:
-                        switch (subState)
-                        {
-                            case SubTaskState.Entry:
-                                Console.WriteLine("Match Ended !");
-                                parent.taskRaiseFlag.Start();
-                                break;
-                            case SubTaskState.EnCours:
-                                if (parent.taskRaiseFlag.isFinished)
-                                    ExitState();
-                                break;
+                    //case GameState.EndMatch:
+                    //    switch (subState)
+                    //    {
+                    //        case SubTaskState.Entry:
+                    //            Console.WriteLine("Match Ended !");
+                    //            parent.taskRaiseFlag.Start();
+                    //            break;
+                    //        case SubTaskState.EnCours:
+                    //            if (parent.taskRaiseFlag.isFinished)
+                    //                ExitState();
+                    //            break;
 
-                            case SubTaskState.Exit:
-                                isFinished = true;
-                                break;
-                        }
-                        break;
+                    //        case SubTaskState.Exit:
+                    //            isFinished = true;
+                    //            break;
+                    //    }
+                    //    break;
                         #endregion
 
-
+                        
 
                 }
             }

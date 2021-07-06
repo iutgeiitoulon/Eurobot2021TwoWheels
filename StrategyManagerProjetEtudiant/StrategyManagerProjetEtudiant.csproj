@@ -65,10 +65,12 @@
     <Compile Include="StrategyGenerique.cs" />
     <Compile Include="StrategyEurobot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Task\MissionWindFlags.cs" />
     <Compile Include="Task\TaskArm.cs" />
     <Compile Include="Task\TaskBase.cs" />
     <Compile Include="Task\TaskRackPrehension.cs" />
     <Compile Include="Task\TaskMainStrategy.cs" />
+    <Compile Include="Task\TaskRackPrivJaune.cs" />
     <Compile Include="Task\TaskRaiseFlag.cs" />
     <Compile Include="Task\TaskTurbine.cs" />
   </ItemGroup>

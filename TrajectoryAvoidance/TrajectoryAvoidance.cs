@@ -40,7 +40,7 @@ namespace TrajectoryAvoidanceNs
                 {
                     if (Toolbox.testIfSegmentIntersectRectangle(robot_to_destination, obstacle) && Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) >= 0.3)
                     {
-                        OnCollisionDetected(true);
+                        //TODO : OnCollisionDetected(true);
                         return;
                     }
                 }

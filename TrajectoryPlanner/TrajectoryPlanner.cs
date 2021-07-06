@@ -24,6 +24,7 @@ namespace TrajectoryPlannerNs
         bool isEnslave = true;
         bool isReversed = false;
         bool isUrgence = false;
+        bool isEventPositionReachSend = false;
 
         AsservissementPID PID_Position_Lineaire;
         AsservissementPID PID_Position_Angulaire;
@@ -86,12 +87,12 @@ namespace TrajectoryPlannerNs
 
         public void Start(Location e)
         {
-            if (Math.Abs(e.X) >= (ConstVar.WIDTH_BOXSIZE / 2) || Math.Abs(e.Y) >= (ConstVar.HEIGHT_BOXSIZE / 2))
+            if (Math.Abs(e.X) >= (ConstVar.WIDTH_BOXSIZE / 2.0) || Math.Abs(e.Y) >= (ConstVar.HEIGHT_BOXSIZE / 2.0))
             {
                 state = GhostState.Wait;
                 return;
             }
-
+            
             WantedDestination = e;
 
             ResetGhost();
@@ -133,10 +134,18 @@ namespace TrajectoryPlannerNs
                     GhostLocation.Vx = 0;
 
                     if (Toolbox.Distance(RobotLocation, GhostLocation) <= ConstVar.PLANNER_LINEAR_ROBOT_DEAD_ZONE)
-                        OnRobotDestinationReached();
+                    {
+                        double d = Toolbox.Distance(RobotLocation, GhostLocation);
+                        if (!isEventPositionReachSend)
+                        {
+                            OnRobotDestinationReached();
+                            isEventPositionReachSend = true;
+                        }
+                    }
                     else
                     {
                         ResetGhost();
+                        isEventPositionReachSend = false;
                         state = GhostState.Arret;
                     }
 
@@ -370,8 +379,8 @@ namespace TrajectoryPlannerNs
         {
             if (e)
             {
-                //isUrgence = true;
-                //state = GhostState.Arret;
+                isUrgence = true;
+                state = GhostState.Arret;
             }
             else 
             {

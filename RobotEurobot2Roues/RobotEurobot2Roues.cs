@@ -289,11 +289,13 @@ namespace RobotEurobot2Roues
             strategyManager.InitStrategy(); //à faire après avoir abonné les events !
             #endregion
 
-
-            if (usingMatchDisplay)
-                StartMatchInterface();
-            else
-                StartRobotInterface();
+            if (true)
+            {
+                if (usingMatchDisplay)
+                    StartMatchInterface();
+                else
+                    StartRobotInterface();
+            }
                       
             ConsoleFormat.EndMainBootSequence();
 

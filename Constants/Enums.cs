@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace Constants
 {
+    public enum GruePositions
+    {
+        Low = 2000,
+        High = 1720,
+        PreshensionRack = 1910
+
+    }
+
     public enum TurbineState
     {
         Off = 1000,

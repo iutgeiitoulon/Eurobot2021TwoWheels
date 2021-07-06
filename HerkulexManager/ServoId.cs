@@ -22,6 +22,8 @@ namespace HerkulexManagerNs
     {
         RackVertical = 770,
         RackHorizontal = 510,
+        RackPrehension = 600,
+
         DrapeauLeve = 512,
         DrapeauManche = 750,
         DrapeauRange = 350

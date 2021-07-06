@@ -18,7 +18,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         private DateTime timestamp;
 
-        public TaskRaiseFlag(StrategyEurobot p) : base(p) { }
+        public TaskRaiseFlag(StrategyEurobot p) : base(p) { Init();  }
 
         public override void Init()
         {

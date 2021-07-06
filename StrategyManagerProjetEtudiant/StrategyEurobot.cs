@@ -22,6 +22,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         Timer configTimer;
 
+        public TaskPrivJaune taskPrivJaune;
         public TaskArm taskArm;
         public TaskRaiseFlag taskRaiseFlag;
         public TaskTurbine taskTurbine;
@@ -35,12 +36,14 @@ namespace StrategyManagerProjetEtudiantNS
             this.robotId = robotId;
             this.teamId = teamId;
             localWorldMap = new LocalWorldMap(robotId, teamId);
+            
 
 
         }
 
         public override void InitStrategy()
         {
+            taskPrivJaune = new TaskPrivJaune(this);
             taskArm = new TaskArm(this);
             taskRaiseFlag = new TaskRaiseFlag(this);
             taskRackPrehension = new TaskRackPrehension(this);

@@ -20,7 +20,7 @@ namespace Constants
         public const double EUROBOT_MATRIX_THETA_COEFF = 4.166667e+00;
 
         public const double LIDAR_FREQ_IN_HZ = 15d;
-        public const double ODOMETRY_FREQ_IN_HZ = 50d;
+        public const double ODOMETRY_FREQ_IN_HZ = 50.0d;
 
         public const string PROJECT_NAME = "Eurobot2021TwoWheels";
         public const string LOG_FOLDER_NAME = "LogFiles";
@@ -72,23 +72,23 @@ namespace Constants
 
         public const double PLANNER_MAX_SPACING = 0.4d;
 
-        public const double PLANNER_LINEAR_ROBOT_DEAD_ZONE = 0.05d;
-        public const double PLANNER_ANGULAR_ROBOT_DEAD_ZONE = 0.075d;
+        public const double PLANNER_LINEAR_ROBOT_DEAD_ZONE = 0.005d;
+        public const double PLANNER_ANGULAR_ROBOT_DEAD_ZONE = 0.095d;
 
-        public const double PLANNER_LINEAR_GHOST_DEAD_ZONE = 0.001d;
+        public const double PLANNER_LINEAR_GHOST_DEAD_ZONE = 0.005d;
         public const double PLANNER_ANGULAR_GHOST_DEAD_ZONE = 0.075d;
         public const double PLANNER_LINEAR_SPEED_MIN = 0.02d;
 
         public const double PLANNER_PID_POSITION_LINEAR_KP = 15d;
         public const double PLANNER_PID_POSITION_LINEAR_KI = 0d;
-        public const double PLANNER_PID_POSITION_LINEAR_KD = 2.1d;
+        public const double PLANNER_PID_POSITION_LINEAR_KD = 1.5d;
         public const double PLANNER_PID_POSITION_LINEAR_MAX_KP = 5d;
         public const double PLANNER_PID_POSITION_LINEAR_MAX_KI = 0d;
         public const double PLANNER_PID_POSITION_LINEAR_MAX_KD = 5d;
 
-        public const double PLANNER_PID_POSITION_ANGULAR_KP = 22.5d;
+        public const double PLANNER_PID_POSITION_ANGULAR_KP = 22.0d;
         public const double PLANNER_PID_POSITION_ANGULAR_KI = 0d;
-        public const double PLANNER_PID_POSITION_ANGULAR_KD = 0.3d;  
+        public const double PLANNER_PID_POSITION_ANGULAR_KD = 0.6d;  
         public const double PLANNER_PID_POSITION_ANGULAR_MAX_KP = 5d * Math.PI;
         public const double PLANNER_PID_POSITION_ANGULAR_MAX_KI = 0d * Math.PI;
         public const double PLANNER_PID_POSITION_ANGULAR_MAX_KD = 5d * Math.PI;
