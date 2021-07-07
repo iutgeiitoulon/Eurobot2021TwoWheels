@@ -25,8 +25,10 @@ namespace StrategyManagerProjetEtudiantNS
         public MissionWindFlags missionWindFlags;
         public MissionReturnToHarbor missionReturnToHarbor;
         public MissionGetRackPrivate missionGetPrivateRack;
+        public MissionRaiseFlag missionRaiseFlag;
+        public MissionSimplePutCup missionSimplePutCup;
         public TaskArm taskArm;
-        public TaskRaiseFlag missionRaiseFlag;
+        
         public TaskTurbine taskTurbine;
         public TaskRackPrehension taskRackPrehension;
         public TaskMainStrategy taskMainStrategy;
@@ -48,7 +50,8 @@ namespace StrategyManagerProjetEtudiantNS
             missionWindFlags = new MissionWindFlags(this);
             missionReturnToHarbor = new MissionReturnToHarbor(this);
             missionGetPrivateRack = new MissionGetRackPrivate(this);
-            missionRaiseFlag = new TaskRaiseFlag(this);
+            missionRaiseFlag = new MissionRaiseFlag(this);
+            missionSimplePutCup = new MissionSimplePutCup(this);
             taskArm = new TaskArm(this);
             taskRackPrehension = new TaskRackPrehension(this);
             taskTurbine = new TaskTurbine(this);

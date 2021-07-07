@@ -19,8 +19,9 @@ namespace StrategyManagerProjetEtudiantNS
             Turbine,
             GetPrivateRack,
             TakeDownWindFlag,
+            ReturnToHarbor,
+            PutSimpleCups,
             EndMatch,
-            ReturnToHarbor
         }
 
 
@@ -49,6 +50,7 @@ namespace StrategyManagerProjetEtudiantNS
             parent.missionGetPrivateRack.Init();
             parent.missionReturnToHarbor.Init();
             parent.missionRaiseFlag.Init();
+            parent.missionSimplePutCup.Init();
             parent.taskTurbine.Init();
             parent.taskArm.Init();
 
@@ -68,6 +70,12 @@ namespace StrategyManagerProjetEtudiantNS
                 {
                     ResetSubState();
                     state = GameState.Idle;
+                }
+
+                if (state != GameState.EndMatch && state != GameState.Idle && state != GameState.WaitingForJack && DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 96000)
+                {
+                    ResetSubState();
+                    state = GameState.EndMatch;
                 }
 
                 switch (state)
@@ -112,7 +120,7 @@ namespace StrategyManagerProjetEtudiantNS
                             case SubTaskState.Exit:
                                 parent.OnSetActualLocation(new Location(RobotInitialX, RobotInitialY, RobotInitialTheta, 0, 0, 0));
                                 parent.OnSetWantedLocation(RobotInitialX, RobotInitialY);
-                                state = GameState.TakeDownWindFlag;
+                                state = GameState.TakeDownWindFlag; /// TEMP
                                 timestamp = DateTime.Now;
                                 break;
                         }
@@ -181,29 +189,49 @@ namespace StrategyManagerProjetEtudiantNS
                                 break;
 
                             case SubTaskState.Exit:
-                                state = GameState.WaitingForJack;
+                                state = GameState.PutSimpleCups;
                                 break;
                         }
                         break;
-                        #endregion
-                        #region EndMatch
-                        //case GameState.EndMatch:
-                        //    switch (subState)
-                        //    {
-                        //        case SubTaskState.Entry:
-                        //            Console.WriteLine("Match Ended !");
-                        //            parent.taskRaiseFlag.Start();
-                        //            break;
-                        //        case SubTaskState.EnCours:
-                        //            if (parent.taskRaiseFlag.isFinished)
-                        //                ExitState();
-                        //            break;
+                    #endregion
+                    #region Puts SimpleCups
+                    case GameState.PutSimpleCups:
+                        switch (subState)
+                        {
+                            case SubTaskState.Entry:
+                                Console.WriteLine("Put Simple Cups");
+                                parent.missionSimplePutCup.Start();
+                                break;
 
-                        //        case SubTaskState.Exit:
-                        //            isFinished = true;
-                        //            break;
-                        //    }
-                        //    break;
+                            case SubTaskState.EnCours:
+                                //if (parent.missionSimplePutCup.isFinished)
+                                    //ExitState(); /// TEMP
+                                break;
+
+                            case SubTaskState.Exit:
+                                break;
+                        }
+                        break;
+                    #endregion
+                    #region EndMatch
+                    case GameState.EndMatch:
+                        switch (subState)
+                        {
+                            case SubTaskState.Entry:
+                                Console.WriteLine("Match Ended !");
+                                parent.OnEnableDisableMotors(false);
+                                parent.missionRaiseFlag.Start();
+                                break;
+                            case SubTaskState.EnCours:
+                                if (parent.missionRaiseFlag.isFinished)
+                                    ExitState();
+                                break;
+
+                            case SubTaskState.Exit:
+                                isFinished = true;
+                                break;
+                        }
+                        break;
                         #endregion
                 }
             }

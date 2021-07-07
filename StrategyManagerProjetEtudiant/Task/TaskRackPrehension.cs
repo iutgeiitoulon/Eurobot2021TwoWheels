@@ -18,6 +18,7 @@ namespace StrategyManagerProjetEtudiantNS
             RackHorizontal,
             RackPrehension,
             RackPrehensionUp,
+            RackPutCups,
         }
 
 
@@ -59,6 +60,10 @@ namespace StrategyManagerProjetEtudiantNS
             SetState(TaskRackPrehensionState.RackPrehensionUp);
         }
 
+        public void SetRackPositionToPutCups()
+        {
+            SetState(TaskRackPrehensionState.RackPutCups);
+        }
         public override void Init()
         {
             ResetSubState();
@@ -72,20 +77,6 @@ namespace StrategyManagerProjetEtudiantNS
             switch(state)
             {
                 case TaskRackPrehensionState.Waiting:
-                    switch (subState)
-                    {
-                        case SubTaskState.Entry:
-
-                            break;
-
-                        case SubTaskState.EnCours:
-
-                            break;
-
-                        case SubTaskState.Exit:
-                            isFinished = true;
-                            break;
-                    }
                     break;
 
                 #region RackVertical
@@ -146,16 +137,16 @@ namespace StrategyManagerProjetEtudiantNS
                             parent.OnSetHerkulexPosition(ServoId.Rack1, Positions.RackPrehension);
                             parent.OnSetHerkulexPosition(ServoId.Rack2, Positions.RackPrehension);
                             parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.PreshensionRack);
+                            timestamp = DateTime.Now;
                             break;
 
                         case SubTaskState.EnCours:
                             if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 1000)
-                            {
                                 ExitState();
-                            }
                             break;
 
                         case SubTaskState.Exit:
+                            isFinished = true;
                             state = TaskRackPrehensionState.Waiting;
                             break;
                     }
@@ -169,6 +160,7 @@ namespace StrategyManagerProjetEtudiantNS
                             parent.OnSetHerkulexPosition(ServoId.Rack1, Positions.RackVertical);
                             parent.OnSetHerkulexPosition(ServoId.Rack2, Positions.RackVertical);
                             parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.High);
+                            timestamp = DateTime.Now;
                             break;
 
                         case SubTaskState.EnCours:
@@ -179,6 +171,31 @@ namespace StrategyManagerProjetEtudiantNS
                             break;
 
                         case SubTaskState.Exit:
+                            isFinished = true;
+                            state = TaskRackPrehensionState.Waiting;
+                            break;
+                    }
+                    break;
+                #endregion
+
+                #region Rack Put Cups
+                case TaskRackPrehensionState.RackPutCups:
+                    switch (subState)
+                    {
+                        case SubTaskState.Entry:
+                            parent.OnSetHerkulexPosition(ServoId.Rack1, Positions.RackHorizontal);
+                            parent.OnSetHerkulexPosition(ServoId.Rack2, Positions.RackHorizontal);
+                            parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.Low);
+                            timestamp = DateTime.Now;
+                            break;
+
+                        case SubTaskState.EnCours:
+                            if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 1000)
+                                ExitState();
+                            break;
+
+                        case SubTaskState.Exit:
+                            isFinished = true;
                             state = TaskRackPrehensionState.Waiting;
                             break;
                     }

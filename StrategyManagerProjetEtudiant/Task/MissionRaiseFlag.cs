@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StrategyManagerProjetEtudiantNS
 {
-    public class TaskRaiseFlag : TaskBase
+    public class MissionRaiseFlag : TaskBase
     {
         public enum TaskRaiseFlagState
         {
@@ -18,7 +18,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         private DateTime timestamp;
 
-        public TaskRaiseFlag(StrategyEurobot p) : base(p) { Init();  }
+        public MissionRaiseFlag(StrategyEurobot p) : base(p) { Init();  }
 
         public override void Init()
         {
@@ -44,19 +44,20 @@ namespace StrategyManagerProjetEtudiantNS
                     switch (subState)
                     {
                         case SubTaskState.Entry:
-                            parent.taskRackPrehension.SetRackPositionToVertical();
+                            parent.taskRackPrehension.SetRackPositionToPrehensionRackUp();
                             parent.taskArm.SetArmUp();
                             timestamp = DateTime.Now;
                             break;
 
                         case SubTaskState.EnCours:
-                            if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 3000 || parent.taskRackPrehension.isFinished)
+                            if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 1000 || parent.taskRackPrehension.isFinished)
                                 ExitState();
 
                             break;
 
                         case SubTaskState.Exit:
                             isFinished = true;
+                            state = TaskRaiseFlagState.Waiting;
                             break;
                     }
                     break;
