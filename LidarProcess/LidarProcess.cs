@@ -100,10 +100,11 @@ namespace LidarProcessNS
             {
 
 
-                //List<PointD> border_points = FindRectangle.FindAllBorderPoints(validPointXY, best_rectangle, 0.05);
-                List<ClusterObjects> borders_clusters = FindRectangle.FindAllBorderClusters(list_of_all_clusters, best_rectangle, 0.05);
+                List<PointD> border_points = FindRectangle.FindAllBorderPoints(allPointXY, best_rectangle, 0.05);
+                //List<ClusterObjects> borders_clusters = FindRectangle.FindAllBorderClusters(list_of_all_clusters, best_rectangle, 0.05);
 
-                List<ClusterObjects> inside_clusters = list_of_all_clusters.Where(x => borders_clusters.IndexOf(x) == -1).ToList();
+                List<ClusterObjects> inside_clusters = ClustersDetection.DetectClusterOfPoint(allPointXY.Where(x => border_points.IndexOf(x) == -1).ToList(), 0.05, 3);
+                //List<ClusterObjects> inside_clusters = list_of_all_clusters.Where(x => borders_clusters.IndexOf(x) == -1).ToList();
                 processedPoints = ClustersDetection.SetColorsOfClustersObjects(inside_clusters);
 
                 Tuple<PointD, PointD, PointD, PointD> corners = Toolbox.GetCornerOfAnOrientedRectangle(best_rectangle);
@@ -356,7 +357,7 @@ namespace LidarProcessNS
         {
             RectangleOriented box_of_cluster = FindRectangle.FindMbrBoxByOverlap(cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList());
 
-            if (box_of_cluster.Width >= 0.10 || box_of_cluster.Lenght >= 0.10)
+            if (box_of_cluster.Width >= 0.05 || box_of_cluster.Lenght >= 0.05)
                 return new LidarObject(new RectangleOriented(box_of_cluster.Center, 0.4, 0.4, box_of_cluster.Angle), Color.Red, LidarObjectType.Robot);
             else
                 return new LidarObject();

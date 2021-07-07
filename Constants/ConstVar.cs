@@ -8,6 +8,9 @@ namespace Constants
 {
     public static class ConstVar
     {
+
+        public const double BACK_SENSOR_AVOID_THRESHOLD = 1.5d;
+
         public const byte START_OF_FRAME = 0xFE;
         public const byte MAX_MSG_LENGHT = 255;
 

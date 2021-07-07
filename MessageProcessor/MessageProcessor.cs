@@ -369,17 +369,18 @@ namespace MessageProcessorNS
 
         public virtual void OnIOAnalogValuesFromRobot(byte[] payload)
         {
-            //OnIOAnalogValuesFromRobotGeneratedEvent?.Invoke(this, new IOAnalogValuesEventArgs { 
-            //    timestampsMS = (uint)(payload[3] | payload[2] << 8 | payload[1] << 16 | payload[0] << 24),
-            //    An1 = BitConverter.ToSingle(payload, 4 * 1),
-            //    An2 = BitConverter.ToSingle(payload, 4 * 2),
-            //    An3 = BitConverter.ToSingle(payload, 4 * 3),
-            //    An4 = BitConverter.ToSingle(payload, 4 * 4),
-            //    An5 = BitConverter.ToSingle(payload, 4 * 5),
-            //});
+            OnIOAnalogValuesFromRobotGeneratedEvent?.Invoke(this, new IOAnalogValuesEventArgs
+            {
+                timestampsMS = (uint)(payload[3] | payload[2] << 8 | payload[1] << 16 | payload[0] << 24),
+                An1 = BitConverter.ToSingle(payload, 4 * 1),
+                An2 = BitConverter.ToSingle(payload, 4 * 2),
+                An3 = BitConverter.ToSingle(payload, 4 * 3),
+                An4 = BitConverter.ToSingle(payload, 4 * 4),
+                An5 = BitConverter.ToSingle(payload, 4 * 5),
+            });
 
 
-            //Console.WriteLine(BitConverter.ToSingle(payload, 4 * 1));
+            Console.WriteLine(BitConverter.ToSingle(payload, 4 * 1));
             //payload.Select(x => x.ToString("X2")).ToList().ForEach(x => Console.Write(x));
             //Console.WriteLine();
 

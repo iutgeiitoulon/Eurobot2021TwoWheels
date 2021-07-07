@@ -123,20 +123,21 @@ namespace StrategyManagerProjetEtudiantNS
                                 else if (parent.localWorldMap.Team == TeamColor.Blue)
                                     parent.OnSetActualLocation(new Location(-RobotInitialX, RobotInitialY, RobotInitialTheta + Math.PI, 0, 0, 0));
                                 parent.OnSetWantedLocation(RobotInitialX, RobotInitialY);
-                                state = GameState.GetPrivateRack; /// TEMP
+                                state = GameState.TakeDownWindFlag;
+                                //state = GameState.GetPrivateRack; /// TEMP
                                 timestamp = DateTime.Now;
                                 break;
                         }
                         break;
                     #endregion
-                    #region MatchRunnig
+                    #region MatchRunnig GetPrivateRack
                     case GameState.GetPrivateRack:
                         switch (subState)
                         {
                             case SubTaskState.Entry:
                                 Console.WriteLine("GetPrivateRack");
-                                parent.OnCalibatrionAsked();
-                                parent.OnEnableDisableMotors(true); 
+                                //parent.OnCalibatrionAsked();
+                                parent.OnEnableDisableMotors(true);
                                 parent.missionGetPrivateRack.Start();
 
                                 break;
@@ -152,7 +153,6 @@ namespace StrategyManagerProjetEtudiantNS
                         }
                         break;
                     #endregion
-
                     #region WindFlags
                     case GameState.TakeDownWindFlag:
                         switch (subState)
@@ -177,7 +177,7 @@ namespace StrategyManagerProjetEtudiantNS
                         }
                         break;
                     #endregion
-                    #region 
+                    #region ReturnToHarbor
                     case GameState.ReturnToHarbor:
                         switch (subState)
                         {

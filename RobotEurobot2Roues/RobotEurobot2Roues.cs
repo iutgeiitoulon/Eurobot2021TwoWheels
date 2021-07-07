@@ -134,6 +134,7 @@ namespace RobotEurobot2Roues
             msgProcessor.OnSpeedPolarOdometryFromRobotEvent += positioning2Wheels.OnOdometryRobotSpeedReceived;
             msgProcessor.OnIndependantOdometrySpeedFromRobotEvent += positioning2Wheels.OnExternalOdometryRobotSpeedReceived;
             msgProcessor.OnIOValuesFromRobotGeneratedEvent += strategyManager.OnIOValuesReceived;
+            msgProcessor.OnIOAnalogValuesFromRobotGeneratedEvent += trajectoryAvoidance.OnBackSensorAnalogReceived;
             #endregion
 
             #region Console
