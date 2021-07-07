@@ -124,6 +124,7 @@ namespace ObjectTrackersNs
         public void OnResetObjectList(object sender, EventArgs e)
         {
             current_object_list = new List<LidarObject>();
+            
         }
         #endregion
 

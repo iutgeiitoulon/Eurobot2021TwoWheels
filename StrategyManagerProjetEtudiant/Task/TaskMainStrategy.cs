@@ -118,9 +118,12 @@ namespace StrategyManagerProjetEtudiantNS
                                 break;
 
                             case SubTaskState.Exit:
-                                parent.OnSetActualLocation(new Location(RobotInitialX, RobotInitialY, RobotInitialTheta, 0, 0, 0));
+                                if (parent.localWorldMap.Team == TeamColor.Yellow)
+                                    parent.OnSetActualLocation(new Location(RobotInitialX, RobotInitialY, RobotInitialTheta, 0, 0, 0));
+                                else if (parent.localWorldMap.Team == TeamColor.Blue)
+                                    parent.OnSetActualLocation(new Location(-RobotInitialX, RobotInitialY, RobotInitialTheta + Math.PI, 0, 0, 0));
                                 parent.OnSetWantedLocation(RobotInitialX, RobotInitialY);
-                                state = GameState.TakeDownWindFlag; /// TEMP
+                                state = GameState.GetPrivateRack; /// TEMP
                                 timestamp = DateTime.Now;
                                 break;
                         }
@@ -132,8 +135,8 @@ namespace StrategyManagerProjetEtudiantNS
                         {
                             case SubTaskState.Entry:
                                 Console.WriteLine("GetPrivateRack");
-                                //parent.OnCalibatrionAsked();
-                                //parent.OnEnableDisableMotors(true); 
+                                parent.OnCalibatrionAsked();
+                                parent.OnEnableDisableMotors(true); 
                                 parent.missionGetPrivateRack.Start();
 
                                 break;

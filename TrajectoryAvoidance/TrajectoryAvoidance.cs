@@ -34,15 +34,20 @@ namespace TrajectoryAvoidanceNs
                 Segment robot_to_destination = new Segment(new PointD(localWorldMap.RobotLocation.X, localWorldMap.RobotLocation.Y), new PointD(localWorldMap.DestinationLocation.X, localWorldMap.DestinationLocation.Y));
 
                 List<RectangleOriented> list_of_obstacle = localWorldMap.Fields.Where(x => x.Type == FieldType.DeadZone).Select(x => x.Shape).ToList();
-                list_of_obstacle.AddRange(localWorldMap.LidarObjectList.Where(x => x.Type == LidarObjectType.Robot).Select(x => x.Shape).ToList());
+                list_of_obstacle.AddRange(localWorldMap.LidarObjectList.Where(x => x.Type == LidarObjectType.Robot && x.LIFE >= ConstVar.LIDAR_OBJECT_VALID_LIFE).Select(x => x.Shape).ToList());
 
                 foreach (RectangleOriented obstacle in list_of_obstacle)
                 {
-                    if (Toolbox.testIfSegmentIntersectRectangle(robot_to_destination, obstacle) && Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) <= 0.9)
+                    if (Toolbox.testIfSegmentIntersectRectangle(robot_to_destination, obstacle) && Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) <= 0.70)
                     {
                         OnCollisionDetected(true);
                         return;
                     }
+                    else if (Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) <= 0.5)
+                    {
+                        OnCollisionDetected(true);
+                        return;
+                    }    
                 }
 
                 OnCollisionDetected(false);
@@ -71,6 +76,7 @@ namespace TrajectoryAvoidanceNs
 
         public virtual void OnCollisionDetected(bool collision)
         {
+            Console.WriteLine(collision);
             OnCollisionDetectedEvent?.Invoke(this, collision);
         }
 

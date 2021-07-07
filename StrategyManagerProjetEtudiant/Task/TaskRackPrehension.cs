@@ -159,7 +159,7 @@ namespace StrategyManagerProjetEtudiantNS
                         case SubTaskState.Entry:
                             parent.OnSetHerkulexPosition(ServoId.Rack1, Positions.RackVertical);
                             parent.OnSetHerkulexPosition(ServoId.Rack2, Positions.RackVertical);
-                            parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.High);
+                            parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.EndMatch);
                             timestamp = DateTime.Now;
                             break;
 

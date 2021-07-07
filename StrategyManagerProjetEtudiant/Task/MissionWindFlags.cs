@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Constants;
 
 namespace StrategyManagerProjetEtudiantNS
 {
@@ -38,6 +39,12 @@ namespace StrategyManagerProjetEtudiantNS
             state = MissionWindFlagsState.GoToWindFlag;
         }
 
+        public void Abort()
+        {
+            isFinished = true;
+            state = MissionWindFlagsState.Waiting;
+        }
+
         public override void TaskStateMachine()
         {
             switch(state)
@@ -49,13 +56,18 @@ namespace StrategyManagerProjetEtudiantNS
                     switch (subState)
                     {
                         case SubTaskState.Entry:
-                            parent.OnSetWantedLocation(1.25, -0.80, false, 0);
+                            if (parent.localWorldMap.Team == TeamColor.Yellow)
+                                parent.OnSetWantedLocation(1.25, -0.80, false, 0);
+                            else if (parent.localWorldMap.Team == TeamColor.Blue)
+                                parent.OnSetWantedLocation(-1.25, -0.80, false, 0);
                             timestamp = DateTime.Now;
                             break;
 
                         case SubTaskState.EnCours:
-                            if (parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 10000)
+                            if (parent.isDeplacementFinished)
                                 ExitState();
+                            else if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 10000)
+                                Abort();
                             break;
 
                         case SubTaskState.Exit:
@@ -86,12 +98,15 @@ namespace StrategyManagerProjetEtudiantNS
                     switch (subState)
                     {
                         case SubTaskState.Entry:
-                            parent.OnSetWantedLocation(0.9, -0.80, true);
+                            if (parent.localWorldMap.Team == TeamColor.Yellow)
+                                parent.OnSetWantedLocation(0.9, -0.80, true);
+                            else if (parent.localWorldMap.Team == TeamColor.Blue)
+                                parent.OnSetWantedLocation(-0.75, -0.80);
                             timestamp = DateTime.Now;
                             break;
 
                         case SubTaskState.EnCours:
-                            if (parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 5000)
+                            if (parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 10000)
                                 ExitState();
                             break;
 

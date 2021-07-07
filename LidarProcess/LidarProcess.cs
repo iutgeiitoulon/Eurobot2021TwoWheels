@@ -308,7 +308,7 @@ namespace LidarProcessNS
                 }
                 else
                 {
-                    return new LidarObject();
+                    return null;
                 }
 
                 PointD center_point = new PointD(pointDs.Sum(x => x.X) / pointDs.Count, pointDs.Sum(x => x.Y) / pointDs.Count, pointDs.Sum(x => x.Rssi) / pointDs.Count);
@@ -337,7 +337,7 @@ namespace LidarProcessNS
                 }
                 else
                 {
-                    return new LidarObject();
+                    return null;
                 }
 
                 PointD center_point = new PointD(pointDs.Sum(x => x.X) / pointDs.Count, pointDs.Sum(x => x.Y) / pointDs.Count, pointDs.Sum(x => x.Rssi) / pointDs.Count);
@@ -356,8 +356,8 @@ namespace LidarProcessNS
         {
             RectangleOriented box_of_cluster = FindRectangle.FindMbrBoxByOverlap(cluster.points.Select(x => Toolbox.ConvertPolarToPointD(x.Pt)).ToList());
 
-            if (box_of_cluster.Width >= 0.17 || box_of_cluster.Lenght >= 0.17)
-                return new LidarObject(new RectangleOriented(box_of_cluster.Center, 0.3, 0.3, box_of_cluster.Angle), Color.Red, LidarObjectType.Robot);
+            if (box_of_cluster.Width >= 0.10 || box_of_cluster.Lenght >= 0.10)
+                return new LidarObject(new RectangleOriented(box_of_cluster.Center, 0.4, 0.4, box_of_cluster.Angle), Color.Red, LidarObjectType.Robot);
             else
                 return new LidarObject();
         }

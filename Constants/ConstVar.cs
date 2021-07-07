@@ -29,15 +29,15 @@ namespace Constants
         public const int WIDTH_BOXSIZE = 3;
         public const int HEIGHT_BOXSIZE = 2;
 
-        public const double LIDAR_MIN_POINT_DISTANCE = 0.03;
+        public const double LIDAR_MIN_POINT_DISTANCE = 0.027;
         public const double LIDAR_MAX_POINT_DISTANCE = 3.60555;/// Math.Sqrt(Math.Pow(WIDTH_BOXSIZE, 2) + Math.Pow(HEIGHT_BOXSIZE, 2));
 
-        public const double LIDAR_OBJECT_MAX_ASSOCIATION_DISTANCE = 0.4;
+        public const double LIDAR_OBJECT_MAX_ASSOCIATION_DISTANCE = 0.5;
         public const int LIDAR_OBJECT_DEFAULT_LIFE = 1;
         public const int LIDAR_OBJECT_DEATH_LIFE = 0;
-        public const int LIDAR_OBJECT_VALID_LIFE = 10;
+        public const int LIDAR_OBJECT_VALID_LIFE = 5;
         public const int LIDAR_OBJECT_MAX_LIFE = 30;
-        public const int LIDAR_OBJECT_GAIN_LIFE = 1;
+        public const int LIDAR_OBJECT_GAIN_LIFE = 2;
         public const int LIDAR_OBJECT_LOSE_LIFE = 3;
 
         public const double MINIMAL_WORLD_HISTORICAL_DIST = 0.010d;
@@ -50,19 +50,19 @@ namespace Constants
         public const double PID_SPEED_MOTOR2_KI = 50.0d;
         public const double PID_SPEED_MOTOR2_KD = 0.0d;
 
-        public const double PID_SPEED_MOTOR1_KP_MAX = 10.0d;
-        public const double PID_SPEED_MOTOR1_KI_MAX = 15.0d;
+        public const double PID_SPEED_MOTOR1_KP_MAX = 3.0d;
+        public const double PID_SPEED_MOTOR1_KI_MAX = 3.0d;
         public const double PID_SPEED_MOTOR1_KD_MAX = 0.0d;
 
-        public const double PID_SPEED_MOTOR2_KP_MAX = 10.0d;
-        public const double PID_SPEED_MOTOR2_KI_MAX = 15.0d;
+        public const double PID_SPEED_MOTOR2_KP_MAX = 3.0d;
+        public const double PID_SPEED_MOTOR2_KI_MAX = 3.0d;
         public const double PID_SPEED_MOTOR2_KD_MAX = 0.0d;
 
 
-        public const double PLANNER_MAX_LINEAR_ACCELERATION = 1.0d;
+        public const double PLANNER_MAX_LINEAR_ACCELERATION = 2.0d;
         public const double PLANNER_MAX_ANGULAR_ACCELERATION = Math.PI;
-        public const double PLANNER_MAX_LINEAR_SPEED = 1.4d;
-        public const double PLANNER_MAX_ANGULAR_SPEED = 2.8d * Math.PI;
+        public const double PLANNER_MAX_LINEAR_SPEED = 1.0d;
+        public const double PLANNER_MAX_ANGULAR_SPEED = 2.0d * Math.PI;
 
         public const double PLANNER_MAJORATION_ANGULAR = 1.525d;
 

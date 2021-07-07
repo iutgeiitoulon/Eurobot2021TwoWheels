@@ -26,6 +26,8 @@ namespace TrajectoryPlannerNs
         bool isUrgence = false;
         bool isEventPositionReachSend = false;
 
+        int avoid_trial = 0;
+
         AsservissementPID PID_Position_Lineaire;
         AsservissementPID PID_Position_Angulaire;
 
@@ -385,9 +387,16 @@ namespace TrajectoryPlannerNs
         public void OnCollisionDetect(object sender, bool e)
         {
             if (e)
+            {
                 Stop();
-            else if (isUrgence)
-                Start(WantedDestination);
+                avoid_trial = 20;
+            }
+            else if (isUrgence) {
+                avoid_trial--;
+                if (avoid_trial <= 0)
+                    Start(WantedDestination);
+            }
+                
         }
         #endregion
 

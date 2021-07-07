@@ -23,7 +23,7 @@ namespace StrategyManagerProjetEtudiantNS
 
 
         int timeout_PointA = 10000;
-        int timeout_AvanceVersRack = 3000;
+        int timeout_AvanceVersRack = 10000;
         MissionRackPrivateState state = MissionRackPrivateState.Waiting;
 
         public MissionGetRackPrivate(StrategyEurobot p) : base(p)
@@ -44,6 +44,12 @@ namespace StrategyManagerProjetEtudiantNS
             state = MissionRackPrivateState.Waiting;
         }
 
+        public void Abort()
+        {
+            isFinished = true;
+            state = MissionRackPrivateState.Waiting;
+        }
+
         public override void TaskStateMachine()
         {
             switch (state)
@@ -57,14 +63,19 @@ namespace StrategyManagerProjetEtudiantNS
                     {
                         case SubTaskState.Entry:
                             timestamp = DateTime.Now;
-                            parent.OnSetWantedLocation(1.265, -0.590, false, 0);
+                            if (parent.localWorldMap.Team == TeamColor.Yellow)
+                                parent.OnSetWantedLocation(1.265, -0.590, false, 0);
+                            else if (parent.localWorldMap.Team == TeamColor.Blue)
+                                parent.OnSetWantedLocation(-1.265, -0.590, false, Math.PI);
                             parent.taskRackPrehension.SetRackPositionToVertical();
                             
                             break;
 
                         case SubTaskState.EnCours:
-                            if(parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= timeout_PointA)
+                            if (parent.isDeplacementFinished)
                                 ExitState();
+                            else if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= timeout_PointA)
+                                Abort();
                             break;
 
                         case SubTaskState.Exit:
@@ -77,7 +88,10 @@ namespace StrategyManagerProjetEtudiantNS
                     switch (subState)
                     {
                         case SubTaskState.Entry:
-                            parent.OnSetWantedLocation(1.37, -0.590, false, 0);
+                            if (parent.localWorldMap.Team == TeamColor.Yellow)
+                                parent.OnSetWantedLocation(1.37, -0.590, false, 0);
+                            else if (parent.localWorldMap.Team == TeamColor.Blue)
+                                parent.OnSetWantedLocation(-1.37, -0.590, false, Math.PI);
                             parent.taskRackPrehension.SetRackPositionToPrehensionRack();
                             timestamp = DateTime.Now;
                             break;
@@ -129,13 +143,15 @@ namespace StrategyManagerProjetEtudiantNS
                     switch (subState)
                     {
                         case SubTaskState.Entry:
-                            parent.OnSetWantedLocation(1.265, -0.590, true);
-                            
+                            if (parent.localWorldMap.Team == TeamColor.Yellow)
+                                parent.OnSetWantedLocation(1.265, -0.590, true);
+                            else if (parent.localWorldMap.Team == TeamColor.Blue)
+                                parent.OnSetWantedLocation(-1.265, -0.590, true);
                             timestamp = DateTime.Now;
                             break;
 
                         case SubTaskState.EnCours:
-                            if (parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= timeout_AvanceVersRack)
+                            if (parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= timeout_AvanceVersRack) 
                             {
                                 ExitState();
                             }
