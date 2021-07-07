@@ -56,6 +56,7 @@ namespace StrategyManagerProjetEtudiantNS
             taskRackPrehension = new TaskRackPrehension(this);
             taskTurbine = new TaskTurbine(this);
 
+            OnEnableDisableIOPolling(true);
 
 
             // Last
@@ -94,6 +95,9 @@ namespace StrategyManagerProjetEtudiantNS
                 );
 
             OnSetAsservissementMode((byte)AsservissementMode.Independant2Wheels);
+
+            
+
             //OnEnableDisableIndependant2WheelsPIDGainDebug(true);
             //OnEnableDisableMotorCurrentData(true);
 

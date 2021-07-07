@@ -314,6 +314,17 @@ namespace EventArgsLibrary
         public uint timeStampMS;
         public int ioValues;
     }
+
+    public class IOAnalogValuesEventArgs : EventArgs
+    {
+        public uint timestampsMS;
+        public float An1;
+        public float An2;
+        public float An3;
+        public float An4;
+        public float An5;
+    }
+
     public class PowerMonitoringValuesEventArgs : EventArgs
     {
         public uint timeStampMS;

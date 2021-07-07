@@ -1,9 +1,11 @@
 ﻿using Constants;
+using Constants;
 using EventArgsLibrary;
 using System;
 using System.Text;
 using System.Timers;
 using Utilities;
+using System.Linq;
 
 namespace MessageProcessorNS
 {
@@ -73,6 +75,10 @@ namespace MessageProcessorNS
 
                 case (short)Commands.R2PC_IOMonitoring:
                     OnIOValuesFromRobot(payload);
+                    break;
+
+                case (short)Commands.R2PC_IOAnalogMonitoring:
+                    OnIOAnalogValuesFromRobot(payload);
                     break;
 
                 case (short)Commands.R2PC_PowerMonitoring:
@@ -160,6 +166,7 @@ namespace MessageProcessorNS
         public event EventHandler<AuxiliarySpeedArgs>                               OnAuxiliaryOdometrySpeedGeneratedEvent;
         public event EventHandler<EncodersRawDataEventArgs>                         OnEncoderRawDataFromRobotGeneratedEvent;
         public event EventHandler<IOValuesEventArgs>                                OnIOValuesFromRobotGeneratedEvent;
+        public event EventHandler<IOAnalogValuesEventArgs>                          OnIOAnalogValuesFromRobotGeneratedEvent;
         public event EventHandler<PowerMonitoringValuesEventArgs>                   OnPowerMonitoringValuesFromRobotGeneratedEvent;
         public event EventHandler<IndependantPidErrorCorrectionConsigneDataArgs>    OnTwoWheelsIndependantPIDErrorCorrectionConsigneEvent;
         public event EventHandler<IndependantPidCorrectionArgs>                     OnTwoWheelsIndependantPIDCorrectionArgsEvent;
@@ -360,6 +367,21 @@ namespace MessageProcessorNS
             });
         }
 
+        public virtual void OnIOAnalogValuesFromRobot(byte[] payload)
+        {
+            //OnIOAnalogValuesFromRobotGeneratedEvent?.Invoke(this, new IOAnalogValuesEventArgs { 
+            //    timestampsMS = (uint)(payload[3] | payload[2] << 8 | payload[1] << 16 | payload[0] << 24),
+            //    An1 = BitConverter.ToSingle(payload, 4 * 1),
+            //    An2 = BitConverter.ToSingle(payload, 4 * 2),
+            //    An3 = BitConverter.ToSingle(payload, 4 * 3),
+            //    An4 = BitConverter.ToSingle(payload, 4 * 4),
+            //    An5 = BitConverter.ToSingle(payload, 4 * 5),
+            //});
+
+            //payload.Select(x => x.ToString("X2")).ToList().ForEach(x => Console.Write(x));
+            //Console.WriteLine();
+
+        }
 
         public virtual void OnPowerMonitoringValuesFromRobot(byte[] payload)
         {

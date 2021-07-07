@@ -262,6 +262,7 @@ namespace RobotEurobot2Roues
             strategyManager.OnSetAsservissementModeEvent += msgGenerator.GenerateMessageSetAsservissementMode;
             strategyManager.On2WheelsIndependantSpeedPIDSetupEvent += msgGenerator.GenerateMessage2WheelsIndependantSpeedPIDSetup;
             strategyManager.OnEnableDisableIndependant2WheelsPIDGainDebugEvent += msgGenerator.GenerateMessageSpeedPIDEnableDebugErrorCorrectionConsigne;
+            strategyManager.OnEnableDisableIOAnalogPoolingEvent += msgGenerator.GenerateMessageEnableIOPollingAnalog;
 
             strategyManager.OnSetActualLocationEvent += localWorldMapManager.OnRobotLocationArgs;
             strategyManager.OnDestinationReachedEvent += localWorldMapManager.OnDestinationReached;
@@ -285,6 +286,7 @@ namespace RobotEurobot2Roues
             strategyManager.SetPositionEvent += herkulexManager.OnSetPosition;
             strategyManager.PololuSetUsEvent += msgGenerator.GenerateMessagePololuSetServoUs;
             strategyManager.OnSetInitLocationEvent += trajectoryPlanner.InitRobotPosition;
+
             
 
             ConsoleFormat.PrintStrategyBoot();

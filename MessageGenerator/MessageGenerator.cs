@@ -81,6 +81,13 @@ namespace MessageGeneratorNS
             OnMessageToRobot((Int16)Commands.PC2R_IOPollingEnable , 1, payload);
         }
 
+        public void GenerateMessageEnableIOPollingAnalog(object sender, BoolEventArgs e)
+        {
+            byte[] payload = new byte[1];
+            payload[0] = Convert.ToByte(e.value);
+            OnMessageToRobot((Int16)Commands.PC2R_IOPollingAnalogEnable, 1, payload);
+        }
+
         public void GenerateMessageEnableDisableMotors(object sender, BoolEventArgs e)
         {
             byte[] payload = new byte[1];

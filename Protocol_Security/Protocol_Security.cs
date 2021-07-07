@@ -20,6 +20,8 @@ namespace Protocol
                     return 28;
                 case (ushort)Commands.R2PC_IOMonitoring:
                     return 5;
+                case (ushort)Commands.R2PC_IOAnalogMonitoring:
+                    return 24;
                 case (ushort)Commands.R2PC_PowerMonitoring:
                     return 20;
                 case (ushort)Commands.R2PC_EncoderRawData:
@@ -68,11 +70,17 @@ namespace Protocol
                     return 1;
                 case (ushort)Commands.R2PC_TirEnableDisableStatus:
                     return 1;
+
+                case (ushort)Commands.R2PC_UnknowCommandTest:
+                    return 1;
+
                 case (ushort)Commands.PC2R_EmergencyStop:
                     return -1;
                 case (ushort)Commands.PC2R_IOPollingEnable:
                     return 1;
                 case (ushort)Commands.PC2R_IOPollingSetFrequency:
+                    return 1;
+                case (ushort)Commands.PC2R_IOPollingAnalogEnable:
                     return 1;
                 case (ushort)Commands.PC2R_PowerMonitoringEnable:
                     return 1;

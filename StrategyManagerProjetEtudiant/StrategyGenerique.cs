@@ -79,7 +79,7 @@ namespace StrategyManagerProjetEtudiantNS
 
 
 
-        
+
 
 
         //************************ Events reçus ************************************************/
@@ -153,6 +153,7 @@ namespace StrategyManagerProjetEtudiantNS
         public event EventHandler<bool> OnEnableDisableEndRotationEvent;
         public event EventHandler<EventArgs> OnCalibrationAskedEvent;
         public event EventHandler<BoolEventArgs> OnEnableDisableIndependant2WheelsPIDGainDebugEvent;
+        public event EventHandler<BoolEventArgs> OnEnableDisableIOAnalogPoolingEvent;
 
         //Herkulex
         public event EventHandler<AddServoArgs> AddServoEvent;
@@ -216,7 +217,7 @@ namespace StrategyManagerProjetEtudiantNS
             OnUpdateWorldMapDisplayEvent?.Invoke(this, new EventArgs());
         }
 
-        
+
         public virtual void On2WheelsIndependantSpeedPIDSetup(double pM1, double iM1, double dM1, double pM2, double iM2, double dM2,
             double pM1Limit, double iM1Limit, double dM1Limit, double pM2Limit, double iM2Limit, double dM2Limit)
         {
@@ -237,7 +238,7 @@ namespace StrategyManagerProjetEtudiantNS
             });
         }
 
-        
+
         public virtual void OnSetRobotSpeedPolarPID(double px, double ix, double dx, double py, double iy, double dy, double ptheta, double itheta, double dtheta,
             double pxLimit, double ixLimit, double dxLimit, double pyLimit, double iyLimit, double dyLimit, double pthetaLimit, double ithetaLimit, double dthetaLimit
             )
@@ -265,7 +266,7 @@ namespace StrategyManagerProjetEtudiantNS
             });
         }
 
-        
+
         public virtual void OnSetRobotSpeedIndependantPID(double pM1, double iM1, double dM1, double pM2, double iM2, double dM2, double pM3, double iM3, double dM3, double pM4, double iM4, double dM4,
             double pM1Limit, double iM1Limit, double dM1Limit, double pM2Limit, double iM2Limit, double dM2Limit, double pM3Limit, double iM3Limit, double dM3Limit, double pM4Limit, double iM4Limit, double dM4Limit
             )
@@ -299,25 +300,25 @@ namespace StrategyManagerProjetEtudiantNS
             });
         }
 
-        
+
         public virtual void OnSetAsservissementMode(byte val)
         {
             OnSetAsservissementModeEvent?.Invoke(this, new ByteEventArgs { Value = val });
         }
 
-        
+
         public virtual void OnSetSpeedConsigneToMotorEvent(object sender, SpeedConsigneToMotorArgs e)
         {
             OnSetSpeedConsigneToMotor?.Invoke(sender, e);
         }
 
-       
+
         public virtual void OnEnableDisableMotorCurrentData(bool val)
         {
             OnEnableDisableMotorCurrentDataEvent?.Invoke(this, new BoolEventArgs { value = val });
         }
 
-        
+
         public virtual void OnCollision(int id, Location robotLocation)
         {
             OnCollisionEvent?.Invoke(this, new CollisionEventArgs { RobotId = id, RobotRealPositionRefTerrain = robotLocation });
@@ -328,13 +329,13 @@ namespace StrategyManagerProjetEtudiantNS
             OnOdometryPointToMeterSetupEvent?.Invoke(this, new DoubleEventArgs { Value = value });
         }
 
-        
+
         public void On2WheelsAngleSetup(double angleM1, double angleM2)
         {
-            On2WheelsAngleSetupEvent?.Invoke(this, new TwoWheelsAngleArgs { angleMotor1 = angleM1, angleMotor2 = angleM2});
+            On2WheelsAngleSetupEvent?.Invoke(this, new TwoWheelsAngleArgs { angleMotor1 = angleM1, angleMotor2 = angleM2 });
         }
 
-        
+
         public void On2WheelsToPolarMatrixSetup(double mX1, double mX2, double mTheta1, double mTheta2)
         {
             On2WheelsToPolarMatrixSetupEvent?.Invoke(this, new TwoWheelsToPolarMatrixArgs
@@ -346,29 +347,29 @@ namespace StrategyManagerProjetEtudiantNS
             });
         }
 
-        
+
         public virtual void OnTextMessage(string str)
         {
             OnTextMessageEvent?.Invoke(this, new StringEventArgs { value = str });
         }
 
-        
+
         public virtual void OnWaypointsReached(Location location)
         {
             OnWaypointsReachedEvent?.Invoke(this, location);
         }
 
-        
+
         public virtual void OnDestinationReached(Location location)
         {
             OnDestinationReachedEvent?.Invoke(this, location);
         }
 
-       
+
 
         public void OnSetActualLocation(Location location)
         {
-            OnSetActualLocationEvent?.Invoke(this, new LocationArgs { RobotId = robotId , Location = location });
+            OnSetActualLocationEvent?.Invoke(this, new LocationArgs { RobotId = robotId, Location = location });
         }
 
         public void OnResetGhostPosition()
@@ -398,7 +399,7 @@ namespace StrategyManagerProjetEtudiantNS
 
         public void OnSetNewWaypoint(PointD point)
         {
-            OnSetNewWaypointEvent?.Invoke(this, new Location(point.X, point.Y, 0, 0, 0, 0)); 
+            OnSetNewWaypointEvent?.Invoke(this, new Location(point.X, point.Y, 0, 0, 0, 0));
         }
 
         public void OnNewFields(List<Field> list_of_fields)
@@ -431,11 +432,16 @@ namespace StrategyManagerProjetEtudiantNS
         {
             OnCalibrationAskedEvent?.Invoke(this, new EventArgs());
         }
-       
+
 
         public void OnEnableDisableIndependant2WheelsPIDGainDebug(bool e)
         {
             OnEnableDisableIndependant2WheelsPIDGainDebugEvent?.Invoke(this, new BoolEventArgs { value = e });
+        }
+
+        public void OnEnableDisableIOPolling(bool e)
+        {
+            OnEnableDisableIOAnalogPoolingEvent?.Invoke(this, new BoolEventArgs { value = e });
         }
         
     }    

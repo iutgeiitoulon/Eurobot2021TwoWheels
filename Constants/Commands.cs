@@ -27,6 +27,7 @@ namespace Constants
 
         R2PC_IMUData = 0x0110,                                          //Timestamp(4L) - AccX(4F) - AccY(4F) - AccZ(4F) - GyroX(4F) - GyroY(4F) - GyroZ(4F)
         R2PC_IOMonitoring = 0x0120,                                     //Timestamp(4L) - IO1-IO8 (1)
+        R2PC_IOAnalogMonitoring = 0x0121,                               //Timestamp(4L) - An0 (4F) - An8(4F) - An9(4F) - An10(4F) - An10(4F)
         R2PC_PowerMonitoring = 0x0130,                                  //Timestamp(4L) - BattCmdVoltage(4F) - BattCmdCurrent(4F) - BattPwrVoltage(4F) - BattPwrCurrent(4F)
         R2PC_EncoderRawData = 0x0140,                                   //Timestamp(4L) - Enc Motor 1 Value(4L) - ... - Enc Motor 7 Value(4L))
 
@@ -57,6 +58,8 @@ namespace Constants
         R2PC_MotorCurrentMonitoringEnableStatus = 0x0188,                  //Enable-Disable (1 Byte)
         R2PC_TirEnableDisableStatus = 0x0189,                              //Enable-Disable (1 Byte)
 
+        R2PC_UnknowCommandTest = 0x018b,
+
         /// <summary>
         /// PC to Robot commands
         /// </summary>
@@ -64,6 +67,8 @@ namespace Constants
 
         PC2R_IOPollingEnable = 0x0220,                                  //Enable-Disable (1 Byte)
         PC2R_IOPollingSetFrequency = 0x0221,                            //Frequency (1 Byte)
+
+        PC2R_IOPollingAnalogEnable = 0x0222,                            //Enable-Disable (1 Byte)
 
         PC2R_PowerMonitoringEnable = 0x0230,                            //Enable-Disable (1 Byte)        
 
