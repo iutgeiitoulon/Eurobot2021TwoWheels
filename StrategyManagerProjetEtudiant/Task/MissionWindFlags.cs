@@ -66,7 +66,7 @@ namespace StrategyManagerProjetEtudiantNS
                         case SubTaskState.EnCours:
                             if (parent.isDeplacementFinished)
                                 ExitState();
-                            else if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 10000)
+                            else if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 15000)
                                 Abort();
                             break;
 
@@ -106,7 +106,7 @@ namespace StrategyManagerProjetEtudiantNS
                             break;
 
                         case SubTaskState.EnCours:
-                            if (parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 10000)
+                            if (parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 15000)
                                 ExitState();
                             break;
 

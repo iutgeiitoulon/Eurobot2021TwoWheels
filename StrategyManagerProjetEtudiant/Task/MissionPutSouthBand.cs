@@ -17,7 +17,7 @@ namespace StrategyManagerProjetEtudiantNS
             LowerRack,
             StopTurbine,
             UpperRack,
-            EscapeSouthBand
+            EscapeSouthBand                                                                                                                                                                                                                                                                                                                            
         }
 
 
@@ -122,33 +122,33 @@ namespace StrategyManagerProjetEtudiantNS
                                 ExitState();
                             break;
                         case SubTaskState.Exit:
-                            state = MissionPutSouthBandState.EscapeSouthBand;
-                            break;
-                    }
-                    break;
-
-                case MissionPutSouthBandState.EscapeSouthBand:
-                    switch (subState)
-                    {
-                        case SubTaskState.Entry:
-                            if (parent.localWorldMap.Team == TeamColor.Yellow)
-                                parent.OnSetWantedLocation(1.3, -0.4, true, -Math.PI);
-                            else if (parent.localWorldMap.Team == TeamColor.Blue)
-                                parent.OnSetWantedLocation(- 1.3, -0.4, true, -Math.PI);
-                            timestamp = DateTime.Now;
-                            break;
-
-                        case SubTaskState.EnCours:
-                            if (parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 10000)
-                                ExitState();
-                            break;
-
-                        case SubTaskState.Exit:
                             isFinished = true;
                             state = MissionPutSouthBandState.Waiting;
                             break;
                     }
                     break;
+
+                //case MissionPutSouthBandState.EscapeSouthBand:
+                //    switch (subState)
+                //    {
+                //        case SubTaskState.Entry:
+                //            if (parent.localWorldMap.Team == TeamColor.Yellow)
+                //                parent.OnSetWantedLocation(1.3, -0.4, true, -Math.PI);
+                //            else if (parent.localWorldMap.Team == TeamColor.Blue)
+                //                parent.OnSetWantedLocation(- 1.3, -0.4, true, -Math.PI);
+                //            timestamp = DateTime.Now;
+                //            break;
+
+                //        case SubTaskState.EnCours:
+                //            if (parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 10000)
+                //                ExitState();
+                //            break;
+
+                //        case SubTaskState.Exit:
+                            
+                //            break;
+                //    }
+                //    break;
             }
         }
     }

@@ -176,6 +176,7 @@ namespace StrategyManagerProjetEtudiantNS
                             break;
                     }
                     break;
+                 
             }
         }
     }
