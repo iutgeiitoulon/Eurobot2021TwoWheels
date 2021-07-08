@@ -76,7 +76,7 @@ namespace FieldSetterNs
 
             /// North South
             list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(-1.3, 0.7), 0.4, 0.4, 0), FieldType.NorthField));
-            list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(-1.3, -0.3), 0.4, 0.4, 0), FieldType.SouthField));
+            list_of_blue_field.Add(new Field(new RectangleOriented(new PointD(-1.3, -0.17), 0.4, 0.4, 0), FieldType.SouthField));
 
             return list_of_blue_field;
         }
@@ -102,7 +102,7 @@ namespace FieldSetterNs
 
             /// North South
             list_of_yellow_field.Add(new Field(new RectangleOriented(new PointD(1.3, 0.7), 0.4, 0.4, 0), FieldType.NorthField));
-            list_of_yellow_field.Add(new Field(new RectangleOriented(new PointD(1.3, -0.3), 0.4, 0.4, 0), FieldType.SouthField));
+            list_of_yellow_field.Add(new Field(new RectangleOriented(new PointD(1.3, -0.17), 0.4, 0.4, 0), FieldType.SouthField));
 
             return list_of_yellow_field;
         }

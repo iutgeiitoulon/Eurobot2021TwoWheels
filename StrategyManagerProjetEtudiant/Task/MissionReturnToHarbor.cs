@@ -51,8 +51,8 @@ namespace StrategyManagerProjetEtudiantNS
                     {
                         case SubTaskState.Entry:
                             timestamp = DateTime.Now;
-                            PointD harbor = parent.localWorldMap.Fields.Where(x => x.Type == FieldType.StartZone).FirstOrDefault().Shape.Center;
-                            parent.OnSetWantedLocation(harbor.X, harbor.Y, false, Math.PI);
+                            PointD harbor = parent.localWorldMap.Fields.Where(x => x.Type == FieldType.SouthField).FirstOrDefault().Shape.Center;
+                            parent.OnSetWantedLocation(harbor.X, harbor.Y, false, Math.PI / 2);
                             break;
 
                         case SubTaskState.EnCours:

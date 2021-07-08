@@ -23,6 +23,7 @@ namespace StrategyManagerProjetEtudiantNS
         Timer configTimer;
 
         public MissionWindFlags missionWindFlags;
+        public MissionGetRackPublicAlly missionGetRackPublicAlly;
         public MissionReturnToHarbor missionReturnToHarbor;
         public MissionGetRackPrivate missionGetPrivateRack;
         public MissionRaiseFlag missionRaiseFlag;

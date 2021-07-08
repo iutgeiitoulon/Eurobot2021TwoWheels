@@ -386,16 +386,16 @@ namespace TrajectoryPlannerNs
 
         public void OnCollisionDetect(object sender, bool e)
         {
-            if (e)
-            {
-                Stop();
-                avoid_trial = 20;
-            }
-            else if (isUrgence) {
-                avoid_trial--;
-                if (avoid_trial <= 0)
-                    Start(WantedDestination);
-            }
+            //if (e)
+            //{
+            //    Stop();
+            //    avoid_trial = 20;
+            //}
+            //else if (isUrgence) {
+            //    avoid_trial--;
+            //    if (avoid_trial <= 0)
+            //        Start(WantedDestination);
+            //}
                 
         }
         #endregion

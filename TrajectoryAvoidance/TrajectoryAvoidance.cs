@@ -58,11 +58,13 @@ namespace TrajectoryAvoidanceNs
                         
                         if (Toolbox.testIfSegmentIntersectRectangle(robot_to_destination, obstacle) && Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) <= 0.70)
                         {
+                            Console.Write("A: ");
                             OnCollisionDetected(true);
                             return;
                         }
-                        else if (Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) <= 0.4)
+                        else if (Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) <= 0.2)
                         {
+                            Console.Write("B: ");
                             OnCollisionDetected(true);
                             return;
                         }
@@ -96,7 +98,7 @@ namespace TrajectoryAvoidanceNs
 
         public virtual void OnCollisionDetected(bool collision)
         {
-            //Console.WriteLine("Collision?: " + collision);
+            Console.WriteLine("Collision?: " + collision);
             OnCollisionDetectedEvent?.Invoke(this, collision);
         }
 
@@ -104,7 +106,7 @@ namespace TrajectoryAvoidanceNs
         {
             firstAnalogValueReceived = true;
             BackSensorAnalogValue = Math.Min(e.An1, e.An2);
-            Console.WriteLine("BackSensor Analog: An1: " + e.An1 + " - An2: " + e.An2);
+            //Console.WriteLine("BackSensor Analog: An1: " + e.An1 + " - An2: " + e.An2);
         }
 
         #endregion

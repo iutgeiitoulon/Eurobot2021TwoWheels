@@ -207,11 +207,12 @@ namespace StrategyManagerProjetEtudiantNS
                                 break;
 
                             case SubTaskState.EnCours:
-                                //if (parent.missionSimplePutCup.isFinished)
-                                    //ExitState(); /// TEMP
+                                if (parent.missionSimplePutCup.isFinished)
+                                    ExitState(); /// TEMP
                                 break;
 
                             case SubTaskState.Exit:
+                                parent.OnEnableDisableMotors(false);
                                 break;
                         }
                         break;
