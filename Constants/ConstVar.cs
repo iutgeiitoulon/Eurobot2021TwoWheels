@@ -53,12 +53,12 @@ namespace Constants
         public const double PID_SPEED_MOTOR2_KI = 50.0d;
         public const double PID_SPEED_MOTOR2_KD = 0.0d;
 
-        public const double PID_SPEED_MOTOR1_KP_MAX = 3.0d;
-        public const double PID_SPEED_MOTOR1_KI_MAX = 3.0d;
+        public const double PID_SPEED_MOTOR1_KP_MAX = 5.0d;
+        public const double PID_SPEED_MOTOR1_KI_MAX = 5.0d;
         public const double PID_SPEED_MOTOR1_KD_MAX = 0.0d;
-
-        public const double PID_SPEED_MOTOR2_KP_MAX = 3.0d;
-        public const double PID_SPEED_MOTOR2_KI_MAX = 3.0d;
+ 
+        public const double PID_SPEED_MOTOR2_KP_MAX = 5.0d;
+        public const double PID_SPEED_MOTOR2_KI_MAX = 5.0d;
         public const double PID_SPEED_MOTOR2_KD_MAX = 0.0d;
 
 

@@ -16,7 +16,8 @@ namespace StrategyManagerProjetEtudiantNS
             GoToBeacon,
             DeployArm,
             PushBeacon,
-            FoldArm
+            FoldArm,
+            EscapeBeacon, //TEMP
 
         }
 
@@ -57,9 +58,9 @@ namespace StrategyManagerProjetEtudiantNS
                     {
                         case SubTaskState.Entry:
                             if (parent.localWorldMap.Team == TeamColor.Yellow)
-                                parent.OnSetWantedLocation(1.25, 0.80, false, 0);
+                                parent.OnSetWantedLocation(1.25, 0.80, false, Math.PI / 2);
                             else if (parent.localWorldMap.Team == TeamColor.Blue)
-                                parent.OnSetWantedLocation(-1.25, 0.80, false, Math.PI);
+                                parent.OnSetWantedLocation(-1.25, 0.80, false, Math.PI / 2);
                             timestamp = DateTime.Now;
                             break;
 
@@ -99,9 +100,9 @@ namespace StrategyManagerProjetEtudiantNS
                     {
                         case SubTaskState.Entry:
                             if (parent.localWorldMap.Team == TeamColor.Yellow)
-                                parent.OnSetWantedLocation(0.9, 0.80);
+                                parent.OnSetWantedLocation(1.25, 0.80, false, Math.PI);
                             else if (parent.localWorldMap.Team == TeamColor.Blue)
-                                parent.OnSetWantedLocation(-0.75, 0.80, true);
+                                parent.OnSetWantedLocation(-0.75, 0.80, true, 0);
                             timestamp = DateTime.Now;
                             break;
 
@@ -131,11 +132,33 @@ namespace StrategyManagerProjetEtudiantNS
                             break;
 
                         case SubTaskState.Exit:
+                            state = MissionActivateBeaconState.EscapeBeacon;
+                            break;
+                    }
+                    break;
+                case MissionActivateBeaconState.EscapeBeacon:
+                    switch (subState)
+                    {
+                        case SubTaskState.Entry:
+                            if (parent.localWorldMap.Team == TeamColor.Yellow)
+                                parent.OnSetWantedLocation(0.65, 0.7, false, 0);
+                            else if (parent.localWorldMap.Team == TeamColor.Blue)
+                                parent.OnSetWantedLocation(-0.65, 0.7, true, -Math.PI);
+                            timestamp = DateTime.Now;
+                            break;
+
+                        case SubTaskState.EnCours:
+                            if (parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 10000)
+                                ExitState();
+                            break;
+
+                        case SubTaskState.Exit:
                             isFinished = true;
                             state = MissionActivateBeaconState.Waiting;
                             break;
                     }
                     break;
+
 
             }
         }

@@ -56,9 +56,9 @@ namespace StrategyManagerProjetEtudiantNS
                     {
                         case SubTaskState.Entry:
                             if (parent.localWorldMap.Team == TeamColor.Yellow)
-                                parent.OnSetWantedLocation(1.3, -0.17, false, - Math.PI / 2);
+                                parent.OnSetWantedLocation(1.3, -0.17, false, Math.PI / 2);
                             else if (parent.localWorldMap.Team == TeamColor.Blue)
-                                parent.OnSetWantedLocation(-1.3, -0.17, false, -Math.PI / 2);
+                                parent.OnSetWantedLocation(-1.3, -0.17, false, Math.PI / 2);
                             timestamp = DateTime.Now;
                             break;
 

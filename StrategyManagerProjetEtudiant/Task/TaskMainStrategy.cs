@@ -129,10 +129,15 @@ namespace StrategyManagerProjetEtudiantNS
 
                             case SubTaskState.Exit:
                                 if (parent.localWorldMap.Team == TeamColor.Yellow)
+                                {
                                     parent.OnSetActualLocation(new Location(RobotInitialX, RobotInitialY, RobotInitialTheta, 0, 0, 0));
+                                    parent.OnSetWantedLocation(RobotInitialX, RobotInitialY);
+                                }
                                 else if (parent.localWorldMap.Team == TeamColor.Blue)
+                                {
                                     parent.OnSetActualLocation(new Location(-RobotInitialX, RobotInitialY, RobotInitialTheta + Math.PI, 0, 0, 0));
-                                parent.OnSetWantedLocation(RobotInitialX, RobotInitialY);
+                                    parent.OnSetWantedLocation(-RobotInitialX, RobotInitialY);
+                                }
                                 state = GameState.GetTrashCup;
                                 //state = GameState.GetPrivateRack; /// TEMP
                                 timestamp = DateTime.Now;
@@ -229,7 +234,7 @@ namespace StrategyManagerProjetEtudiantNS
                                 break;
 
                             case SubTaskState.Exit:
-                                state = GameState.ActivateBeacon;
+                                state = GameState.TakeDownWindFlag;
                                 break;
                         }
                         break;
@@ -253,7 +258,7 @@ namespace StrategyManagerProjetEtudiantNS
                                 break;
 
                             case SubTaskState.Exit:
-                                state = GameState.ActivateBeacon;
+                                state = GameState.TakeDownWindFlag;
                                 break;
                         }
                         break;
@@ -267,7 +272,7 @@ namespace StrategyManagerProjetEtudiantNS
                                 Console.WriteLine("WindFlags");
 
                                 /// TEMP:
-                                parent.OnCalibatrionAsked();
+                                //parent.OnCalibatrionAsked();
                                 parent.OnEnableDisableMotors(true);
                                 parent.missionWindFlags.Start();
                                 break;

@@ -17,7 +17,8 @@ namespace StrategyManagerProjetEtudiantNS
             LowerRack,
             StopTurbine,
             UpperRack,
-            EscapeNorthBand
+            EscapeNorthBand,
+            TempMovement,
         }
 
 
@@ -57,9 +58,9 @@ namespace StrategyManagerProjetEtudiantNS
                         case SubTaskState.Entry:
                             
                             if (parent.localWorldMap.Team == TeamColor.Yellow)
-                                parent.OnSetWantedLocation(1.3, 0.63, false, -Math.PI / 2);
+                                parent.OnSetWantedLocation(1.25, 0.63, false, -Math.PI / 2);
                             else if (parent.localWorldMap.Team == TeamColor.Blue)
-                                parent.OnSetWantedLocation(-1.3, 0.63, false, -Math.PI / 2);
+                                parent.OnSetWantedLocation(-1.25, 0.63, false, -Math.PI / 2);
                             timestamp = DateTime.Now;
                             break;
 
@@ -134,9 +135,32 @@ namespace StrategyManagerProjetEtudiantNS
                         case SubTaskState.Entry:
                             parent.OnDisableAvoidance();
                             if (parent.localWorldMap.Team == TeamColor.Yellow)
-                                parent.OnSetWantedLocation(1.3, 0.8, true);
+                                parent.OnSetWantedLocation(1.25, 0.8, true);
                             else if (parent.localWorldMap.Team == TeamColor.Blue)
-                                parent.OnSetWantedLocation(-1.3, 0.8, true);
+                                parent.OnSetWantedLocation(-1.25, 0.8, true);
+                            timestamp = DateTime.Now;
+                            break;
+
+                        case SubTaskState.EnCours:
+                            if (parent.isDeplacementFinished || DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 10000)
+                                ExitState();
+                            break;
+
+                        case SubTaskState.Exit:
+                            parent.OnEnableAvoidance();
+                            state = MissionPutNorthBandState.TempMovement;
+                            break;
+                    }
+                    break;
+                case MissionPutNorthBandState.TempMovement:
+                    switch (subState)
+                    {
+                        case SubTaskState.Entry:
+                            parent.OnDisableAvoidance();
+                            if (parent.localWorldMap.Team == TeamColor.Yellow)
+                                parent.OnSetWantedLocation(0.65, 0.7);
+                            else if (parent.localWorldMap.Team == TeamColor.Blue)
+                                parent.OnSetWantedLocation(-0.65, 0.7);
                             timestamp = DateTime.Now;
                             break;
 

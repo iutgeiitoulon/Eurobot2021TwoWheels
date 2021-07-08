@@ -66,7 +66,7 @@ namespace StrategyManagerProjetEtudiantNS
                             if (parent.localWorldMap.Team == TeamColor.Yellow)
                                 parent.OnSetWantedLocation(0.625, 0.75, false, Math.PI / 2);
                             else if (parent.localWorldMap.Team == TeamColor.Blue)
-                                parent.OnSetWantedLocation(0.625, 0.75, false, Math.PI / 2);
+                                parent.OnSetWantedLocation(-0.625, 0.75, false, Math.PI / 2);
                             parent.taskRackPrehension.SetRackPositionToVertical();
                             break;
 
