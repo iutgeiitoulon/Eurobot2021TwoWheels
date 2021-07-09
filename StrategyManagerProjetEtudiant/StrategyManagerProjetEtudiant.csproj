@@ -65,9 +65,13 @@
     <Compile Include="StrategyGenerique.cs" />
     <Compile Include="StrategyEurobot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Task\MissionGetNorthTrashCups.cs" />
     <Compile Include="Task\MissionGetPublicAllyRack.cs" />
-    <Compile Include="Task\MissionSimplePutCup.cs" />
+    <Compile Include="Task\MissionPutHarbor.cs" />
+    <Compile Include="Task\MissionPutSouthBand.cs" />
+    <Compile Include="Task\MissionPutNorthBand.cs" />
     <Compile Include="Task\MissionReturnToHarbor.cs" />
+    <Compile Include="Task\MissionActivateBeacon.cs" />
     <Compile Include="Task\MissionWindFlags.cs" />
     <Compile Include="Task\TaskArm.cs" />
     <Compile Include="Task\TaskBase.cs" />

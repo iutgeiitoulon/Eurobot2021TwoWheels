@@ -23,11 +23,15 @@ namespace StrategyManagerProjetEtudiantNS
         Timer configTimer;
 
         public MissionWindFlags missionWindFlags;
+        public MissionGetNorthTrashCups missionGetNorthTrashCups;
         public MissionGetRackPublicAlly missionGetRackPublicAlly;
         public MissionReturnToHarbor missionReturnToHarbor;
         public MissionGetRackPrivate missionGetPrivateRack;
         public MissionRaiseFlag missionRaiseFlag;
-        public MissionSimplePutCup missionSimplePutCup;
+        public MissionPutHarbor missionPutHarbor;
+        public MissionPutNorthBand missionPutNorthBand;
+        public MissionPutSouthBand missionPutSouthBand;
+        public MissionActivateBeacon missionActivateBeacon;
         public TaskArm taskArm;
         
         public TaskTurbine taskTurbine;
@@ -48,11 +52,16 @@ namespace StrategyManagerProjetEtudiantNS
 
         public override void InitStrategy()
         {
+            missionActivateBeacon = new MissionActivateBeacon(this);
             missionWindFlags = new MissionWindFlags(this);
             missionReturnToHarbor = new MissionReturnToHarbor(this);
             missionGetPrivateRack = new MissionGetRackPrivate(this);
+            missionGetNorthTrashCups = new MissionGetNorthTrashCups(this);
             missionRaiseFlag = new MissionRaiseFlag(this);
-            missionSimplePutCup = new MissionSimplePutCup(this);
+            missionGetRackPublicAlly = new MissionGetRackPublicAlly(this);
+            missionPutHarbor = new MissionPutHarbor(this);
+            missionPutSouthBand = new MissionPutSouthBand(this);
+            missionPutNorthBand = new MissionPutNorthBand(this);
             taskArm = new TaskArm(this);
             taskRackPrehension = new TaskRackPrehension(this);
             taskTurbine = new TaskTurbine(this);

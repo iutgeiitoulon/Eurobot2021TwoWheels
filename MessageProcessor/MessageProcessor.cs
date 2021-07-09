@@ -380,7 +380,7 @@ namespace MessageProcessorNS
             });
 
 
-            Console.WriteLine(BitConverter.ToSingle(payload, 4 * 1));
+            //Console.WriteLine(BitConverter.ToSingle(payload, 4 * 1));
             //payload.Select(x => x.ToString("X2")).ToList().ForEach(x => Console.Write(x));
             //Console.WriteLine();
 

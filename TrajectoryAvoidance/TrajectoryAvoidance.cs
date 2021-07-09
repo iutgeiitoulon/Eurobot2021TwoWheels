@@ -15,7 +15,8 @@ namespace TrajectoryAvoidanceNs
         public int robotID;
         public double BackSensorAnalogValue;
         bool firstAnalogValueReceived = false;
-        LocalWorldMap localWorldMap;        
+        LocalWorldMap localWorldMap;
+        private bool enableAvoidance = true;
 
         public TrajectoryAvoidance(int robotId)
         {
@@ -26,54 +27,68 @@ namespace TrajectoryAvoidanceNs
 
         public void DetectObstacleCollision()
         {
-            if(firstAnalogValueReceived) //on attend de recevoir au moins un retour du capteur sick
+            if(enableAvoidance)
             {
-                if (localWorldMap == null)
-                    return;
-                lock (localWorldMap)
+                if (firstAnalogValueReceived) //on attend de recevoir au moins un retour du capteur sick
                 {
-                    if (localWorldMap.RobotLocation == null || localWorldMap.DestinationLocation == null || localWorldMap.Fields == null || localWorldMap.LidarObjectList == null)
+                    if (localWorldMap == null)
                         return;
-
-                    Segment robot_to_destination = new Segment(new PointD(localWorldMap.RobotLocation.X, localWorldMap.RobotLocation.Y), new PointD(localWorldMap.DestinationLocation.X, localWorldMap.DestinationLocation.Y));
-
-                    List<RectangleOriented> list_of_obstacle = localWorldMap
-                                                                .Fields
-                                                                .Where(x => x.Type == FieldType.DeadZone)
-                                                                .Select(x => x.Shape)
-                                                                .ToList();
-
-                    list_of_obstacle.AddRange(localWorldMap.LidarObjectList.Where(x => x.Type == LidarObjectType.Robot && x.LIFE >= ConstVar.LIDAR_OBJECT_VALID_LIFE).Select(x => x.Shape).ToList());
-
-                    //on check le backsensor si on recule
-                    if(BackSensorAnalogValue <= ConstVar.BACK_SENSOR_AVOID_THRESHOLD && localWorldMap.RobotLocation.Vx < 0) //Si on dépasse la distance min et qu'on recule
+                    lock (localWorldMap)
                     {
-                        OnCollisionDetected(true);
-                        return;
-                    }
+                        if (localWorldMap.RobotLocation == null || localWorldMap.DestinationLocation == null || localWorldMap.Fields == null || localWorldMap.LidarObjectList == null)
+                            return;
+
+                        Segment robot_to_destination = new Segment(new PointD(localWorldMap.RobotLocation.X, localWorldMap.RobotLocation.Y), new PointD(localWorldMap.DestinationLocation.X, localWorldMap.DestinationLocation.Y));
+
+                        List<RectangleOriented> list_of_obstacle = localWorldMap
+                                                                    .Fields
+                                                                    .Where(x => x.Type == FieldType.DeadZone)
+                                                                    .Select(x => x.Shape)
+                                                                    .ToList();
+
+                        List<LidarObject> valid_robot = localWorldMap.LidarObjectList.Where(x => x.Type == LidarObjectType.Robot && x.LIFE >= ConstVar.LIDAR_OBJECT_VALID_LIFE).ToList();
+
+                        List<RectangleOriented> list_of_personnal_field = localWorldMap.Fields.Where(x => x.Type == FieldType.Harbor).Select(x => x.Shape).ToList();
 
 
-                    foreach (RectangleOriented obstacle in list_of_obstacle)
-                    {
-                        
-                        if (Toolbox.testIfSegmentIntersectRectangle(robot_to_destination, obstacle) && Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) <= 0.70)
+                        foreach (RectangleOriented rectangle in list_of_personnal_field)
                         {
-                            Console.Write("A: ");
+                            valid_robot = valid_robot.Where(x => Toolbox.TestIfPointInsideAnOrientedRectangle(rectangle, x.Shape.Center)).ToList();
+                        }
+                        list_of_obstacle.AddRange(valid_robot.Select(x => x.Shape).ToList());
+                        ;
+
+                        //on check le backsensor si on recule
+                        if (BackSensorAnalogValue <= ConstVar.BACK_SENSOR_AVOID_THRESHOLD && localWorldMap.RobotGhostLocation.Vx < 0) //Si on dépasse la distance min et qu'on recule
+                        {
                             OnCollisionDetected(true);
                             return;
                         }
-                        else if (Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) <= 0.2)
+
+
+                        foreach (RectangleOriented obstacle in list_of_obstacle)
                         {
-                            Console.Write("B: ");
-                            OnCollisionDetected(true);
-                            return;
+
+                            if (Toolbox.testIfSegmentIntersectRectangle(robot_to_destination, obstacle) && Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) <= 0.70)
+                            {
+                                //Console.Write("A: ");
+                                OnCollisionDetected(true);
+                                return;
+                            }
+                            else if (Toolbox.Distance(localWorldMap.RobotLocation, obstacle.Center) <= 0.15)
+                            {
+                                //Console.Write("B: ");
+                                OnCollisionDetected(true);
+                                return;
+                            }
                         }
+
+
+                        OnCollisionDetected(false);
                     }
-
-
-                    OnCollisionDetected(false);
                 }
             }
+
         }
 
         public void UpdateLocalMap(LocalWorldMap localWorld)
@@ -98,8 +113,19 @@ namespace TrajectoryAvoidanceNs
 
         public virtual void OnCollisionDetected(bool collision)
         {
-            Console.WriteLine("Collision?: " + collision);
+            //Console.WriteLine("Collision?: " + collision);
             OnCollisionDetectedEvent?.Invoke(this, collision);
+        }
+
+
+        public void OnDisableAvoidance(object sender, EventArgs e)
+        {
+            enableAvoidance = false;
+        }
+
+        public void OnEnableAvoidance(object sender, EventArgs e)
+        {
+            enableAvoidance = true;
         }
 
         public void OnBackSensorAnalogReceived(object sender, IOAnalogValuesEventArgs e)

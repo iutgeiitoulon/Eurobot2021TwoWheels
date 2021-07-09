@@ -288,6 +288,9 @@ namespace RobotEurobot2Roues
             strategyManager.PololuSetUsEvent += msgGenerator.GenerateMessagePololuSetServoUs;
             strategyManager.OnSetInitLocationEvent += trajectoryPlanner.InitRobotPosition;
 
+            strategyManager.EnableAvoidanceEvent += trajectoryAvoidance.OnEnableAvoidance;
+            strategyManager.DisableAvoidanceEvent += trajectoryAvoidance.OnDisableAvoidance;
+
             
 
             ConsoleFormat.PrintStrategyBoot();

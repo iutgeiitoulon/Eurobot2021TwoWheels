@@ -163,6 +163,20 @@ namespace StrategyManagerProjetEtudiantNS
         //Polulu
         public event EventHandler<PololuServoArgs> PololuSetUsEvent;
 
+
+        public event EventHandler<EventArgs> EnableAvoidanceEvent;
+        public event EventHandler<EventArgs> DisableAvoidanceEvent;
+
+        public virtual void OnEnableAvoidance()
+        {
+            EnableAvoidanceEvent?.Invoke(this, new EventArgs());
+        }
+
+        public virtual void OnDisableAvoidance()
+        {
+            DisableAvoidanceEvent?.Invoke(this, new EventArgs());
+        }
+
         public virtual void OnPololuSetUs(PololuActuators channel, ushort us)
         {
             PololuSetUsEvent?.Invoke(this, new PololuServoArgs

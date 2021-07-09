@@ -64,9 +64,9 @@ namespace StrategyManagerProjetEtudiantNS
                         case SubTaskState.Entry:
                             timestamp = DateTime.Now;
                             if (parent.localWorldMap.Team == TeamColor.Yellow)
-                                parent.OnSetWantedLocation(0.7, 0.80, false, 0);
+                                parent.OnSetWantedLocation(0.625, 0.75, false, Math.PI / 2);
                             else if (parent.localWorldMap.Team == TeamColor.Blue)
-                                parent.OnSetWantedLocation(-1.265, -0.590, false, Math.PI);
+                                parent.OnSetWantedLocation(0.625, 0.75, false, Math.PI / 2);
                             parent.taskRackPrehension.SetRackPositionToVertical();
                             break;
 
@@ -88,9 +88,9 @@ namespace StrategyManagerProjetEtudiantNS
                     {
                         case SubTaskState.Entry:
                             if (parent.localWorldMap.Team == TeamColor.Yellow)
-                                parent.OnSetWantedLocation(1.37, -0.590, false, 0);
+                                parent.OnSetWantedLocation(0.625, 0.90, false, Math.PI / 2);
                             else if (parent.localWorldMap.Team == TeamColor.Blue)
-                                parent.OnSetWantedLocation(-1.37, -0.590, false, Math.PI);
+                                parent.OnSetWantedLocation(-0.625, 0.90, false, Math.PI / 2) ;
                             parent.taskRackPrehension.SetRackPositionToPrehensionRack();
                             timestamp = DateTime.Now;
                             break;
@@ -143,9 +143,9 @@ namespace StrategyManagerProjetEtudiantNS
                     {
                         case SubTaskState.Entry:
                             if (parent.localWorldMap.Team == TeamColor.Yellow)
-                                parent.OnSetWantedLocation(1.265, -0.590, true);
+                                parent.OnSetWantedLocation(0.625, 0.75, true);
                             else if (parent.localWorldMap.Team == TeamColor.Blue)
-                                parent.OnSetWantedLocation(-1.265, -0.590, true);
+                                parent.OnSetWantedLocation(-0.625, 0.75, true);
                             timestamp = DateTime.Now;
                             break;
 

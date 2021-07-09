@@ -11,7 +11,8 @@ namespace Constants
         Low = 2000,
         High = 1720, // 1720
         EndMatch = 1840,
-        PreshensionRack = 1890
+        PreshensionRack = 1890,
+        PrehensionTerrain = 1870
 
     }
 

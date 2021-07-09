@@ -13,6 +13,8 @@ namespace Utilities
         public double Y;// { get; set; }
         public double Rssi;
 
+
+
         public PointD()
         {
             X = 0;

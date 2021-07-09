@@ -19,6 +19,7 @@ namespace StrategyManagerProjetEtudiantNS
             RackPrehension,
             RackPrehensionUp,
             RackPutCups,
+            RackGetNormalCups
         }
 
 
@@ -38,6 +39,11 @@ namespace StrategyManagerProjetEtudiantNS
             ResetSubState();
             isFinished = false;
             this.state = state;
+        }
+
+        public void SetRackPositionToGetCups()
+        {
+            SetState(TaskRackPrehensionState.RackGetNormalCups);
         }
 
         public void SetRackPositionToVertical()
@@ -201,6 +207,31 @@ namespace StrategyManagerProjetEtudiantNS
                     }
                     break;
                 #endregion
+
+                #region GetCups
+                case TaskRackPrehensionState.RackGetNormalCups:
+                    switch (subState)
+                    {
+                        case SubTaskState.Entry:
+                            parent.OnSetHerkulexPosition(ServoId.Rack1, Positions.RackHorizontal);
+                            parent.OnSetHerkulexPosition(ServoId.Rack2, Positions.RackHorizontal);
+                            parent.OnPololuSetUs(PololuActuators.ServoAscenseur, (ushort)GruePositions.PrehensionTerrain);
+                            timestamp = DateTime.Now;
+                            break;
+
+                        case SubTaskState.EnCours:
+                            if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 1000)
+                                ExitState();
+                            break;
+
+                        case SubTaskState.Exit:
+                            isFinished = true;
+                            state = TaskRackPrehensionState.Waiting;
+                            break;
+                    }
+                    break;
+
+                    #endregion
             }
 
         }

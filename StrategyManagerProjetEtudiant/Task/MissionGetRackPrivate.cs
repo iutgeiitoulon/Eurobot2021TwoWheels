@@ -22,8 +22,8 @@ namespace StrategyManagerProjetEtudiantNS
         }
 
 
-        int timeout_PointA = 10000;
-        int timeout_AvanceVersRack = 10000;
+        int timeout_PointA = 15000;
+        int timeout_AvanceVersRack = 15000;
         MissionRackPrivateState state = MissionRackPrivateState.Waiting;
 
         public MissionGetRackPrivate(StrategyEurobot p) : base(p)
