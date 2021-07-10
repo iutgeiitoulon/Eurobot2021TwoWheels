@@ -148,7 +148,13 @@ namespace StrategyManagerProjetEtudiantNS
 
                         case SubTaskState.Exit:
                             parent.OnEnableAvoidance();
-                            state = MissionPutNorthBandState.TempMovement;
+                            if (parent.localWorldMap.Team == TeamColor.Yellow)
+                                state = MissionPutNorthBandState.TempMovement;
+                            else
+                            {
+                                state = MissionPutNorthBandState.Waiting;
+                                isFinished = true;
+                            }
                             break;
                     }
                     break;

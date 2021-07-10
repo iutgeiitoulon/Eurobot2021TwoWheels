@@ -25,6 +25,7 @@ namespace StrategyManagerProjetEtudiantNS
             TakeDownWindFlag,
             GetPrivateRack,
             PutDownSouthBand,
+            Demo,
             StopMoving,
             EndMatch,
         }
@@ -61,6 +62,7 @@ namespace StrategyManagerProjetEtudiantNS
             parent.missionRaiseFlag.Init();
             parent.missionPutNorthBand.Init();
             parent.missionActivateBeacon.Init();
+            parent.missionDemo.Init();
             parent.taskTurbine.Init();
             parent.taskArm.Init();
 
@@ -97,6 +99,7 @@ namespace StrategyManagerProjetEtudiantNS
                             case SubTaskState.Entry:
                                 Console.WriteLine("Waiting For Jack");
                                 Init();
+                                parent.OnCalibatrionAsked();
                                 parent.OnEnableDisableMotors(false);
                                 break;
 
@@ -138,8 +141,11 @@ namespace StrategyManagerProjetEtudiantNS
                                     parent.OnSetActualLocation(new Location(-RobotInitialX, RobotInitialY, RobotInitialTheta + Math.PI, 0, 0, 0));
                                     parent.OnSetWantedLocation(-RobotInitialX, RobotInitialY);
                                 }
+                                parent.OnSetWantedLocation(0, 0, false, 0);
+                                parent.OnEnableDisableMotors(true);
+                                //state = GameState.Demo;
                                 state = GameState.GetTrashCup;
-                                //state = GameState.GetPrivateRack; /// TEMP
+
                                 timestamp = DateTime.Now;
                                 break;
                         }
@@ -151,7 +157,7 @@ namespace StrategyManagerProjetEtudiantNS
                         {
                             case SubTaskState.Entry:
                                 Console.WriteLine("GetTrashCup");
-                                //parent.OnCalibatrionAsked();
+                                parent.OnCalibatrionAsked();
                                 parent.OnDisableAvoidance();
                                 parent.OnEnableDisableMotors(true);
                                 parent.missionGetNorthTrashCups.Start();
@@ -175,7 +181,7 @@ namespace StrategyManagerProjetEtudiantNS
                         {
                             case SubTaskState.Entry:
                                 Console.WriteLine("PutHarbor");
-                                //parent.OnCalibatrionAsked();
+                                parent.OnCalibatrionAsked();
                                 parent.OnEnableDisableMotors(true);
                                 parent.missionPutHarbor.Start();
 
@@ -234,7 +240,10 @@ namespace StrategyManagerProjetEtudiantNS
                                 break;
 
                             case SubTaskState.Exit:
-                                state = GameState.TakeDownWindFlag;
+                                if (parent.localWorldMap.Team == TeamColor.Yellow)
+                                    state = GameState.TakeDownWindFlag;
+                                else if (parent.localWorldMap.Team == TeamColor.Blue)
+                                    state = GameState.ActivateBeacon;
                                 break;
                         }
                         break;
@@ -246,7 +255,7 @@ namespace StrategyManagerProjetEtudiantNS
                         {
                             case SubTaskState.Entry:
                                 Console.WriteLine("ActivateBeacon");
-                                //parent.OnCalibatrionAsked();
+                                parent.OnCalibatrionAsked();
                                 parent.OnEnableDisableMotors(true);
                                 parent.missionActivateBeacon.Start();
 
@@ -258,7 +267,8 @@ namespace StrategyManagerProjetEtudiantNS
                                 break;
 
                             case SubTaskState.Exit:
-                                state = GameState.TakeDownWindFlag;
+                                state = GameState.GetPrivateRack;
+
                                 break;
                         }
                         break;
@@ -272,7 +282,7 @@ namespace StrategyManagerProjetEtudiantNS
                                 Console.WriteLine("WindFlags");
 
                                 /// TEMP:
-                                //parent.OnCalibatrionAsked();
+                                parent.OnCalibatrionAsked();
                                 parent.OnEnableDisableMotors(true);
                                 parent.missionWindFlags.Start();
                                 break;
@@ -294,7 +304,7 @@ namespace StrategyManagerProjetEtudiantNS
                         {
                             case SubTaskState.Entry:
                                 Console.WriteLine("GetPrivateRack");
-                                //parent.OnCalibatrionAsked();
+                                parent.OnCalibatrionAsked();
                                 parent.OnEnableDisableMotors(true);
                                 parent.missionGetPrivateRack.Start();
 
@@ -369,7 +379,25 @@ namespace StrategyManagerProjetEtudiantNS
                                 break;
                         }
                         break;
-                        #endregion
+                    #endregion
+
+                    case GameState.Demo:
+                        switch (subState)
+                        {
+                            case SubTaskState.Entry:
+                                parent.OnSetWantedLocation(0, 0, false, 0);
+                                parent.OnEnableDisableMotors(true);
+                                timestamp = DateTime.Now;
+                                //parent.missionDemo.Start();
+                                break;
+                            case SubTaskState.EnCours:
+                                if (DateTime.Now.Subtract(timestamp).TotalMilliseconds >= 1000)
+                                    ExitState();
+                                break;
+                            case SubTaskState.Exit:
+                                break;
+                        }
+                        break;
                 }
             }
         }

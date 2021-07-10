@@ -88,9 +88,9 @@ namespace StrategyManagerProjetEtudiantNS
                     {
                         case SubTaskState.Entry:
                             if (parent.localWorldMap.Team == TeamColor.Yellow)
-                                parent.OnSetWantedLocation(0.625, 0.90, false, Math.PI / 2);
+                                parent.OnSetWantedLocation(0.625, 0.88, false, Math.PI / 2);
                             else if (parent.localWorldMap.Team == TeamColor.Blue)
-                                parent.OnSetWantedLocation(-0.625, 0.90, false, Math.PI / 2) ;
+                                parent.OnSetWantedLocation(-0.625, 0.88, false, Math.PI / 2) ;
                             parent.taskRackPrehension.SetRackPositionToPrehensionRack();
                             timestamp = DateTime.Now;
                             break;

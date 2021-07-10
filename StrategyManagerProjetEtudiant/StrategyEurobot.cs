@@ -32,6 +32,7 @@ namespace StrategyManagerProjetEtudiantNS
         public MissionPutNorthBand missionPutNorthBand;
         public MissionPutSouthBand missionPutSouthBand;
         public MissionActivateBeacon missionActivateBeacon;
+        public MissionDemo missionDemo;
         public TaskArm taskArm;
         
         public TaskTurbine taskTurbine;
@@ -62,6 +63,7 @@ namespace StrategyManagerProjetEtudiantNS
             missionPutHarbor = new MissionPutHarbor(this);
             missionPutSouthBand = new MissionPutSouthBand(this);
             missionPutNorthBand = new MissionPutNorthBand(this);
+            missionDemo = new MissionDemo(this);                
             taskArm = new TaskArm(this);
             taskRackPrehension = new TaskRackPrehension(this);
             taskTurbine = new TaskTurbine(this);

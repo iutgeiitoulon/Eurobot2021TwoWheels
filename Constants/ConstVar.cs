@@ -53,12 +53,12 @@ namespace Constants
         public const double PID_SPEED_MOTOR2_KI = 50.0d;
         public const double PID_SPEED_MOTOR2_KD = 0.0d;
 
-        public const double PID_SPEED_MOTOR1_KP_MAX = 5.0d;
-        public const double PID_SPEED_MOTOR1_KI_MAX = 5.0d;
+        public const double PID_SPEED_MOTOR1_KP_MAX = 3.0d;
+        public const double PID_SPEED_MOTOR1_KI_MAX = 3.0d;
         public const double PID_SPEED_MOTOR1_KD_MAX = 0.0d;
- 
-        public const double PID_SPEED_MOTOR2_KP_MAX = 5.0d;
-        public const double PID_SPEED_MOTOR2_KI_MAX = 5.0d;
+
+        public const double PID_SPEED_MOTOR2_KP_MAX = 3.0d;
+        public const double PID_SPEED_MOTOR2_KI_MAX = 3.0d;
         public const double PID_SPEED_MOTOR2_KD_MAX = 0.0d;
 
 
@@ -91,19 +91,17 @@ namespace Constants
 
         public const double PLANNER_PID_POSITION_ANGULAR_KP = 22.0d;
         public const double PLANNER_PID_POSITION_ANGULAR_KI = 0d;
-        public const double PLANNER_PID_POSITION_ANGULAR_KD = 0.6d;  
+        public const double PLANNER_PID_POSITION_ANGULAR_KD = 0.6d;
         public const double PLANNER_PID_POSITION_ANGULAR_MAX_KP = 5d * Math.PI;
         public const double PLANNER_PID_POSITION_ANGULAR_MAX_KI = 0d * Math.PI;
         public const double PLANNER_PID_POSITION_ANGULAR_MAX_KD = 5d * Math.PI;
 
-        public const double ROBOT_ENCODER_DIST_WHEELS = 0.297d; 
+        public const double ROBOT_ENCODER_DIST_WHEELS = 0.297d;
         public const double ROBOT_ENCODER_WHEELS_DIAMETER = 0.0426d;
         public const double ROBOT_ENCODER_POINT_TO_METER = ROBOT_ENCODER_WHEELS_DIAMETER * Math.PI / 8192.0d;
 
 
         public const byte HKLX_PLAYTIME = 50;
-    
-        
-        
+
     }
 }
