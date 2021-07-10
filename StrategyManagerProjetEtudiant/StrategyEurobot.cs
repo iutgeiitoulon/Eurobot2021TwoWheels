@@ -33,7 +33,10 @@ namespace StrategyManagerProjetEtudiantNS
         public MissionPutSouthBand missionPutSouthBand;
         public MissionActivateBeacon missionActivateBeacon;
         public TaskArm taskArm;
-        
+
+        public MissionCoupeOff missionCoupeOff;
+        public MissionCoupeOffMovement missionCoupeOffMovement;
+
         public TaskTurbine taskTurbine;
         public TaskRackPrehension taskRackPrehension;
         public TaskMainStrategy taskMainStrategy;
@@ -52,6 +55,10 @@ namespace StrategyManagerProjetEtudiantNS
 
         public override void InitStrategy()
         {
+
+            missionCoupeOff = new MissionCoupeOff(this);
+            missionCoupeOffMovement = new MissionCoupeOffMovement(this);
+
             missionActivateBeacon = new MissionActivateBeacon(this);
             missionWindFlags = new MissionWindFlags(this);
             missionReturnToHarbor = new MissionReturnToHarbor(this);

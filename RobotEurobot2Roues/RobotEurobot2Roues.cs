@@ -291,7 +291,7 @@ namespace RobotEurobot2Roues
             strategyManager.EnableAvoidanceEvent += trajectoryAvoidance.OnEnableAvoidance;
             strategyManager.DisableAvoidanceEvent += trajectoryAvoidance.OnDisableAvoidance;
 
-            
+            strategyManager.OnSpeedConsigneEvent += msgGenerator.GenerateMessageSetSpeedConsigneToRobot;
 
             ConsoleFormat.PrintStrategyBoot();
             strategyManager.InitStrategy(); //à faire après avoir abonné les events !

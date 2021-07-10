@@ -328,10 +328,10 @@ namespace TrajectoryPlannerNs
             /// On envoie les vitesses consigne.
             /// Indispensable en permanence, sinon la sécurité de l'embarqué reset le contrôle moteur
             /// en l'absence d'orde pendant 200ms
-            if (isEnslave)
-                OnSpeedConsigneToRobot(robotId, VxeaireRobot, vAngulaireRobot);
-            else
-                OnSpeedConsigneToRobot(robotId, 0, 0);
+            //if (isEnslave)
+            //    OnSpeedConsigneToRobot(robotId, VxeaireRobot, vAngulaireRobot);
+            //else
+            //    OnSpeedConsigneToRobot(robotId, 0, 0);
         }
 
         void PIDPositionReset()

@@ -164,6 +164,8 @@ namespace StrategyManagerProjetEtudiantNS
         public event EventHandler<PololuServoArgs> PololuSetUsEvent;
 
 
+        public event EventHandler<PolarSpeedArgs> OnSpeedConsigneEvent;
+
         public event EventHandler<EventArgs> EnableAvoidanceEvent;
         public event EventHandler<EventArgs> DisableAvoidanceEvent;
 
@@ -456,6 +458,11 @@ namespace StrategyManagerProjetEtudiantNS
         public void OnEnableDisableIOPolling(bool e)
         {
             OnEnableDisableIOAnalogPoolingEvent?.Invoke(this, new BoolEventArgs { value = e });
+        }
+
+        public void GenerateSpeedConsigne(double x, double theta)
+        {
+            OnSpeedConsigneEvent?.Invoke(this, new PolarSpeedArgs { RobotId = robotId, Vx = x, Vtheta = theta });
         }
         
     }    

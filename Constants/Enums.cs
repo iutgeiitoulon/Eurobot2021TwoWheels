@@ -20,7 +20,16 @@ namespace Constants
     {
         Off = 1000,
         PrehensionHigh = 1300,
-        PreshensionLow = 1200
+        PreshensionLow = 1200,
+    }
+
+    public enum Note
+    {
+        Silence = 1000,
+        Note1 = 1200,
+        Note2 = 1250,
+        Note3 = 1300,
+        Note4 = 1350
     }
 
     public enum TeamColor

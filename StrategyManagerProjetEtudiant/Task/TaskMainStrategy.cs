@@ -17,6 +17,10 @@ namespace StrategyManagerProjetEtudiantNS
             WaitingForJack,
             Idle,
             GetTrashCup,
+
+            CoupeOff,
+
+
             PutHarbor,
             GetPublicRackAlly,
             PutDownNorthBand,
@@ -50,6 +54,9 @@ namespace StrategyManagerProjetEtudiantNS
         public override void Init()
         {
             timestamp = DateTime.Now;
+
+            parent.missionCoupeOff.Init();
+            parent.missionCoupeOffMovement.Init();
 
             parent.missionWindFlags.Init();
             parent.missionGetPrivateRack.Init();
@@ -138,19 +145,21 @@ namespace StrategyManagerProjetEtudiantNS
                                     parent.OnSetActualLocation(new Location(-RobotInitialX, RobotInitialY, RobotInitialTheta + Math.PI, 0, 0, 0));
                                     parent.OnSetWantedLocation(-RobotInitialX, RobotInitialY);
                                 }
-                                state = GameState.GetTrashCup;
+                                state = GameState.CoupeOff;
+                                parent.missionCoupeOffMovement.Start();
                                 //state = GameState.GetPrivateRack; /// TEMP
                                 timestamp = DateTime.Now;
                                 break;
                         }
                         break;
                     #endregion
-                    #region GetTrashCup
+
+                    #region Coupe Off
                     case GameState.GetTrashCup:
                         switch (subState)
                         {
                             case SubTaskState.Entry:
-                                Console.WriteLine("GetTrashCup");
+                                Console.WriteLine("CoupeOff");
                                 //parent.OnCalibatrionAsked();
                                 parent.OnDisableAvoidance();
                                 parent.OnEnableDisableMotors(true);
@@ -165,6 +174,28 @@ namespace StrategyManagerProjetEtudiantNS
 
                             case SubTaskState.Exit:
                                 state = GameState.PutHarbor;
+                                break;
+                        }
+                        break;
+                    #endregion
+                    #region GetTrashCup
+                    case GameState.CoupeOff:
+                        switch (subState)
+                        {
+                            case SubTaskState.Entry:
+                                Console.WriteLine("CoupeOff");
+
+                                parent.missionCoupeOff.Start();
+
+                                break;
+
+                            case SubTaskState.EnCours:
+                                if (parent.missionCoupeOff.isFinished)
+                                    ExitState();
+                                break;
+
+                            case SubTaskState.Exit:
+                                state = GameState.StopMoving;
                                 break;
                         }
                         break;
